@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import type { ToneStyle } from '@/api';
 import { guideRetrospective, refineRetrospective } from '@/api';
-import infoCircle from '@/assets/Info-circle.svg';
-import star from '@/assets/star.svg';
+import { svg } from '@/assets';
 import { SpeechBubble } from '@/components/SpeechBubble';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -45,7 +44,7 @@ export function RetrospectiveDetailPage() {
         } else {
           setRefinedContent('');
         }
-      } catch (error) {
+      } catch (_error) {
         setRefinedContent('');
       }
     };
@@ -71,7 +70,7 @@ export function RetrospectiveDetailPage() {
         } else {
           setGuideMessage('');
         }
-      } catch (error) {
+      } catch (_error) {
         setGuideMessage('');
       }
     }, 1000);
@@ -142,9 +141,9 @@ export function RetrospectiveDetailPage() {
             />
             <div className="flex items-center justify-end gap-3">
               <div className="flex items-center gap-1.5">
-                <img src={star} alt="star" />
+                <img src={svg.star} alt="star" />
                 <p className="text-base font-medium text-black">AI 필터링</p>
-                <img src={infoCircle} alt="info-circle" />
+                <img src={svg.infoCircle} alt="info-circle" />
               </div>
               <Switch checked={isAiFilterEnabled} onCheckedChange={setIsAiFilterEnabled} />
             </div>

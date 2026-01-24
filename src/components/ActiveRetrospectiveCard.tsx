@@ -9,7 +9,7 @@ interface ActiveRetrospectiveCardProps {
 function useCountdown(endTime: string, retrospectiveId: string) {
   const [timeLeft, setTimeLeft] = useState({ minutes: 0, seconds: 0 });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: endTime is stable and retrospectiveId is intentionally excluded
   useEffect(() => {
     const calculateTime = () => {
       const now = Date.now();
