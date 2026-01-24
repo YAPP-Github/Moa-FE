@@ -5,10 +5,15 @@ import { RetrospectiveDetailPage } from './pages/RetrospectiveDetailPage';
 import { RetrospectivePage } from './pages/RetrospectivePage';
 import { RetrospectiveResultPage } from './pages/RetrospectiveResultPage';
 import { RetrospectiveSubmitPage } from './pages/RetrospectiveSubmitPage';
+import { SigninPage } from './pages/SigninPage';
 
 function App() {
   return (
     <Routes>
+      {/* Signin route (without layout) */}
+      <Route path="/signin" element={<SigninPage />} />
+
+      {/* Dashboard routes (with layout) */}
       <Route element={<DashboardLayout />}>
         <Route index element={<Navigate to="/retrospective" replace />} />
         <Route path="retrospective" element={<RetrospectivePage />} />
