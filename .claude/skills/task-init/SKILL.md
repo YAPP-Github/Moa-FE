@@ -100,10 +100,47 @@ Use `/task-init` when:
 
 ### 5. Sub-Agent Configuration
 
-**For React/Next.js Code Changes:**
+**Dynamic Agent Creation Process:**
+
+Sub-agents are created dynamically in `.claude/agents/` based on task requirements:
+
+**A. Determine Task Type:**
+
+- **FSD Refactoring/Architecture**: Create `fsd-architect` agent
+- **Asset Management**: Create `asset-manager` agent
+- **React/Next.js Development**: Create `react-developer` agent
+- **Code Review**: Create `code-reviewer` agent
+- **Testing**: Create `test-writer` agent
+- **Documentation**: Create `doc-writer` agent (when needed)
+
+**B. Agent Configuration:**
+
+For FSD-based tasks:
 
 ```markdown
-Sub-agents will be configured with:
+# .claude/agents/fsd-architect.md
+
+- Enforces FSD layer rules
+- Validates single-direction dependencies
+- Guides code placement decisions
+- Reviews import paths for compliance
+```
+
+For asset management tasks:
+
+```markdown
+# .claude/agents/asset-manager.md
+
+- Enforces naming conventions (ic*\*, img*\*)
+- Auto-corrects misnamed assets
+- Validates folder structure
+- Updates index.ts exports
+```
+
+For React/Next.js development:
+
+```markdown
+# .claude/agents/react-developer.md
 
 - vercel-react-best-practices skill enabled
 - Specific focus areas based on task type:
@@ -113,12 +150,12 @@ Sub-agents will be configured with:
   - server-\* rules for API/server components
 ```
 
-**Agent Types to Create:**
+**C. Agent Lifecycle:**
 
-- `react-developer`: For writing React/Next.js components (always uses best practices)
-- `code-reviewer`: For reviewing code quality and performance
-- `test-writer`: For creating/updating tests
-- `doc-writer`: For documentation updates (if needed)
+- Created during task-init in `.claude/agents/`
+- Tagged with issue number for tracking
+- Cleaned up during task-done
+- Referenced in plan document for transparency
 
 ### 6. User Approval
 
