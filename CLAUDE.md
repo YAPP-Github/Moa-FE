@@ -46,6 +46,16 @@ npx tsc --noEmit   # 타입 오류 수정 필수
 
 **task-init 옵션**: 텍스트 설명, 이미지(디자인 목업/스크린샷), 또는 둘 다 추가 가능
 
+**서브에이전트 시스템**:
+
+- task-init 시 작업 타입에 따라 `.claude/agents/`에 동적 생성
+  - FSD 작업: `fsd-architect` (레이어 규칙 검증)
+  - 에셋 작업: `asset-manager` (네이밍 자동 수정)
+  - React 개발: `react-developer` (best practices 자동 적용)
+  - 코드 리뷰: `code-reviewer`, 테스트: `test-writer`, 문서: `doc-writer`
+- task-done 시 생성된 에이전트 자동 정리
+- 이슈 번호로 태깅되어 추적 가능
+
 자세한 워크플로우는 [.claude/rules/workflows.md](.claude/rules/workflows.md) 참조
 
 ### 3. React Best Practices
@@ -61,13 +71,27 @@ npx tsc --noEmit   # 타입 오류 수정 필수
 - `react-developer`: 코드 작성 시 자동 적용
 - `code-reviewer`: 리뷰 시 규칙 검증
 
-### 4. 컨벤션
+### 4. FSD 아키텍처
+
+**Feature-Sliced Design**: 모든 코드는 FSD 레이어 구조를 따름
+
+- **레이어**: `app → pages → widgets → features → entities → shared` (단방향 의존성)
+- **원칙**: 슬라이스 간 직접 참조 금지, Public API (`index.ts`) 사용 강제
+- **코드 배치**: 신규 코드는 FSD 우선, 기존 코드는 점진적 이관
+- **자동화**: task-init 시 `fsd-architect`, `asset-manager` 에이전트 활성화
+
+자세한 내용은 [.claude/rules/fsd.md](.claude/rules/fsd.md) 및 [docs/guides/FSD.md](docs/guides/FSD.md) 참조
+
+### 5. 컨벤션
 
 - **브랜치**: `{type}/{issue_number}-{slug}` (예: `feat/25-add-feature`)
 - **커밋**: `type(scope): subject` + `Closes #123`
 - **라벨**: `type:*`, `area:*`, `priority:*` (3개 필수)
 - **계획 문서**: `docs/plans/{issue_number}-{description}.md`
-- **Assets**: `src/assets/images/`, `src/assets/svg/` + index export 방식 (자세한 내용: [.claude/rules/assets.md](.claude/rules/assets.md))
+- **Assets**: `src/shared/assets/` (중앙집중형)
+  - SVG: `ic_{descriptor}_{size}.svg` → `icDescriptorSize`
+  - Images: `img_{context}_{descriptor}.ext` → `imgContextDescriptor`
+  - 자세한 내용: [.claude/rules/assets.md](.claude/rules/assets.md)
 
 ---
 
@@ -80,9 +104,8 @@ npx tsc --noEmit   # 타입 오류 수정 필수
 
 ### 코드 컨벤션
 
-- [Assets 관리 규칙](.claude/rules/assets.md) - 이미지/SVG 관리, 네이밍, index export
-
-> > > > > > > origin/main
+- [FSD 아키텍처 가이드](.claude/rules/fsd.md) - Feature-Sliced Design 레이어, 의존성, 코드 배치
+- [Assets 관리 규칙](.claude/rules/assets.md) - 이미지/SVG 네이밍 컨벤션, 자동 정리
 
 ### 실수 & 해결
 
@@ -105,5 +128,3 @@ npx tsc --noEmit   # 타입 오류 수정 필수
 - `vercel-react-best-practices`: React 성능 최적화 (`.claude/skills/vercel-react-best-practices/`)
 
 **마지막 업데이트**: 2026-01-24
-
-> > > > > > > origin/main
