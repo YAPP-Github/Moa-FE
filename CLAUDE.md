@@ -82,6 +82,8 @@ npx tsc --noEmit   # 타입 오류 수정 필수
 
 - [Assets 관리 규칙](.claude/rules/assets.md) - 이미지/SVG 관리, 네이밍, index export
 
+> > > > > > > origin/main
+
 ### 실수 & 해결
 
 - [실수 기록 및 규칙](.claude/rules/mistakes.md)
@@ -102,6 +104,6 @@ npx tsc --noEmit   # 타입 오류 수정 필수
 
 - `vercel-react-best-practices`: React 성능 최적화 (`.claude/skills/vercel-react-best-practices/`)
 
----
-
 **마지막 업데이트**: 2026-01-24
+
+> > > > > > > origin/main
