@@ -18,9 +18,9 @@
 
 ```ts
 // entities/user/api/user.queryKeys.ts
-import { createQueryKeys } from '@lukemorales/query-key-factory';
+import { createQueryKeys } from "@lukemorales/query-key-factory";
 
-export const userKeys = createQueryKeys('user', {
+export const userKeys = createQueryKeys("user", {
   all: null,
   list: (params: { page: number }) => [params],
   detail: (id: string) => [id],
