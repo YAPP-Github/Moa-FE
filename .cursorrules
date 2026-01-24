@@ -1,1 +1,11 @@
-When generating git commit messages, always follow the **Conventional Commits** specification. Use types like feat, fix, docs, style, refactor, perf, test, chore. The format should be type(scope): description.
+## 안내
+- 이 레포의 규칙은 **Project Rules**로 분리 관리한다: `/.cursor/rules/*.mdc`
+  - 기본/우선순위: `/.cursor/rules/00-project.mdc`
+  - 프로세스: `/.cursor/rules/01-process.mdc`
+  - FSD: `/.cursor/rules/02-fsd.mdc`
+  - TypeScript: `/.cursor/rules/03-typescript.mdc`
+  - React Query: `/.cursor/rules/04-react-query.mdc`
+  - Commits: `/.cursor/rules/05-commits.mdc`
+  - Few-shot: `/.cursor/rules/90-few-shot.mdc`
+
+- 상세 가이드는 `docs/guides/*`를 참고한다.

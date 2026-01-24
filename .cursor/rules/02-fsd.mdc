@@ -1,0 +1,31 @@
+---
+description: Feature-Sliced Design (FSD) layering, dependency rules, and placement
+alwaysApply: false
+globs: src/**
+---
+
+## FSD 폴더/의존(단방향) 규칙
+- **레이어 방향(단방향)**: `app -> pages -> widgets -> features -> entities -> shared`
+- **금지**: 동일 레이어의 슬라이스 간 직접 참조 금지
+- **세그먼트(권장)**: `ui/`, `api/`, `model/`, `lib/`, `config/` (components/hooks 같은 기술명 세그먼트 지양)
+- **Public API 강제**:
+  - 슬라이스 외부 노출은 `index.ts`(public API)로만 한다
+  - 외부 import는 반드시 public API를 경유한다
+- **신규 코드 배치**:
+  - 신규 코드는 FSD 하위(`src/{app,pages,widgets,features,entities,shared}`)에 배치한다
+  - 기존 `src/components`, `src/api` 등은 **점진 이관**
+- **Slice grouping 허용**: 동일 도메인 데이터를 다루는 복수 페이지는 그룹 하위 슬라이스로 묶는다
+  - 예: `pages/benefit/{list,detail,...}`
+- **API 배치 기준**:
+  - 페이지 전용: `pages/<group>/<slice>/api`
+  - 기능 단위 재사용(동일 slice-group): `features/<feature>/api`
+  - 데이터 도메인 단위 재사용(다수 페이지/도메인): `entities/<domain>/api`
+  - 전역 공통/유틸: `shared/api`
+- **레이어 역할**:
+  - `app`: Provider/라우팅/전역 설정만(비즈니스 로직 금지)
+  - `pages`: 라우트 조립
+  - `widgets`: 재사용 UI 블록
+  - `features`: 상호작용 단위
+  - `entities`: 도메인 모델/데이터
+  - `shared`: 전역 공통
+- **경로 alias 사용 시**: FSD 단방향 위배 여부를 반드시 검증한다

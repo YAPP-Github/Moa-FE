@@ -1,0 +1,16 @@
+---
+description: Project-wide fundamentals (priority, references, rule writing principles)
+alwaysApply: true
+---
+
+## 목적 / 우선순위 / 적용 범위
+- 이 프로젝트 규칙은 **AI가 작업할 때 따라야 하는 기준**(아키텍처/컨벤션/프로세스)을 정의한다.
+- **우선순위**: Project Rules(`.cursor/rules/*`) > `docs/guides/*` 상세 가이드 > 기존 코드 관례(충돌 시 규칙 우선).
+
+## 원칙(베스트 프랙티스)
+- 규칙은 **행동 가능한 문장**으로 작성한다(“~해야 한다/금지한다/경로는 ~다”).
+- 모호하면 우선 `docs/guides/*`를 확인하고, 기존 코드와 일관되게 적용한다.
+- 규칙이 길어지면(대략 500줄 이상) 섹션을 분리하거나 문서로 이동한다.
+
+## 참고 문서(단일 소스)
+- 상세 가이드: `docs/guides/FSD.md`, `docs/guides/TYPES.md`, `docs/guides/REACT_QUERY.md`, `docs/guides/COMMITS.md`, `docs/guides/PROCESS.md`

@@ -1,0 +1,17 @@
+---
+description: TypeScript conventions (types, naming, imports, immutability)
+alwaysApply: false
+globs: **/*.ts, **/*.tsx
+---
+
+## 타입(TypeScript) 컨벤션
+- **네이밍**: `PascalCase`(타입/인터페이스), `camelCase`(값), `SCREAMING_SNAKE_CASE`(상수)
+- **타입 전용 import**: `import type { Foo } from "./foo.types"`
+- **enum 지양**: `as const` 객체 + 유니온으로 대체
+- **파일명**: 도메인 타입 `*.types.ts`, 스키마 `*.schema.ts`
+- **안전한 타입**:
+  - `any` 대신 `unknown`으로 받고 좁힌다
+  - 불가능 상태는 `never`로 표현한다
+- **입출력 타입 분리**: `*Input`, `*Response` 등으로 분리한다(특히 API)
+- **불변성**: 가능하면 `readonly` / `ReadonlyArray<T>` 사용
+- **컴포넌트 props**: 별도 타입 선언, `children` 필요 시 명시

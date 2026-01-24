@@ -1,0 +1,25 @@
+---
+description: React Query conventions (query-key-factory, naming, provider paths)
+alwaysApply: false
+globs: src/**/*.ts, src/**/*.tsx
+---
+
+## React Query 컨벤션 (with query-key-factory)
+- **패키지**: `@tanstack/react-query`, `@lukemorales/query-key-factory` (필수), `@tanstack/react-query-devtools`(옵션)
+- **Query keys**: 도메인 가까이에 두고 factory 사용
+  - `entities/<domain>/api/<domain>.queryKeys.ts`
+  - `features/<feature>/api/<feature>.queryKeys.ts`
+- **키 형태 예**: `{ all, list(params), detail(id) }`
+  - params는 객체 1개로 묶어 **키 안정성**을 확보한다
+- **Provider 경로**:
+  - `src/app/providers/queryClient.ts`
+  - `src/app/providers/QueryProvider.tsx`
+  - 적용: 루트 `src/main.tsx`
+- **네이밍**:
+  - 쿼리 함수: `fetch*`
+  - 뮤테이션: `mutate*`
+  - 훅: `use*Query` / `use*Mutation`
+- **옵션 공통화**: `staleTime/gcTime/refetchOnWindowFocus` 등은 도메인 상수로 선언 후 재사용
+- **invalidateQueries**: factory 키로 명시 호출
+- **낙관적 업데이트**: `onMutate/onError/onSettled`를 한 파일에 정의
+- **UX 최적화**: `select`, `enabled`, `placeholderData` 적극 활용

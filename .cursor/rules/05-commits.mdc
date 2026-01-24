@@ -1,0 +1,13 @@
+---
+description: Commit message conventions (Conventional Commits)
+alwaysApply: false
+---
+
+## 커밋 컨벤션(Conventional Commits)
+- 포맷: `type(scope): summary`
+- type: `feat|fix|docs|style|refactor|perf|test|chore`
+- scope 예: `fsd`, `react-query`, `templates`, `docs`, `tasks`, `ui`
+- 본문/푸터에 참조 추가:
+  - `Refs: #<issue>`
+  - `Refs: docs/tasks/NNN-slug.md`
+- **한 커밋 = 한 논리 단위**(문서/설치/코드 분리)

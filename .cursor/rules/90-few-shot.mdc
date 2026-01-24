@@ -1,0 +1,19 @@
+---
+description: Few-shot example for retrospective list work (optional reference)
+alwaysApply: false
+---
+
+## Few-shot 예시 (Issue #12: 회고 목록)
+- **PRD**: `docs/tasks/012-retro-list.md` 작성
+- **Branch**: `feat/#12-retro-list`
+- **배치 예**:
+  - `entities/retrospective/api/retrospective.queryKeys.ts`
+  - `entities/retrospective/api/retrospective.queries.ts`
+  - `features/retrospective/ui/RetrospectiveList.tsx`
+  - `features/retrospective/lib/useRetrospectiveList.ts`
+  - `widgets/RetroListWidget/RetroListWidget.tsx`
+  - `pages/RetrospectiveListPage.tsx`
+- **커밋 예**:
+  - `docs(tasks): add prd for retro list`
+  - `feat(react-query): add retrospective list query and keys`
+  - `feat(retro): add retro list widget and page`

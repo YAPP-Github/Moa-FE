@@ -22,4 +22,8 @@ dist-ssr
 *.sw?
 
 # Ai
-.claude
+.mcp.json
+
+# Environment variables
+.env.example
+.env
