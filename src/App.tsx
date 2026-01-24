@@ -1,24 +1,7 @@
-import { Navigate, Route, Routes } from 'react-router';
-import { DashboardLayout } from './components/layout/DashboardLayout';
-import { ArchivePage } from './pages/ArchivePage';
-import { RetrospectiveDetailPage } from './pages/RetrospectiveDetailPage';
-import { RetrospectivePage } from './pages/RetrospectivePage';
-import { RetrospectiveResultPage } from './pages/RetrospectiveResultPage';
-import { RetrospectiveSubmitPage } from './pages/RetrospectiveSubmitPage';
+import { Routes } from 'react-router';
 
 function App() {
-  return (
-    <Routes>
-      <Route element={<DashboardLayout />}>
-        <Route index element={<Navigate to="/retrospective" replace />} />
-        <Route path="retrospective" element={<RetrospectivePage />} />
-        <Route path="retrospective/:id" element={<RetrospectiveDetailPage />} />
-        <Route path="retrospective/:id/submit" element={<RetrospectiveSubmitPage />} />
-        <Route path="retrospective/:id/result" element={<RetrospectiveResultPage />} />
-        <Route path="archive" element={<ArchivePage />} />
-      </Route>
-    </Routes>
-  );
+  return <Routes></Routes>;
 }
 
 export default App;
