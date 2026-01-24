@@ -62,14 +62,13 @@ Fill the PR template from `.github/PULL_REQUEST_TEMPLATE.md`:
 
 - **PR title must be in Korean**
 - Format: `[#123] {Type}: {Korean title}`
-- Use issue labels to map `{Type}`:
-  - `type:feature` → `Feature`
-  - `type:bug` → `Bug`
-  - `type:enhancement` → `Enhancement`
-  - `type:refactor` → `Refactor`
-  - `type:docs` → `Docs`
-  - `type:test` → `Test`
-  - `type:chore` → `Chore`
+- Use branch type to map `{Type}`:
+  - `feat` → `Feature`
+  - `fix` → `Bug`
+  - `chore` → `Chore`
+  - `refactor` → `Refactor`
+  - `docs` → `Docs`
+  - `test` → `Test`
 - Use the issue title without the `[Type]` prefix for `{Korean title}`
 
 ### Step 5: Check if Branch is Pushed
@@ -90,17 +89,7 @@ Use GitHub MCP `create_pull_request`:
 - body: Filled PR template
 - draft: true if `--draft` flag used
 
-### Step 7: Apply Assignee and Labels
-
-1. Extract labels from the issue (from Step 1)
-2. Use GitHub MCP `issue_write` with method `update`:
-   - owner: From git remote
-   - repo: From git remote
-   - issue_number: PR number from Step 6
-   - labels: Same as issue labels
-   - assignees: Include the current user (use GitHub MCP `get_me` to fetch the login)
-
-### Step 8: Report Results
+### Step 7: Report Results
 
 Display:
 
