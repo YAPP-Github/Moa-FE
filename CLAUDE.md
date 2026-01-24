@@ -67,6 +67,7 @@ npx tsc --noEmit   # 타입 오류 수정 필수
 - **커밋**: `type(scope): subject` + `Closes #123`
 - **라벨**: `type:*`, `area:*`, `priority:*` (3개 필수)
 - **계획 문서**: `docs/plans/{issue_number}-{description}.md`
+- **Assets**: `src/assets/images/`, `src/assets/svg/` + index export 방식 (자세한 내용: [.claude/rules/assets.md](.claude/rules/assets.md))
 
 ---
 
@@ -76,6 +77,12 @@ npx tsc --noEmit   # 타입 오류 수정 필수
 
 - [작업 플래닝 상세 가이드](.claude/rules/task-management.md)
 - [계획 문서 템플릿](docs/plans/TEMPLATE.md)
+
+### 코드 컨벤션
+
+- [Assets 관리 규칙](.claude/rules/assets.md) - 이미지/SVG 관리, 네이밍, index export
+
+> > > > > > > origin/main
 
 ### 실수 & 해결
 
@@ -97,6 +104,6 @@ npx tsc --noEmit   # 타입 오류 수정 필수
 
 - `vercel-react-best-practices`: React 성능 최적화 (`.claude/skills/vercel-react-best-practices/`)
 
----
+**마지막 업데이트**: 2026-01-24
 
-**마지막 업데이트**: 2026-01-22
+> > > > > > > origin/main

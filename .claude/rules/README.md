@@ -13,6 +13,7 @@
 │   ├── README.md            # 이 파일
 │   ├── workflows.md         # 워크플로우 상세 가이드
 │   ├── task-management.md   # 작업 관리 시스템 상세
+│   ├── assets.md            # Assets 관리 규칙 (이미지/SVG)
 │   └── mistakes.md          # 실수 기록 및 규칙 (계속 업데이트)
 ├── skills/
 │   ├── task-init/           # 작업 계획 수립 skill
@@ -51,6 +52,20 @@
 - 히스토리 관리
 
 **언제 참조**: `/task-init` 또는 `/task-done` 동작을 이해하고 싶을 때
+
+### [assets.md](assets.md)
+
+Assets 관리 규칙 (이미지/SVG)
+
+**내용**:
+
+- 폴더 구조 (`images/`, `svg/`)
+- 네이밍 컨벤션 (kebab-case → camelCase)
+- Index export 방식
+- 새 파일 추가 프로세스
+- 파일 이동/정리 가이드
+
+**언제 참조**: 이미지나 SVG 파일을 추가/수정할 때
 
 ### [mistakes.md](mistakes.md)
 
@@ -176,4 +191,4 @@ CLAUDE.md에서 링크로 연결:
 
 ---
 
-**마지막 업데이트**: 2026-01-22
+**마지막 업데이트**: 2026-01-24
