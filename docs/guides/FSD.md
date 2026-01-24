@@ -55,7 +55,7 @@ flowchart TD
 ## 네이밍 & 기타
 
 - 슬라이스 이름은 도메인/기능 단위(kebab-case). 세그먼트 파일명은 PascalCase 컴포넌트, camelCase 훅/유틸.
-- cross-cutting concern(로그, 에러 처리)은 `shared/lib` 또는 `app` 설정으로 한정.***
+- cross-cutting concern(로그, 에러 처리)은 `shared/lib` 또는 `app` 설정으로 한정.\*\*\*
 
 ## Slice grouping
 
@@ -72,9 +72,9 @@ flowchart TD
 
 ## Bottom-up 도입 가이드
 
-1) 신규 코드는 `pages`에 먼저 배치.  
-2) 동일 그룹 내 다른 슬라이스가 재사용하면 `features/<group>`로 승격.  
-3) 여러 그룹/도메인에서 재사용되면 `entities/<domain>`로 승격.  
-4) 전역/비즈니스 무관 공통은 `shared`로 이동.  
+1. 신규 코드는 `pages`에 먼저 배치.
+2. 동일 그룹 내 다른 슬라이스가 재사용하면 `features/<group>`로 승격.
+3. 여러 그룹/도메인에서 재사용되면 `entities/<domain>`로 승격.
+4. 전역/비즈니스 무관 공통은 `shared`로 이동.
 
 이 규칙을 반복 적용해 점진적으로 FSD 정합성을 확보한다.

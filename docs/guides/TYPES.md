@@ -26,4 +26,4 @@
 - 불변성: `readonly` 속성, `ReadonlyArray<T>` 우선.
 - 입력/출력 타입 분리(`*Input`, `*Response`), UI 파생 타입은 도메인 타입을 조합해 생성.
 - React 컴포넌트 prop 타입은 도메인 타입을 import 후 확장/선택하여 선언, `children` 명시.
-- 유틸 타입 사용 예: `Pick/Partial/Omit` 대신 구체 타입 설계 우선, 공용 Utility는 `shared/lib`에 배치.***
+- 유틸 타입 사용 예: `Pick/Partial/Omit` 대신 구체 타입 설계 우선, 공용 Utility는 `shared/lib`에 배치.\*\*\*
