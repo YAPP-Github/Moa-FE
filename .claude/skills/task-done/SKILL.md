@@ -131,10 +131,45 @@ If any fail, notifies user and does NOT mark task as done.
 
 ### 5. Sub-Agent Cleanup
 
-- Lists all agents created during this task
-- Shows what each agent accomplished
-- Removes agent references/configurations
-- Confirms cleanup completion
+**Dynamic Agent Cleanup Process:**
+
+A. **Identify Task-Specific Agents:**
+
+- Check `.claude/agents/` for agents created during task-init
+- Match agents by issue number tag or timestamp
+- Common agents to check:
+  - `fsd-architect.md` (FSD tasks)
+  - `asset-manager.md` (asset management tasks)
+  - `react-developer.md` (React development tasks)
+  - `code-reviewer.md` (code review tasks)
+  - `test-writer.md` (testing tasks)
+  - `doc-writer.md` (documentation tasks)
+
+B. **Document Agent Contributions:**
+
+```markdown
+Sub-agents used in this task:
+
+- fsd-architect: Enforced FSD layer rules, validated 12 import paths
+- asset-manager: Renamed 8 assets, updated 2 index files
+- react-developer: Created 3 components, applied 5 best practice rules
+```
+
+C. **Remove Agent Files:**
+
+- Delete agent markdown files from `.claude/agents/`
+- Only remove agents created specifically for this task
+- Keep permanent agents (if any exist)
+- Confirm deletion with file list
+
+D. **Cleanup Verification:**
+
+```bash
+# List remaining agents
+ls .claude/agents/
+
+# Confirm task-specific agents are removed
+```
 
 ### 6. Next Steps Guidance
 
