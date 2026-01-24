@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { images } from '@/assets';
-import { InviteLinkStep } from '@/components/signin/InviteLinkStep';
-import { LoginStep } from '@/components/signin/LoginStep';
-import { NicknameStep } from '@/components/signin/NicknameStep';
-import { TeamNameStep } from '@/components/signin/TeamNameStep';
-import { TeamStep } from '@/components/signin/TeamStep';
-
-type SigninStep = 'login' | 'nickname' | 'team' | 'team-name' | 'invite-link';
+import {
+  InviteLinkStep,
+  LoginStep,
+  NicknameStep,
+  type SigninStep,
+  TeamNameStep,
+  TeamStep,
+} from '@/features/auth';
+import { images } from '@/shared/assets';
 
 export function SigninPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -78,7 +79,7 @@ export function SigninPage() {
       {/* 좌측: 이미지 영역 (데스크톱만 표시) */}
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-[#F9F8F5] overflow-hidden">
         <img
-          src={images.signinImage}
+          src={images.imgSigninBanner}
           alt="Signin background"
           className="max-h-screen w-auto object-contain"
           loading="lazy"
