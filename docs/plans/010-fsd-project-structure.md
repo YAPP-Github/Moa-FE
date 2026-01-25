@@ -803,6 +803,7 @@ npm run dev         # 개발 서버 실행
 #### Phase 2: Asset Reorganization ✅
 
 **SVG Files Renamed** (6 files):
+
 - `big-check.svg` → `ic_check_lg.svg`
 - `delete.svg` → `ic_delete_md.svg`
 - `google.svg` → `ic_google_lg.svg`
@@ -811,14 +812,17 @@ npm run dev         # 개발 서버 실행
 - `star.svg` → `ic_star_md.svg`
 
 **Image Files Renamed** (2 files):
+
 - `logo.jpeg` → `img_logo.jpeg`
 - `signin-image.jpg` → `img_signin_banner.jpg`
 
 **Export Updates**:
+
 - [src/shared/assets/svg/index.ts](../../src/shared/assets/svg/index.ts) - Updated to camelCase exports
 - [src/shared/assets/images/index.ts](../../src/shared/assets/images/index.ts) - Updated to camelCase exports
 
 **Code References Updated** (5 files):
+
 - [src/components/signin/LoginStep.tsx](../../src/features/auth/ui/LoginStep.tsx#L47,50,53) - Updated logo and social icons
 - [src/components/signin/NicknameStep.tsx](../../src/features/auth/ui/NicknameStep.tsx#L45) - Updated delete icon
 - [src/components/signin/TeamNameStep.tsx](../../src/features/auth/ui/TeamNameStep.tsx#L47) - Updated delete icon
@@ -828,6 +832,7 @@ npm run dev         # 개발 서버 실행
 #### Phase 3: Signin Code Migration ✅
 
 **Created FSD Structure**:
+
 - [src/features/auth/ui/](../../src/features/auth/ui/) - 5 signin step components
   - [LoginStep.tsx](../../src/features/auth/ui/LoginStep.tsx)
   - [NicknameStep.tsx](../../src/features/auth/ui/NicknameStep.tsx)
@@ -841,11 +846,13 @@ npm run dev         # 개발 서버 실행
 - [src/app/App.tsx](../../src/app/App.tsx) - Moved to app layer
 
 **Deleted Old Structure**:
+
 - Removed `src/components/signin/` directory (5 files)
 - Removed `src/pages/SigninPage.tsx`
 - Removed `src/App.tsx` (moved to app layer)
 
 **Import Path Updates**:
+
 - [src/main.tsx](../../src/main.tsx#L4) - Updated App import to `./app/App`
 - [src/app/App.tsx](../../src/app/App.tsx#L2) - Updated to use `@/pages/signin`
 - [src/pages/signin/ui/SigninPage.tsx](../../src/pages/signin/ui/SigninPage.tsx#L3-10) - Updated to use `@/features/auth`
@@ -874,12 +881,14 @@ All quality gates passed successfully.
 **No Major Deviations**: The implementation followed the plan closely.
 
 **Minor Adjustments**:
+
 - Asset naming convention uses underscores instead of hyphens (e.g., `ic_check_lg` not `ic-check-lg`) for better consistency with typical conventions
 - Size descriptors use abbreviations (`sm`, `md`, `lg`) instead of pixel values for flexibility
 
 ### Performance Impact
 
 **Bundle Impact**:
+
 - No significant bundle size change (structure refactoring only)
 - Assets properly optimized (see dist output):
   - `img_logo.jpeg`: 12.69 KB
@@ -887,6 +896,7 @@ All quality gates passed successfully.
   - `ic_google_lg.svg`: 82.30 KB (gzipped: 55.46 KB)
 
 **FSD Benefits**:
+
 - Improved code organization and maintainability
 - Clear dependency boundaries
 - Better tree-shaking potential with Public APIs
@@ -894,10 +904,12 @@ All quality gates passed successfully.
 ### Sub-Agents Used
 
 **Task-Specific Agents Created**:
+
 - **fsd-architect** (8.9 KB): Enforced FSD layer rules, validated dependency directions
 - **asset-manager** (10.3 KB): Automated asset naming convention enforcement and validation
 
 **Actions Performed**:
+
 - Renamed 8 asset files to new conventions
 - Migrated 8 signin-related files to FSD structure
 - Created 5 new index.ts Public API files
@@ -937,4 +949,3 @@ All planned acceptance criteria met:
 **Documentation Added**: 5 new/updated files (1,500+ lines total)
 **Code Migrated**: 8 files reorganized into FSD structure
 **Assets Reorganized**: 8 files renamed with new conventions
-
