@@ -71,3 +71,19 @@ export const Clearable: Story = {
     );
   },
 };
+
+export const WithCharacterCount: Story = {
+  render: function CharacterCountInput() {
+    const [value, setValue] = useState('');
+
+    return (
+      <Input
+        placeholder="닉네임을 입력하세요"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        maxLength={10}
+        showCount
+      />
+    );
+  },
+};
