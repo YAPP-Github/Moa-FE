@@ -10,3 +10,9 @@ export {
   type FieldProps,
 } from './field';
 export { Input, type InputProps } from './input';
+export {
+  RadioCardGroup,
+  type RadioCardGroupProps,
+  RadioCardItem,
+  type RadioCardItemProps,
+} from './radio-card';
