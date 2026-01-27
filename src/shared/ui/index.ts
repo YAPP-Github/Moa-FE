@@ -1,3 +1,15 @@
+export {
+  AccordionContent,
+  type AccordionContentProps,
+  AccordionHeader,
+  type AccordionHeaderProps,
+  AccordionItem,
+  type AccordionItemProps,
+  AccordionRoot,
+  type AccordionRootProps,
+  AccordionTrigger,
+  type AccordionTriggerProps,
+} from './accordion';
 export { Button, type ButtonProps, buttonVariants } from './button';
 export { Calendar, type CalendarProps, dayVariants } from './calendar';
 export {
