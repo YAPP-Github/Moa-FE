@@ -1,4 +1,5 @@
 export { Button, type ButtonProps, buttonVariants } from './button';
+export { Calendar, type CalendarProps, dayVariants } from './calendar';
 export {
   Field,
   FieldDescription,
