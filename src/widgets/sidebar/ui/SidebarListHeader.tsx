@@ -1,4 +1,4 @@
-import { icMeatball24 } from '@/shared/assets/svg';
+import icMeatball24 from '@/shared/assets/svg/ic_meatball_24.svg';
 
 interface SidebarListHeaderProps {
   title: string;

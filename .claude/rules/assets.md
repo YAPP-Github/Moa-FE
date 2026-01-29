@@ -1,7 +1,7 @@
 # Assets 관리 규칙
 
 > 프로젝트의 모든 정적 리소스(이미지, SVG) 관리 규칙
-> 중앙집중형 관리 + 자동화된 네이밍 컨벤션
+> 중앙집중형 관리 + 직접 import 방식 (Tree-shaking 최적화)
 
 ---
 
@@ -9,13 +9,10 @@
 
 ```
 src/shared/assets/
-├── index.ts                # 메인 export (images, svg 네임스페이스)
 ├── images/
-│   ├── index.ts           # 이미지 파일들의 named export
 │   ├── img_logo.jpeg
 │   └── img_signin_banner.jpg
 └── svg/
-    ├── index.ts           # SVG 파일들의 named export
     ├── ic_check_lg.svg
     ├── ic_delete_md.svg
     └── ic_google_lg.svg
@@ -25,6 +22,7 @@ src/shared/assets/
 
 - 모든 assets은 반드시 `src/shared/assets/images/` 또는 `src/shared/assets/svg/` 폴더 내에 위치
 - FSD 아키텍처의 `shared` 레이어에서 중앙집중형 관리
+- **직접 import 방식 사용** (barrel export 제거로 tree-shaking 최적화)
 
 ---
 
@@ -124,14 +122,14 @@ signin-image.jpg   → img_signin_banner.jpg
 banner.png         → img_banner.png (or img_banner_hero.png)
 ```
 
-### Export명: camelCase
+### Import 변수명: camelCase
 
-**Rule**: 파일명(snake_case) → export명(camelCase)
+**Rule**: 파일명(snake_case) → import 변수명(camelCase)
 
 **Conversion**:
 
 ```
-File Name                  → Export Name
+File Name                  → Import Variable
 ic_check_lg.svg           → icCheckLg
 ic_google_lg.svg          → icGoogleLg
 ic_arrow_right_sm.svg     → icArrowRightSm
@@ -141,66 +139,38 @@ img_signin_banner.jpg     → imgSigninBanner
 
 ---
 
-## Index Export 방식
-
-### 1. 개별 폴더 index.ts
-
-**src/shared/assets/images/index.ts**:
-
-```typescript
-export { default as imgLogo } from "./img_logo.jpeg";
-export { default as imgSigninBanner } from "./img_signin_banner.jpg";
-```
-
-**src/shared/assets/svg/index.ts**:
-
-```typescript
-export { default as icCheckLg } from "./ic_check_lg.svg";
-export { default as icDeleteMd } from "./ic_delete_md.svg";
-export { default as icGoogleLg } from "./ic_google_lg.svg";
-export { default as icInfoMd } from "./ic_info_md.svg";
-export { default as icKakaoLg } from "./ic_kakao_lg.svg";
-export { default as icStarMd } from "./ic_star_md.svg";
-```
-
-### 2. 메인 index.ts
-
-**src/shared/assets/index.ts**:
-
-```typescript
-export * as images from "./images";
-export * as svg from "./svg";
-```
-
----
-
-## 사용 방법
+## 사용 방법 (직접 Import)
 
 ### Import
 
 ```typescript
-import { images, svg } from "@/shared/assets";
+// SVG 직접 import
+import icDeleteMd from "@/shared/assets/svg/ic_delete_md.svg";
+import icGoogleLg from "@/shared/assets/svg/ic_google_lg.svg";
+import icKakaoLg from "@/shared/assets/svg/ic_kakao_lg.svg";
+
+// 이미지 직접 import
+import imgLogo from "@/shared/assets/images/img_logo.jpeg";
+import imgSigninBanner from "@/shared/assets/images/img_signin_banner.jpg";
 ```
 
 ### 사용 예시
 
 ```tsx
 // 이미지 사용
-<img src={images.imgLogo} alt="Logo" />
-<img src={images.imgSigninBanner} alt="Signin" />
+<img src={imgLogo} alt="Logo" />
+<img src={imgSigninBanner} alt="Signin" />
 
 // SVG 사용
-<img src={svg.icGoogleLg} alt="Google" />
-<img src={svg.icCheckLg} alt="Check" />
-<img src={svg.icDeleteMd} alt="Delete" />
+<img src={icGoogleLg} alt="Google" />
+<img src={icDeleteMd} alt="Delete" />
 ```
 
 **잘못된 사용** (절대 금지):
 
 ```typescript
-// ❌ 개별 파일 직접 import (Public API 우회)
-import imgLogo from "@/shared/assets/images/img_logo.jpeg";
-import icGoogle from "@/shared/assets/svg/ic_google_lg.svg";
+// ❌ barrel export 방식 (tree-shaking 불리)
+import { images, svg } from "@/shared/assets";
 
 // ❌ 이전 경로 (FSD 이전)
 import { images, svg } from "@/assets";
@@ -256,24 +226,21 @@ git status | grep 'src/shared/assets/'
 승인 후:
 
 1. 파일명 변경
-2. `index.ts` export 추가/업데이트 (camelCase)
-3. 해당 asset을 사용하는 모든 파일 찾기
-4. Import 경로 업데이트
-5. 빌드 검증
+2. 해당 asset을 사용하는 모든 파일 찾기
+3. Import 경로 업데이트 (직접 import 방식)
+4. 빌드 검증
 
 ```bash
 # 1. 파일명 변경
 git mv src/shared/assets/svg/google.svg src/shared/assets/svg/ic_google_lg.svg
 
-# 2. index.ts 업데이트
-# export { default as icGoogleLg } from './ic_google_lg.svg';
-
-# 3. Import 경로 찾기
+# 2. Import 경로 찾기
 grep -r "google" src/ --include="*.tsx" --include="*.ts"
 
-# 4. 경로 수정 (자동)
+# 3. 경로 수정 (자동)
+# import icGoogleLg from '@/shared/assets/svg/ic_google_lg.svg';
 
-# 5. 빌드 검증
+# 4. 빌드 검증
 npm run build
 ```
 
@@ -293,33 +260,20 @@ src/shared/assets/svg/ic_new_icon_md.svg
 src/shared/assets/images/img_new_banner.png
 ```
 
-### 2. Export 추가
+### 2. 사용
 
-해당 폴더의 `index.ts`에 export 추가 (알파벳 순서 유지):
-
-**SVG 추가 시** (`src/shared/assets/svg/index.ts`):
+직접 import 후 사용:
 
 ```typescript
-export { default as icCheckLg } from "./ic_check_lg.svg";
-export { default as icDeleteMd } from "./ic_delete_md.svg";
-export { default as icNewIconMd } from "./ic_new_icon_md.svg"; // 추가
-```
+// SVG import
+import icNewIconMd from '@/shared/assets/svg/ic_new_icon_md.svg';
 
-**이미지 추가 시** (`src/shared/assets/images/index.ts`):
+// 이미지 import
+import imgNewBanner from '@/shared/assets/images/img_new_banner.png';
 
-```typescript
-export { default as imgLogo } from "./img_logo.jpeg";
-export { default as imgNewBanner } from "./img_new_banner.png"; // 추가
-export { default as imgSigninBanner } from "./img_signin_banner.jpg";
-```
-
-### 3. 사용
-
-```typescript
-import { images, svg } from '@/shared/assets';
-
-<img src={images.imgNewBanner} />
-<img src={svg.icNewIconMd} />
+// 사용
+<img src={imgNewBanner} alt="Banner" />
+<img src={icNewIconMd} alt="Icon" />
 ```
 
 ---
@@ -346,17 +300,12 @@ git mv src/shared/assets/svg/big-check.svg src/shared/assets/svg/ic_check_lg.svg
 git mv src/shared/assets/images/signin-image.jpg src/shared/assets/images/img_signin_banner.jpg
 ```
 
-**3. Index 업데이트**:
-
-- 해당 폴더의 `index.ts`에 새 export 추가
-- 알파벳 순서로 정렬
-
-**4. Import 업데이트**:
+**3. Import 업데이트**:
 
 - 기존 파일에서 해당 asset을 사용하는 모든 곳 찾기
-- `import { images, svg } from '@/shared/assets'` 방식으로 변경
+- 직접 import 방식으로 변경
 
-**5. 빌드 검증**:
+**4. 빌드 검증**:
 
 ```bash
 npm run build
@@ -419,10 +368,8 @@ viewBox를 찾을 수 없습니다.
 - [ ] SVG 파일명이 `ic_{descriptor}_{size}.svg` 형식인가?
 - [ ] Image 파일명이 `img_{context}_{descriptor}.ext` 형식인가?
 - [ ] 파일명이 snake_case인가? (하이픈 없음)
-- [ ] 해당 폴더의 `index.ts`에 export가 추가되었는가?
-- [ ] Export명이 camelCase인가?
-- [ ] Export가 알파벳 순서로 정렬되어 있는가?
-- [ ] 기존 파일에서 import 방식이 `{ images, svg } from '@/shared/assets'`인가?
+- [ ] Import 변수명이 camelCase인가? (예: `imgLogo`, `icDeleteMd`)
+- [ ] 직접 import 방식을 사용하는가? (예: `import icDeleteMd from '@/shared/assets/svg/ic_delete_md.svg'`)
 - [ ] Build와 lint가 통과하는가?
 
 ---
@@ -443,7 +390,7 @@ task-init 시 자동 활성화:
 
 - 네이밍 컨벤션 자동 검증
 - 잘못된 이름 자동 수정 제안
-- index.ts export 자동 업데이트
+- Import 경로 자동 업데이트
 
 자세한 내용: [.claude/agents/asset-manager.md](../agents/asset-manager.md)
 
@@ -455,4 +402,4 @@ task-init 시 자동 활성화:
 
 ---
 
-**마지막 업데이트**: 2026-01-24
+**마지막 업데이트**: 2026-01-29

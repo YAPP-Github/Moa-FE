@@ -1,4 +1,6 @@
-import { images, svg } from '@/shared/assets';
+import imgLogo from '@/shared/assets/images/img_logo.jpeg';
+import icGoogleLg from '@/shared/assets/svg/ic_google_lg.svg';
+import icKakaoLg from '@/shared/assets/svg/ic_kakao_lg.svg';
 
 interface LoginStepProps {
   onKakaoLogin: () => void;
@@ -10,7 +12,7 @@ export function LoginStep({ onKakaoLogin, onGoogleLogin }: LoginStepProps) {
     <>
       {/* 로고 */}
       <div className="mb-40">
-        <img src={images.imgLogo} alt="회고 라운지 로고" className="w-40 h-auto object-contain" />
+        <img src={imgLogo} alt="회고 라운지 로고" className="w-40 h-auto object-contain" />
       </div>
 
       {/* 로그인 버튼 그룹 */}
@@ -23,7 +25,7 @@ export function LoginStep({ onKakaoLogin, onGoogleLogin }: LoginStepProps) {
           aria-label="카카오톡으로 시작하기"
         >
           <span className="flex items-center justify-center gap-2">
-            <img src={svg.icKakaoLg} alt="Kakao" className="w-5 h-5" />
+            <img src={icKakaoLg} alt="Kakao" className="w-5 h-5" />
             <span className="text-[15px] font-semibold leading-[150%] tracking-[-0.003em] text-[#333D4B]">
               카카오톡으로 시작하기
             </span>
@@ -38,7 +40,7 @@ export function LoginStep({ onKakaoLogin, onGoogleLogin }: LoginStepProps) {
           aria-label="구글로 시작하기"
         >
           <span className="flex items-center justify-center gap-2">
-            <img src={svg.icGoogleLg} alt="Google" className="w-5 h-5" />
+            <img src={icGoogleLg} alt="Google" className="w-5 h-5" />
             <span className="text-[15px] font-semibold leading-[150%] tracking-[-0.003em] text-[#333D4B]">
               구글로 시작하기
             </span>

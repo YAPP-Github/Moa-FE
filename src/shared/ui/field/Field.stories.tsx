@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Field, FieldDescription, FieldError, FieldLabel } from './Field';
-import { Input } from '../input';
+import { Input } from '../input/Input';
 
 const meta: Meta<typeof Field> = {
   title: 'shared/ui/Field',

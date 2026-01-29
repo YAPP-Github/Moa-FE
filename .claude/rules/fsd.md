@@ -13,7 +13,7 @@
 
 1. 단방향 의존성: `app → pages → widgets → features → entities → shared`
 2. 슬라이스 간 직접 참조 금지
-3. Public API (`index.ts`) 사용 강제
+3. 직접 import 사용 (tree-shaking 최적화를 위해 barrel export 미사용)
 
 ---
 
@@ -58,9 +58,8 @@ src/
 ```
 pages/
 └── signin/
-    ├── ui/
-    │   └── SigninPage.tsx
-    └── index.ts           # Public API
+    └── ui/
+        └── SigninPage.tsx
 ```
 
 **예시**:
@@ -73,6 +72,7 @@ pages/
 - widgets, features, entities, shared 조합 가능
 - 비즈니스 로직 최소화 (조립만)
 - 페이지 전용 로직은 해당 슬라이스에 배치
+- 직접 import 사용 (barrel export 미사용)
 
 ### Layer 3: widgets
 
@@ -108,9 +108,8 @@ features/
     │   └── NicknameStep.tsx
     ├── api/
     │   └── auth.queries.ts
-    ├── model/
-    │   └── types.ts
-    └── index.ts           # Public API
+    └── model/
+        └── types.ts
 ```
 
 **예시**:
@@ -124,6 +123,7 @@ features/
 - entities, shared만 참조 가능
 - 비즈니스 로직 포함 가능
 - 같은 레이어 다른 feature 참조 금지
+- 직접 import 사용 (barrel export 미사용)
 
 ### Layer 5: entities
 
@@ -138,9 +138,8 @@ entities/
 └── user/
     ├── model/
     │   └── types.ts
-    ├── api/
-    │   └── user.queries.ts
-    └── index.ts           # Public API
+    └── api/
+        └── user.queries.ts
 ```
 
 **예시**:
@@ -154,6 +153,7 @@ entities/
 - shared만 참조 가능
 - 데이터 모델, API 쿼리, 도메인 로직
 - 다수 feature/page에서 재사용
+- 직접 import 사용 (barrel export 미사용)
 
 ### Layer 6: shared
 
@@ -165,15 +165,16 @@ entities/
 
 ```
 shared/
-├── assets/              # 중앙집중형 assets
+├── assets/              # 중앙집중형 assets (직접 import)
 │   ├── images/
-│   ├── svg/
-│   └── index.ts
-├── ui/                  # 공통 UI 컴포넌트
-│   ├── Button.tsx
-│   └── Input.tsx
-├── lib/                 # 유틸리티 함수
-│   └── date.ts
+│   └── svg/
+├── ui/                  # 공통 UI 컴포넌트 (직접 import)
+│   ├── button/
+│   │   └── Button.tsx
+│   └── input/
+│       └── Input.tsx
+├── lib/                 # 유틸리티 함수 (직접 import)
+│   └── cn.ts
 ├── api/                 # 공통 API 설정
 │   └── client.ts
 └── config/              # 설정 파일
@@ -185,6 +186,7 @@ shared/
 - 다른 레이어 참조 불가
 - 비즈니스 로직 금지
 - 범용적이고 재사용 가능한 코드만
+- **직접 import 사용** (tree-shaking 최적화를 위해 barrel export 미사용)
 
 ---
 
@@ -199,7 +201,7 @@ shared/
 **규칙**:
 
 - 같은 레이어 내 슬라이스 간 직접 참조 금지
-- Public API (`index.ts`)를 통해서만 외부 노출
+- 직접 import 방식 사용 (tree-shaking 최적화)
 
 ### 세그먼트 (Segment)
 
@@ -221,50 +223,54 @@ shared/
 
 ---
 
-## Public API & import 규칙
+## Import 규칙 (직접 Import 방식)
 
-### Public API (`index.ts`)
-
-각 슬라이스 루트에 `index.ts`를 두고 외부 노출을 한정:
-
-```typescript
-// features/auth/index.ts
-export { LoginStep } from "./ui/LoginStep";
-export { NicknameStep } from "./ui/NicknameStep";
-export { TeamStep } from "./ui/TeamStep";
-export type { SigninStep, SigninState } from "./model/types";
-```
+> **Tree-shaking 최적화**를 위해 barrel export (index.ts) 대신 직접 import를 사용합니다.
 
 ### Import 규칙
 
-**✅ Good**:
+**✅ Good (직접 Import)**:
 
 ```typescript
-// Public API 사용
-import { LoginStep, NicknameStep } from "@/features/auth";
-import { useUser } from "@/entities/user";
-import { images, svg } from "@/shared/assets";
-```
-
-**❌ Bad**:
-
-```typescript
-// 내부 경로 직접 접근 금지
+// Features - 세그먼트까지 직접 import
 import { LoginStep } from "@/features/auth/ui/LoginStep";
-import { useUser } from "@/entities/user/api/user.queries";
+import { NicknameStep } from "@/features/auth/ui/NicknameStep";
+import type { SigninStep } from "@/features/auth/model/types";
+
+// Widgets - 세그먼트까지 직접 import
+import { DashboardLayout } from "@/widgets/layout/ui/DashboardLayout";
+import { Header } from "@/widgets/header/ui/Header";
+
+// Pages - 세그먼트까지 직접 import
+import { MainPage } from "@/pages/main/ui/MainPage";
+import { SigninPage } from "@/pages/signin/ui/SigninPage";
+
+// Shared - 개별 파일까지 직접 import
+import { cn } from "@/shared/lib/cn";
+import { Button } from "@/shared/ui/button/Button";
+import icDeleteMd from "@/shared/assets/svg/ic_delete_md.svg";
 import imgLogo from "@/shared/assets/images/img_logo.jpeg";
 ```
 
-**❌ Bad**:
+**❌ Bad (barrel export)**:
+
+```typescript
+// barrel export 금지 (tree-shaking 비효율)
+import { LoginStep, NicknameStep } from "@/features/auth";
+import { images, svg } from "@/shared/assets";
+import { cn } from "@/shared/lib";
+```
+
+**❌ Bad (레이어 위반)**:
 
 ```typescript
 // 상위 레이어 참조 금지
 // features/auth/ui/LoginStep.tsx
-import { SigninPage } from "@/pages/signin"; // ❌ features가 pages 참조
+import { SigninPage } from "@/pages/signin/ui/SigninPage"; // ❌ features가 pages 참조
 
 // 같은 레이어 슬라이스 간 참조 금지
 // features/auth/ui/LoginStep.tsx
-import { RetrospectiveForm } from "@/features/retrospective"; // ❌
+import { RetrospectiveForm } from "@/features/retrospective/ui/RetrospectiveForm"; // ❌
 ```
 
 ---
@@ -342,8 +348,7 @@ import { RetrospectiveForm } from "@/features/retrospective"; // ❌
 - [ ] 코드가 어느 레이어에 속하는지 판단
 - [ ] 슬라이스 이름 결정 (도메인/기능 단위)
 - [ ] 세그먼트별로 파일 분류 (ui, api, model, lib, config)
-- [ ] `index.ts` (Public API) 생성
-- [ ] 모든 import 경로를 Public API로 변경
+- [ ] 모든 import 경로를 직접 import로 변경
 - [ ] 빌드 검증 (`npm run build`)
 
 ---
@@ -358,17 +363,14 @@ import { RetrospectiveForm } from "@/features/retrospective"; // ❌
 pages/
 └── retrospective/           # Group
     ├── list/               # Slice
-    │   ├── ui/
-    │   │   └── RetrospectiveListPage.tsx
-    │   └── index.ts
+    │   └── ui/
+    │       └── RetrospectiveListPage.tsx
     ├── detail/             # Slice
-    │   ├── ui/
-    │   │   └── RetrospectiveDetailPage.tsx
-    │   └── index.ts
+    │   └── ui/
+    │       └── RetrospectiveDetailPage.tsx
     └── create/             # Slice
-        ├── ui/
-        │   └── RetrospectiveCreatePage.tsx
-        └── index.ts
+        └── ui/
+            └── RetrospectiveCreatePage.tsx
 ```
 
 **규칙**:
@@ -421,9 +423,8 @@ src/
 │   └── App.tsx                       # 라우팅 설정
 ├── pages/
 │   └── signin/
-│       ├── ui/
-│       │   └── SigninPage.tsx        # 페이지 조립
-│       └── index.ts
+│       └── ui/
+│           └── SigninPage.tsx        # 페이지 조립
 ├── features/
 │   └── auth/
 │       ├── ui/
@@ -432,9 +433,8 @@ src/
 │       │   ├── TeamStep.tsx
 │       │   ├── TeamNameStep.tsx
 │       │   └── InviteLinkStep.tsx
-│       ├── model/
-│       │   └── types.ts
-│       └── index.ts
+│       └── model/
+│           └── types.ts
 └── shared/
     └── assets/
         ├── images/
@@ -444,17 +444,20 @@ src/
             └── ic_kakao_lg.svg
 ```
 
-**Import Flow**:
+**Import Flow (직접 Import)**:
 
 ```typescript
 // app/App.tsx
-import { SigninPage } from "@/pages/signin";
+import { SigninPage } from "@/pages/signin/ui/SigninPage";
 
 // pages/signin/ui/SigninPage.tsx
-import { LoginStep, NicknameStep } from "@/features/auth";
+import { LoginStep } from "@/features/auth/ui/LoginStep";
+import { NicknameStep } from "@/features/auth/ui/NicknameStep";
+import type { SigninStep } from "@/features/auth/model/types";
 
 // features/auth/ui/LoginStep.tsx
-import { svg } from "@/shared/assets";
+import icGoogleLg from "@/shared/assets/svg/ic_google_lg.svg";
+import icKakaoLg from "@/shared/assets/svg/ic_kakao_lg.svg";
 ```
 
 ### Example 2: Retrospective Feature
@@ -464,28 +467,24 @@ src/
 ├── pages/
 │   └── retrospective/
 │       ├── list/
-│       │   ├── ui/
-│       │   │   └── RetrospectiveListPage.tsx
-│       │   └── index.ts
+│       │   └── ui/
+│       │       └── RetrospectiveListPage.tsx
 │       └── detail/
-│           ├── ui/
-│           │   └── RetrospectiveDetailPage.tsx
-│           └── index.ts
+│           └── ui/
+│               └── RetrospectiveDetailPage.tsx
 ├── features/
 │   └── retrospective/
 │       ├── ui/
 │       │   ├── RetrospectiveForm.tsx
 │       │   └── RetrospectiveCard.tsx
-│       ├── api/
-│       │   └── retrospective.queries.ts
-│       └── index.ts
+│       └── api/
+│           └── retrospective.queries.ts
 └── entities/
     └── retrospective/
         ├── model/
         │   └── types.ts
-        ├── api/
-        │   └── retrospective.api.ts
-        └── index.ts
+        └── api/
+            └── retrospective.api.ts
 ```
 
 ---
@@ -505,4 +504,4 @@ src/
 
 ---
 
-**마지막 업데이트**: 2026-01-24
+**마지막 업데이트**: 2026-01-29
