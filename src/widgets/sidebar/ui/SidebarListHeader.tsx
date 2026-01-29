@@ -1,4 +1,4 @@
-import icMeatball24 from '@/shared/assets/svg/ic_meatball_24.svg';
+import IcMeatball from '@/shared/ui/icons/IcMeatball';
 
 interface SidebarListHeaderProps {
   title: string;
@@ -11,7 +11,7 @@ export function SidebarListHeader({ title }: SidebarListHeaderProps) {
         {title}
       </span>
       <button type="button" className="shrink-0">
-        <img src={icMeatball24} alt="더보기" className="w-6 h-6" />
+        <IcMeatball className="w-6 h-6" />
       </button>
     </div>
   );
