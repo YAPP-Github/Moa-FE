@@ -20,7 +20,10 @@
     "deploy": "dotenv -- bash .github/scripts/deploy.sh",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "generate:icons": "svgr --config-file svgr.icons.config.mjs src/shared/assets/icons",
+    "generate:logos": "svgr --config-file svgr.logos.config.mjs src/shared/assets/logos",
+    "generate:svg": "pnpm run generate:icons && pnpm run generate:logos && pnpm run lint:fix && pnpm run format"
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
@@ -45,6 +48,7 @@
     "@storybook/addon-essentials": "^8",
     "@storybook/react": "^8",
     "@storybook/react-vite": "^8",
+    "@svgr/cli": "^8.1.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query-devtools": "^5.91.2",
     "@testing-library/jest-dom": "^6.9.1",

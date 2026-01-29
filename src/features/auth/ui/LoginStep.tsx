@@ -1,6 +1,6 @@
 import imgLogo from '@/shared/assets/images/img_logo.jpeg';
-import icGoogleLg from '@/shared/assets/svg/ic_google_lg.svg';
-import icKakaoLg from '@/shared/assets/svg/ic_kakao_lg.svg';
+import IcGoogle from '@/shared/ui/logos/IcGoogle';
+import IcKakao from '@/shared/ui/logos/IcKakao';
 
 interface LoginStepProps {
   onKakaoLogin: () => void;
@@ -25,7 +25,7 @@ export function LoginStep({ onKakaoLogin, onGoogleLogin }: LoginStepProps) {
           aria-label="카카오톡으로 시작하기"
         >
           <span className="flex items-center justify-center gap-2">
-            <img src={icKakaoLg} alt="Kakao" className="w-5 h-5" />
+            <IcKakao className="w-5 h-5" />
             <span className="text-[15px] font-semibold leading-[150%] tracking-[-0.003em] text-[#333D4B]">
               카카오톡으로 시작하기
             </span>
@@ -40,7 +40,7 @@ export function LoginStep({ onKakaoLogin, onGoogleLogin }: LoginStepProps) {
           aria-label="구글로 시작하기"
         >
           <span className="flex items-center justify-center gap-2">
-            <img src={icGoogleLg} alt="Google" className="w-5 h-5" />
+            <IcGoogle className="w-5 h-5" />
             <span className="text-[15px] font-semibold leading-[150%] tracking-[-0.003em] text-[#333D4B]">
               구글로 시작하기
             </span>
