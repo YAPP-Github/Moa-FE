@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { cn } from '@/shared/lib';
+import { cn } from '@/shared/lib/cn';
 
 interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { svg } from '@/shared/assets';
+import icDeleteMd from '@/shared/assets/svg/ic_delete_md.svg';
 
 interface InviteLinkStepProps {
   onSubmit: (inviteLink: string) => void;
@@ -44,7 +44,7 @@ export function InviteLinkStep({ onSubmit }: InviteLinkStepProps) {
               className="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] flex items-center justify-center"
               aria-label="Clear input"
             >
-              <img src={svg.icDeleteMd} alt="Clear" className="w-full h-full" />
+              <img src={icDeleteMd} alt="Clear" className="w-full h-full" />
             </button>
           )}
         </div>

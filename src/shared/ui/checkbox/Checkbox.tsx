@@ -1,5 +1,5 @@
 import { forwardRef, useId } from 'react';
-import { cn } from '@/shared/lib';
+import { cn } from '@/shared/lib/cn';
 
 interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   /** 체크박스 옆에 표시할 레이블 텍스트 */

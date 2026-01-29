@@ -30,7 +30,7 @@
  */
 
 import { createContext, forwardRef, useContext, useId } from 'react';
-import { cn } from '@/shared/lib';
+import { cn } from '@/shared/lib/cn';
 
 interface RadioCardContextValue {
   name: string;

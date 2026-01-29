@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
-import { Button } from '../button';
-import { svg } from '@/shared/assets';
-import { cn } from '@/shared/lib';
+import { Button } from '../button/Button';
+import icDeleteMd from '@/shared/assets/svg/ic_delete_md.svg';
+import { cn } from '@/shared/lib/cn';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
@@ -58,7 +58,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               className="absolute right-4 top-1/2 h-[18px] w-[18px] -translate-y-1/2 rounded-full"
               aria-label="입력 지우기"
             >
-              <img src={svg.icDeleteMd} alt="" className="h-[18px] w-[18px]" />
+              <img src={icDeleteMd} alt="" className="h-[18px] w-[18px]" />
             </Button>
           )}
         </div>

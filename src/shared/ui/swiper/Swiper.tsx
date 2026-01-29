@@ -18,7 +18,7 @@
  */
 
 import { createContext, forwardRef, useCallback, useContext, useRef, useState } from 'react';
-import { cn } from '@/shared/lib';
+import { cn } from '@/shared/lib/cn';
 
 // ============================================================================
 // Types
