@@ -12,6 +12,7 @@ export {
 } from './accordion';
 export { Button, type ButtonProps, buttonVariants } from './button';
 export { Calendar, type CalendarProps, dayVariants } from './calendar';
+export { Checkbox, type CheckboxProps } from './checkbox';
 export {
   Field,
   FieldDescription,
