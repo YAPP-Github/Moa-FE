@@ -21,8 +21,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "generate:icons": "svgr --config-file svgr.icons.config.mjs src/shared/assets/icons",
-    "generate:logos": "svgr --config-file svgr.logos.config.mjs src/shared/assets/logos",
+    "generate:icons": "svgr --config-file svgr.icons.config.js src/shared/assets/icons",
+    "generate:logos": "svgr --config-file svgr.logos.config.js src/shared/assets/logos",
     "generate:svg": "pnpm run generate:icons && pnpm run generate:logos && pnpm run lint:fix && pnpm run format"
   },
   "lint-staged": {
