@@ -226,12 +226,12 @@ src/
 ```typescript
 // pages/signin/ui/SigninPage.tsx
 export function SigninPage() {
-  const [step, setStep] = useState<SigninStep>('login');
+  const [step, setStep] = useState<SigninStep>("login");
 
   return (
     <div>
-      {step === 'login' && <LoginStep onNext={() => setStep('nickname')} />}
-      {step === 'nickname' && <NicknameStep onNext={() => setStep('team')} />}
+      {step === "login" && <LoginStep onNext={() => setStep("nickname")} />}
+      {step === "nickname" && <NicknameStep onNext={() => setStep("team")} />}
       {/* ... other steps */}
     </div>
   );
@@ -243,12 +243,12 @@ export function LoginStep({ onNext }: { onNext: () => void }) {
 }
 
 // features/auth/index.ts (Public API)
-export { LoginStep } from './ui/LoginStep';
-export { NicknameStep } from './ui/NicknameStep';
-export { TeamStep } from './ui/TeamStep';
-export { TeamNameStep } from './ui/TeamNameStep';
-export { InviteLinkStep } from './ui/InviteLinkStep';
-export type { SigninStep } from './model/types';
+export { LoginStep } from "./ui/LoginStep";
+export { NicknameStep } from "./ui/NicknameStep";
+export { TeamStep } from "./ui/TeamStep";
+export { TeamNameStep } from "./ui/TeamNameStep";
+export { InviteLinkStep } from "./ui/InviteLinkStep";
+export type { SigninStep } from "./model/types";
 ```
 
 ### Data Models
@@ -616,11 +616,13 @@ npm run dev         # 개발 서버 실행
 **Phase-based Rollout**:
 
 1. **Phase 1-2**: 문서 및 Asset 정리 (기능 영향 없음)
+
    - CLAUDE.md, FSD 문서 추가
    - Asset 네이밍 변경
    - 빌드 검증
 
 2. **Phase 3**: 코드 마이그레이션 (기능 영향 있음)
+
    - Signin 코드 FSD 이동
    - Import 경로 업데이트
    - 기능 동작 검증

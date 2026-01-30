@@ -479,7 +479,7 @@ const Analytics = dynamic(
   () => import("@vercel/analytics/react").then((m) => m.Analytics),
   {
     ssr: false,
-  },
+  }
 );
 
 export default function RootLayout({ children }) {
@@ -519,7 +519,7 @@ const MonacoEditor = dynamic(
   () => import("./monaco-editor").then((m) => m.MonacoEditor),
   {
     ssr: false,
-  },
+  }
 );
 
 function CodePanel({ code }: { code: string }) {
@@ -1260,7 +1260,7 @@ function cachePrefs(user: FullUser) {
       JSON.stringify({
         theme: user.preferences.theme,
         notifications: user.preferences.notifications,
-      }),
+      })
     );
   } catch {}
 }
@@ -1436,7 +1436,7 @@ function TodoList() {
     (newItems: Item[]) => {
       setItems([...items, ...newItems]);
     },
-    [items],
+    [items]
   ); // ❌ items dependency causes recreations
 
   // Risk of stale closure if dependency is forgotten
@@ -1521,7 +1521,7 @@ function FilteredList({ items }: { items: Item[] }) {
 function UserProfile() {
   // JSON.parse runs on every render
   const [settings, setSettings] = useState(
-    JSON.parse(localStorage.getItem("settings") || "{}"),
+    JSON.parse(localStorage.getItem("settings") || "{}")
   );
 
   return <SettingsForm settings={settings} onChange={setSettings} />;
@@ -1949,14 +1949,14 @@ Use a module-level Map to cache function results when the same function is calle
 function ProjectList({ projects }: { projects: Project[] }) {
   return (
     <div>
-      {projects.map(project => {
+      {projects.map((project) => {
         // slugify() called 100+ times for same project names
-        const slug = slugify(project.name)
+        const slug = slugify(project.name);
 
-        return <ProjectCard key={project.id} slug={slug} />
+        return <ProjectCard key={project.id} slug={slug} />;
       })}
     </div>
-  )
+  );
 }
 ```
 
@@ -1964,28 +1964,28 @@ function ProjectList({ projects }: { projects: Project[] }) {
 
 ```typescript
 // Module-level cache
-const slugifyCache = new Map<string, string>()
+const slugifyCache = new Map<string, string>();
 
 function cachedSlugify(text: string): string {
   if (slugifyCache.has(text)) {
-    return slugifyCache.get(text)!
+    return slugifyCache.get(text)!;
   }
-  const result = slugify(text)
-  slugifyCache.set(text, result)
-  return result
+  const result = slugify(text);
+  slugifyCache.set(text, result);
+  return result;
 }
 
 function ProjectList({ projects }: { projects: Project[] }) {
   return (
     <div>
-      {projects.map(project => {
+      {projects.map((project) => {
         // Computed only once per unique project name
-        const slug = cachedSlugify(project.name)
+        const slug = cachedSlugify(project.name);
 
-        return <ProjectCard key={project.id} slug={slug} />
+        return <ProjectCard key={project.id} slug={slug} />;
       })}
     </div>
-  )
+  );
 }
 ```
 
@@ -2056,7 +2056,7 @@ let cookieCache: Record<string, string> | null = null;
 function getCookie(name: string) {
   if (!cookieCache) {
     cookieCache = Object.fromEntries(
-      document.cookie.split("; ").map((c) => c.split("=")),
+      document.cookie.split("; ").map((c) => c.split("="))
     );
   }
   return cookieCache[name];
@@ -2355,8 +2355,8 @@ function UserList({ users }: { users: User[] }) {
   const sorted = useMemo(
     () => users.sort((a, b) => a.name.localeCompare(b.name)),
     [users]
-  )
-  return <div>{sorted.map(renderUser)}</div>
+  );
+  return <div>{sorted.map(renderUser)}</div>;
 }
 ```
 
@@ -2368,8 +2368,8 @@ function UserList({ users }: { users: User[] }) {
   const sorted = useMemo(
     () => users.toSorted((a, b) => a.name.localeCompare(b.name)),
     [users]
-  )
-  return <div>{sorted.map(renderUser)}</div>
+  );
+  return <div>{sorted.map(renderUser)}</div>;
 }
 ```
 

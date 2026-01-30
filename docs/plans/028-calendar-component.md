@@ -198,7 +198,7 @@ const dayVariants = cva(
     defaultVariants: {
       state: "default",
     },
-  },
+  }
 );
 ```
 

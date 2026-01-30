@@ -62,16 +62,19 @@ Initialize task planning workflow by analyzing GitHub issues, scanning the codeb
 Use Task tool with Explore agent (thoroughness: medium by default) to:
 
 1. **Map Directory Structure**:
+
    - Identify relevant directories for the task
    - Understand project organization patterns
    - Locate configuration files
 
 2. **Find Related Files**:
+
    - Search for components/modules related to the task
    - Identify files that will need modification
    - Find similar implementations for reference
 
 3. **Understand Architecture**:
+
    - Review existing patterns and conventions
    - Identify data flow and state management
    - Understand routing and API structure
@@ -92,11 +95,13 @@ Use Task tool with Explore agent (thoroughness: medium by default) to:
 Perform web research if needed:
 
 1. **Library Documentation**:
+
    - Search for official docs of unfamiliar libraries
    - Review API references for libraries being used
    - Check for recent changes or deprecations
 
 2. **Best Practices**:
+
    - Search for React/Next.js patterns related to the task
    - Review Vercel React best practices rules applicable to task
    - Find performance optimization techniques
@@ -135,6 +140,7 @@ Create plan document at `docs/plans/{issue_number}-{description}.md`:
 **Create specialized agents for implementation**:
 
 1. **react-developer** (always for React/Next.js tasks):
+
    - Enable `vercel-react-best-practices` skill
    - Configure focus areas based on task type:
      - Data fetching: `async-*` rules (async-defer-await, async-parallel)
@@ -143,11 +149,13 @@ Create plan document at `docs/plans/{issue_number}-{description}.md`:
      - Server: `server-*` rules (server-cache-react, server-serialization)
 
 2. **code-reviewer**:
+
    - Review code quality and adherence to best practices
    - Check for performance issues
    - Verify security considerations
 
 3. **test-writer**:
+
    - Create unit tests for new functionality
    - Update existing tests affected by changes
    - Ensure test coverage meets standards
@@ -168,11 +176,13 @@ Create plan document at `docs/plans/{issue_number}-{description}.md`:
 Present plan summary to user:
 
 1. **Show Plan Highlights**:
+
    - Key objectives and approach
    - Files that will be created/modified
    - Major design decisions
 
 2. **Display Sub-Agents**:
+
    - List agents that will be created
    - Show which best practices rules will be applied
 

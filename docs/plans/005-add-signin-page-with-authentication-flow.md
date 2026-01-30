@@ -215,7 +215,7 @@ function SigninPage() {
           <Button
             variant="kakao"
             className="w-full"
-            onClick={() => console.log('Kakao login')}
+            onClick={() => console.log("Kakao login")}
           >
             <KakaoIcon />
             카카오톡으로 시작하기
@@ -224,7 +224,7 @@ function SigninPage() {
           <Button
             variant="google"
             className="w-full"
-            onClick={() => console.log('Google login')}
+            onClick={() => console.log("Google login")}
           >
             <GoogleIcon />
             구글로 시작하기
@@ -240,7 +240,7 @@ function SigninPage() {
 
 ```typescript
 interface SocialButtonProps {
-  provider: 'kakao' | 'google';
+  provider: "kakao" | "google";
   icon: React.ReactNode;
   label: string;
   onClick: () => void;
@@ -248,14 +248,14 @@ interface SocialButtonProps {
 
 function SocialButton({ provider, icon, label, onClick }: SocialButtonProps) {
   const styles = {
-    kakao: 'bg-[#FFEB00] text-black hover:bg-[#FFE500]',
-    google: 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50',
+    kakao: "bg-[#FFEB00] text-black hover:bg-[#FFE500]",
+    google: "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50",
   };
 
   return (
     <button
       className={cn(
-        'flex items-center justify-center gap-3 rounded-lg px-6 py-3 text-base font-semibold transition-colors',
+        "flex items-center justify-center gap-3 rounded-lg px-6 py-3 text-base font-semibold transition-colors",
         styles[provider]
       )}
       onClick={onClick}
@@ -770,17 +770,20 @@ npm run lint        # 린트 통과
 **Added** (Not in Original Plan):
 
 1. **Complete multi-step signin flow**:
+
    - Original plan only included initial login screen
    - Implemented full flow: login → nickname → team → (team-name | invite-link)
    - All based on user-provided mockups during implementation
 
 2. **Assets reorganization**:
+
    - Created `images/` and `svg/` folder structure
    - Implemented namespace-based import pattern
    - Established naming conventions (kebab-case → camelCase)
    - Created comprehensive documentation in `.claude/rules/assets.md`
 
 3. **Query parameter routing**:
+
    - Used `useSearchParams` instead of local state for step management
    - Enables better URL sharing and back button support
 
@@ -791,10 +794,12 @@ npm run lint        # 린트 통과
 **Changed** (Different Approach):
 
 1. **Component modularization**:
+
    - Created 5 separate step components instead of single monolithic component
    - Better separation of concerns and maintainability
 
 2. **Assets structure**:
+
    - Original plan had `src/assets/signin/` for signin-specific assets
    - Implemented global organization: `src/assets/images/` and `src/assets/svg/`
    - More scalable for entire project

@@ -125,7 +125,7 @@ cn(
   "flex items-center",
   variant === "primary" && "bg-blue-500",
   variant === "secondary" && "bg-gray-500",
-  className,
+  className
 );
 ```
 

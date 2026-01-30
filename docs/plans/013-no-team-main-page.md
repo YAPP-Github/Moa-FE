@@ -140,7 +140,7 @@ src/
 // UI only - 비즈니스 로직 없음
 function NoTeamEmptyState() {
   const handleStartRetrospective = () => {
-    console.log('TODO: 회고 시작 플로우로 이동');
+    console.log("TODO: 회고 시작 플로우로 이동");
   };
 
   return (
