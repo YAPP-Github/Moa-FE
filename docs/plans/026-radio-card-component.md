@@ -152,9 +152,8 @@ src/shared/ui/
 **RadioCardGroup**:
 
 ```typescript
-interface RadioCardGroupProps extends React.ComponentPropsWithoutRef<
-  typeof RadioGroup.Root
-> {
+interface RadioCardGroupProps
+  extends React.ComponentPropsWithoutRef<typeof RadioGroup.Root> {
   className?: string;
   children: React.ReactNode;
 }
@@ -165,9 +164,8 @@ interface RadioCardGroupProps extends React.ComponentPropsWithoutRef<
 **RadioCardItem**:
 
 ```typescript
-interface RadioCardItemProps extends React.ComponentPropsWithoutRef<
-  typeof RadioGroup.Item
-> {
+interface RadioCardItemProps
+  extends React.ComponentPropsWithoutRef<typeof RadioGroup.Item> {
   className?: string;
   children: React.ReactNode;
 }

@@ -17,8 +17,8 @@ function UserList({ users }: { users: User[] }) {
   const sorted = useMemo(
     () => users.sort((a, b) => a.name.localeCompare(b.name)),
     [users]
-  )
-  return <div>{sorted.map(renderUser)}</div>
+  );
+  return <div>{sorted.map(renderUser)}</div>;
 }
 ```
 
@@ -30,8 +30,8 @@ function UserList({ users }: { users: User[] }) {
   const sorted = useMemo(
     () => users.toSorted((a, b) => a.name.localeCompare(b.name)),
     [users]
-  )
-  return <div>{sorted.map(renderUser)}</div>
+  );
+  return <div>{sorted.map(renderUser)}</div>;
 }
 ```
 

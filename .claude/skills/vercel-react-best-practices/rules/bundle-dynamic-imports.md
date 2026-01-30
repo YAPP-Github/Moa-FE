@@ -28,7 +28,7 @@ const MonacoEditor = dynamic(
   () => import("./monaco-editor").then((m) => m.MonacoEditor),
   {
     ssr: false,
-  },
+  }
 );
 
 function CodePanel({ code }: { code: string }) {

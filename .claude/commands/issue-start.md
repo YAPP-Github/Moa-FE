@@ -28,6 +28,7 @@ Before creating the GitHub issue, perform research to enrich the issue with prop
 **A. Directory and File Search**:
 
 1. Use Glob tool to find relevant files based on task type:
+
    - For UI/component tasks: Search for related components (`**/*.tsx`, `**/*.ts` in `src/components`, `src/app`)
    - For API/backend tasks: Search for API routes, server actions (`**/api/**/*.ts`, `**/actions/**/*.ts`)
    - For styling tasks: Search for CSS/styling files (`**/*.css`, `**/globals.css`)
@@ -41,6 +42,7 @@ Before creating the GitHub issue, perform research to enrich the issue with prop
 **B. Web Research** (if needed):
 
 1. Search for relevant documentation or best practices if:
+
    - The task involves unfamiliar libraries or frameworks
    - The task requires implementation of complex patterns
    - The task mentions specific technologies or APIs
@@ -67,6 +69,7 @@ Before creating the GitHub issue, perform research to enrich the issue with prop
    - Extract YAML frontmatter (if present) - this contains default labels
    - Extract markdown body sections
 3. Fill the template with analyzed information from task-analyzer (only fill relevant sections):
+
    - **Title**: Use `[Type] {title}` format where `{title}` comes from task-analyzer output
      - Map type to `[Type]` prefix:
        - `feat` → `[Feature]`

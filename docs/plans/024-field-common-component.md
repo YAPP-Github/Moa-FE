@@ -148,9 +148,7 @@ interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 // data-invalid 속성으로 에러 상태 전달
-<Field data-invalid={hasError}>
-  ...
-</Field>
+<Field data-invalid={hasError}>...</Field>;
 ```
 
 **FieldLabel**:
@@ -163,17 +161,18 @@ interface FieldLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
 // required일 때 * 표시
 <FieldLabel htmlFor="email" required>
   이메일
-</FieldLabel>
+</FieldLabel>;
 ```
 
 **FieldDescription**:
 
 ```typescript
-interface FieldDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
+interface FieldDescriptionProps
+  extends React.HTMLAttributes<HTMLParagraphElement> {}
 
 <FieldDescription id="email-description">
   이메일 형식으로 입력하세요
-</FieldDescription>
+</FieldDescription>;
 ```
 
 **FieldError**:
@@ -183,9 +182,7 @@ interface FieldErrorProps extends React.HTMLAttributes<HTMLParagraphElement> {
   children?: React.ReactNode;
 }
 
-<FieldError>
-  이메일 형식이 올바르지 않습니다
-</FieldError>
+<FieldError>이메일 형식이 올바르지 않습니다</FieldError>;
 ```
 
 **사용 예시 (react-hook-form)**:

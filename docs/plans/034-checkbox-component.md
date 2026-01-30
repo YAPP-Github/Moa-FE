@@ -163,10 +163,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 ### Data Models
 
 ```typescript
-interface CheckboxProps extends Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  "type"
-> {
+interface CheckboxProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
   /** 체크박스 옆에 표시할 레이블 텍스트 */
   label?: string;
 }

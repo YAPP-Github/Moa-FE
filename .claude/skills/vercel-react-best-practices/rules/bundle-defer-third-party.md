@@ -35,7 +35,7 @@ const Analytics = dynamic(
   () => import("@vercel/analytics/react").then((m) => m.Analytics),
   {
     ssr: false,
-  },
+  }
 );
 
 export default function RootLayout({ children }) {

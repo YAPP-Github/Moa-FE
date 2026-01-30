@@ -21,6 +21,7 @@ Finalize task completion workflow by validating quality gates, generating implem
 ### Step 1: Find Plan Document
 
 1. **Extract Issue Number**:
+
    - Get current branch name: `git branch --show-current`
    - Parse branch format: `{type}/{issue_number}-{slug}`
    - Example: `feat/25-add-feature` → Issue #25
@@ -208,10 +209,12 @@ Generate comprehensive summary following this structure:
 ### Step 5: Append Summary to Plan Document
 
 1. **Read Current Plan**:
+
    - Load plan document from `docs/plans/{issue_number}-*.md`
    - Verify document structure
 
 2. **Append Implementation Summary**:
+
    - Add generated summary to Section 10 (Implementation Summary)
    - Preserve all other sections
    - Ensure proper markdown formatting
@@ -223,6 +226,7 @@ Generate comprehensive summary following this structure:
 ### Step 6: Clean Up Sub-Agents
 
 1. **Identify Created Agents**:
+
    - List agents created during `/task-init`:
      - react-developer
      - code-reviewer
