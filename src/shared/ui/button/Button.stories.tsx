@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
-  title: 'shared/ui/Button',
+  title: 'shared/ui/Buttons/Button',
   component: Button,
   parameters: {
     layout: 'centered',
@@ -11,11 +11,11 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'ghost'],
+      options: ['primary', 'secondary', 'tertiary', 'ghost'],
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg', 'icon'],
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
     disabled: {
       control: 'boolean',
@@ -29,41 +29,72 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Variants
 export const Primary: Story = {
   args: {
     variant: 'primary',
-    children: '시작하기',
+    children: 'Primary',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    variant: 'secondary',
+    children: 'Secondary',
+  },
+};
+
+export const Tertiary: Story = {
+  args: {
+    variant: 'tertiary',
+    children: 'Tertiary',
   },
 };
 
 export const Ghost: Story = {
   args: {
     variant: 'ghost',
-    children: '취소',
+    children: 'Ghost',
+  },
+};
+
+// Sizes
+export const ExtraSmall: Story = {
+  args: {
+    size: 'xs',
+    children: 'XS (24px)',
   },
 };
 
 export const Small: Story = {
   args: {
     size: 'sm',
-    children: '확인',
+    children: 'SM (28px)',
   },
 };
 
 export const Medium: Story = {
   args: {
     size: 'md',
-    children: '다음',
+    children: 'MD (32px)',
   },
 };
 
 export const Large: Story = {
   args: {
     size: 'lg',
-    children: '제출하기',
+    children: 'LG (36px)',
   },
 };
 
+export const ExtraLarge: Story = {
+  args: {
+    size: 'xl',
+    children: 'XL (48px)',
+  },
+};
+
+// States
 export const Disabled: Story = {
   args: {
     disabled: true,
@@ -85,49 +116,43 @@ export const FullWidth: Story = {
   ],
 };
 
-export const Icon: Story = {
-  args: {
-    size: 'icon',
-    children: (
-      <svg
-        aria-hidden="true"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="m5 12 7-7 7 7" />
-        <path d="M12 19V5" />
-      </svg>
-    ),
-    'aria-label': '위로',
-  },
+// All Variants
+export const AllVariants: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <div className="flex gap-2 items-center">
+        <Button variant="primary">Primary</Button>
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="tertiary">Tertiary</Button>
+        <Button variant="ghost">Ghost</Button>
+      </div>
+      <div className="flex gap-2 items-center">
+        <Button variant="primary" disabled>
+          Primary
+        </Button>
+        <Button variant="secondary" disabled>
+          Secondary
+        </Button>
+        <Button variant="tertiary" disabled>
+          Tertiary
+        </Button>
+        <Button variant="ghost" disabled>
+          Ghost
+        </Button>
+      </div>
+    </div>
+  ),
 };
 
-export const RoundedButtons: Story = {
+// All Sizes
+export const AllSizes: Story = {
   render: () => (
-    <div className="flex gap-2">
-      <Button className="rounded-full">시작하기</Button>
-      <Button variant="ghost" size="icon" className="rounded-full">
-        <svg
-          aria-hidden="true"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="m5 12 7-7 7 7" />
-          <path d="M12 19V5" />
-        </svg>
-      </Button>
+    <div className="flex gap-2 items-end">
+      <Button size="xs">XS</Button>
+      <Button size="sm">SM</Button>
+      <Button size="md">MD</Button>
+      <Button size="lg">LG</Button>
+      <Button size="xl">XL</Button>
     </div>
   ),
 };
