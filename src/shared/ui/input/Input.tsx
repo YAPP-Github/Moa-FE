@@ -40,9 +40,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               'h-12 w-full rounded-md border-[1.5px] px-5 transition-colors',
               'focus:outline-none focus-visible:ring-[3px]',
               error
-                ? 'border-destructive focus-visible:border-destructive focus-visible:ring-destructive/30'
+                ? 'border-red-300 focus-visible:border-red-300 focus-visible:ring-red-300/30'
                 : 'border-[#EBEBEB] focus-visible:border-[#3182F6] focus-visible:ring-[#3182F6]/30',
-              disabled && 'cursor-not-allowed bg-muted opacity-50',
+              disabled && 'cursor-not-allowed bg-grey-100 opacity-50',
               clearable && hasValue && 'pr-12',
               className
             )}

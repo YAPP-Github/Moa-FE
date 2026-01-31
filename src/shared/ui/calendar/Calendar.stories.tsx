@@ -46,7 +46,7 @@ export const Controlled: Story = {
     return (
       <div className="w-80 space-y-4">
         <Calendar selected={selected} onSelect={setSelected} />
-        <p className="text-sm text-muted-foreground text-center">
+        <p className="text-sm text-grey-600 text-center">
           선택된 날짜: {selected?.toLocaleDateString('ko-KR') ?? '없음'}
         </p>
       </div>

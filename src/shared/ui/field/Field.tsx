@@ -29,7 +29,7 @@ const FieldLabel = forwardRef<HTMLLabelElement, FieldLabelProps>(
         {...props}
       >
         {children}
-        {required && <span className="ml-0.5 text-destructive">*</span>}
+        {required && <span className="ml-0.5 text-red-300">*</span>}
       </label>
     );
   }
@@ -41,7 +41,7 @@ interface FieldDescriptionProps extends React.HTMLAttributes<HTMLParagraphElemen
 
 const FieldDescription = forwardRef<HTMLParagraphElement, FieldDescriptionProps>(
   ({ className, ...props }, ref) => {
-    return <p ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />;
+    return <p ref={ref} className={cn('text-sm text-grey-600', className)} {...props} />;
   }
 );
 
@@ -56,7 +56,7 @@ const FieldError = forwardRef<HTMLParagraphElement, FieldErrorProps>(
     if (!children) return null;
 
     return (
-      <p ref={ref} className={cn('text-sm text-destructive', className)} role="alert" {...props}>
+      <p ref={ref} className={cn('text-sm text-red-300', className)} role="alert" {...props}>
         {children}
       </p>
     );
