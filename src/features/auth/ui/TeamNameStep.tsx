@@ -1,22 +1,13 @@
-import { useState } from 'react';
-import IcDelete from '@/shared/ui/icons/IcDelete';
+import { useFormContext } from 'react-hook-form';
+import type { SigninFormData } from '@/features/auth/model/schema';
+import { Button } from '@/shared/ui/button/Button';
+import { Field, FieldLabel } from '@/shared/ui/field/Field';
+import { Input } from '@/shared/ui/input/Input';
 
-interface TeamNameStepProps {
-  onSubmit: (teamName: string) => void;
-}
+export function TeamNameStep() {
+  const { register, watch, setValue } = useFormContext<SigninFormData>();
 
-export function TeamNameStep({ onSubmit }: TeamNameStepProps) {
-  const [teamName, setTeamName] = useState('');
-
-  const handleSubmit = () => {
-    if (teamName.trim()) {
-      onSubmit(teamName);
-    }
-  };
-
-  const handleClear = () => {
-    setTeamName('');
-  };
+  const teamName = watch('teamName');
 
   return (
     <div className="w-[368px] flex flex-col">
@@ -24,41 +15,22 @@ export function TeamNameStep({ onSubmit }: TeamNameStepProps) {
       <h1 className="text-2xl font-bold text-center mb-16">팀 이름을 입력해주세요</h1>
 
       {/* 입력 필드 */}
-      <div className="mb-28">
-        <label htmlFor="teamName" className="block text-[14px] font-semibold text-[#6B7684] mb-2">
-          팀 이름
-        </label>
-        <div className="relative">
-          <input
-            id="teamName"
-            type="text"
-            placeholder="팀 이름"
-            value={teamName}
-            onChange={(e) => setTeamName(e.target.value)}
-            className="w-full h-12 px-5 pr-12 border-[1.5px] border-[#EBEBEB] focus:border-[#191F28] rounded-[6px] focus:outline-none"
-          />
-          {teamName && (
-            <button
-              type="button"
-              onClick={handleClear}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] flex items-center justify-center"
-              aria-label="Clear input"
-            >
-              <IcDelete className="w-full h-full" />
-            </button>
-          )}
-        </div>
-      </div>
+      <Field className="mb-28">
+        <FieldLabel htmlFor="teamName">팀 이름</FieldLabel>
+        <Input
+          id="teamName"
+          type="text"
+          placeholder="팀 이름"
+          {...register('teamName')}
+          clearable
+          onClear={() => setValue('teamName', '')}
+        />
+      </Field>
 
-      {/* 시작하기 버튼 */}
-      <button
-        onClick={handleSubmit}
-        disabled={!teamName.trim()}
-        className="w-full h-12 bg-[#3182F6] hover:bg-[#2563EB] text-white font-semibold rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        type="button"
-      >
+      {/* 시작하기 버튼 - type="submit"으로 폼 제출 */}
+      <Button type="submit" disabled={!teamName?.trim()} size="xl" fullWidth>
         시작하기
-      </button>
+      </Button>
     </div>
   );
 }

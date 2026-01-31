@@ -1,19 +1,20 @@
-import { useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import type { SigninFormData } from '@/features/auth/model/schema';
+import { Button } from '@/shared/ui/button/Button';
+import { useStepContext } from '@/shared/ui/multi-step-form/MultiStepForm';
+import { RadioCardGroup, RadioCardItem } from '@/shared/ui/radio-card/RadioCard';
 
-interface TeamStepProps {
-  onSubmit: (teamOption: 'create' | 'join') => void;
-}
+export function TeamStep() {
+  const { control, watch } = useFormContext<SigninFormData>();
+  const { goToStep } = useStepContext();
 
-export function TeamStep({ onSubmit }: TeamStepProps) {
-  const [selectedOption, setSelectedOption] = useState<'create' | 'join' | null>(null);
-
-  const handleOptionClick = (option: 'create' | 'join') => {
-    setSelectedOption(option);
-  };
+  const teamOption = watch('teamOption');
 
   const handleSubmit = () => {
-    if (selectedOption) {
-      onSubmit(selectedOption);
+    if (teamOption === 'create') {
+      goToStep(3); // TeamNameStep
+    } else if (teamOption === 'join') {
+      goToStep(4); // InviteLinkStep
     }
   };
 
@@ -27,48 +28,41 @@ export function TeamStep({ onSubmit }: TeamStepProps) {
           참여하실 팀이 있으신가요?
         </h1>
         <p className="text-[14px] font-medium leading-[150%] tracking-[-0.02em] text-[#000000]/42 text-center">
-          프로필에 보일 닉네임이에요
+          팀을 생성하거나 초대 링크로 참여하세요
         </p>
       </div>
 
-      {/* 버튼 그룹 */}
-      <div className="flex gap-3 mb-30">
-        {/* 새로운 팀 생성 버튼 */}
-        <button
-          onClick={() => handleOptionClick('create')}
-          className={`flex-1 py-5 font-semibold rounded-[10px] transition-colors ${
-            selectedOption === 'create'
-              ? 'bg-[#E9F2FE] text-[#31B2F6]'
-              : 'bg-[#F3F4F5] text-[#000000]'
-          }`}
-          type="button"
-        >
-          새로운 팀 생성
-        </button>
+      {/* 라디오 카드 그룹 */}
+      <Controller
+        name="teamOption"
+        control={control}
+        render={({ field }) => (
+          <RadioCardGroup
+            value={field.value}
+            onValueChange={field.onChange}
+            className="flex gap-3 mb-30"
+          >
+            <RadioCardItem
+              value="create"
+              className="flex-1 py-5 text-center font-semibold rounded-[10px] transition-colors data-[state=checked]:bg-[#E6F2FF] data-[state=checked]:text-[#3182F6] data-[state=unchecked]:bg-[#F3F4F5] data-[state=unchecked]:text-[#333D4B]"
+            >
+              새로운 팀 생성
+            </RadioCardItem>
 
-        {/* 초대 받았어요 버튼 */}
-        <button
-          onClick={() => handleOptionClick('join')}
-          className={`flex-1 py-5 font-semibold rounded-[10px] transition-colors ${
-            selectedOption === 'join'
-              ? 'bg-[#E9F2FE] text-[#31B2F6]'
-              : 'bg-[#F3F4F5] text-[#000000]'
-          }`}
-          type="button"
-        >
-          초대 받았어요
-        </button>
-      </div>
+            <RadioCardItem
+              value="join"
+              className="flex-1 py-5 text-center font-semibold rounded-[10px] transition-colors data-[state=checked]:bg-[#E6F2FF] data-[state=checked]:text-[#3182F6] data-[state=unchecked]:bg-[#F3F4F5] data-[state=unchecked]:text-[#333D4B]"
+            >
+              초대 받았어요
+            </RadioCardItem>
+          </RadioCardGroup>
+        )}
+      />
 
       {/* 다음 버튼 */}
-      <button
-        onClick={handleSubmit}
-        disabled={!selectedOption}
-        className="w-full h-12 bg-[#3182F6] hover:bg-[#2563EB] text-white font-semibold rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        type="button"
-      >
+      <Button onClick={handleSubmit} disabled={!teamOption} size="xl" fullWidth>
         다음
-      </button>
+      </Button>
     </div>
   );
 }

@@ -1,12 +1,23 @@
-import IcDelete from '@/shared/ui/icons/IcDelete';
+import { useFormContext } from 'react-hook-form';
+import type { SigninFormData } from '@/features/auth/model/schema';
+import { Button } from '@/shared/ui/button/Button';
+import { Field, FieldLabel } from '@/shared/ui/field/Field';
+import { Input } from '@/shared/ui/input/Input';
+import { useStepContext } from '@/shared/ui/multi-step-form/MultiStepForm';
 
-interface NicknameStepProps {
-  nickname: string;
-  onNicknameChange: (value: string) => void;
-  onSubmit: () => void;
-}
+export function NicknameStep() {
+  const { register, watch, setValue } = useFormContext<SigninFormData>();
+  const { goToNextStep } = useStepContext();
 
-export function NicknameStep({ nickname, onNicknameChange, onSubmit }: NicknameStepProps) {
+  const nickname = watch('nickname');
+
+  const handleSubmit = async () => {
+    const isValid = await goToNextStep();
+    if (isValid) {
+      console.log('Nickname submitted:', nickname);
+    }
+  };
+
   return (
     <div className="w-[368px] flex flex-col">
       {/* 제목 및 설명 */}
@@ -22,41 +33,22 @@ export function NicknameStep({ nickname, onNicknameChange, onSubmit }: NicknameS
       </div>
 
       {/* 입력 필드 */}
-      <div className="mb-30">
-        <label htmlFor="nickname" className="block text-[14px] font-semibold text-[#6B7684] mb-2">
-          닉네임
-        </label>
-        <div className="relative">
-          <input
-            id="nickname"
-            type="text"
-            placeholder="닉네임"
-            value={nickname}
-            onChange={(e) => onNicknameChange(e.target.value)}
-            className="w-full h-12 px-5 pr-12 border-[1.5px] border-[#EBEBEB] focus:border-[#191F28] rounded-[6px] focus:outline-none"
-          />
-          {nickname && (
-            <button
-              type="button"
-              onClick={() => onNicknameChange('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] flex items-center justify-center"
-              aria-label="Clear input"
-            >
-              <IcDelete className="w-full h-full" />
-            </button>
-          )}
-        </div>
-      </div>
+      <Field className="mb-30">
+        <FieldLabel htmlFor="nickname">닉네임</FieldLabel>
+        <Input
+          id="nickname"
+          type="text"
+          placeholder="닉네임"
+          {...register('nickname')}
+          clearable
+          onClear={() => setValue('nickname', '')}
+        />
+      </Field>
 
       {/* 다음 버튼 */}
-      <button
-        onClick={onSubmit}
-        disabled={!nickname.trim()}
-        className="w-full h-12 bg-[#3182F6] hover:bg-[#2563EB] text-white font-semibold rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        type="button"
-      >
+      <Button onClick={handleSubmit} disabled={!nickname?.trim()} size="xl" fullWidth>
         다음
-      </button>
+      </Button>
     </div>
   );
 }
