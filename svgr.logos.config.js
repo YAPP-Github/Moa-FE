@@ -6,6 +6,7 @@ export default {
   ref: false,
   svgProps: {
     'aria-hidden': 'true',
+    'shape-rendering': 'geometricPrecision',
   },
   svgoConfig: {
     plugins: [
@@ -14,6 +15,7 @@ export default {
         params: {
           overrides: {
             removeViewBox: false,
+            convertPathData: false,
           },
         },
       },
