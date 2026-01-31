@@ -40,7 +40,7 @@ function BasicStepNavigation() {
       <Button type="button" variant="ghost" onClick={goToPrevStep} disabled={isFirstStep}>
         이전
       </Button>
-      <span className="text-sm text-muted-foreground">
+      <span className="text-sm text-grey-600">
         {currentStep + 1} / {totalSteps}
       </span>
       {isLastStep ? (
@@ -158,21 +158,21 @@ function PlanSelectionStep() {
                 className="flex flex-col gap-1 p-4 rounded-lg border-2 data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-50 data-[state=unchecked]:border-gray-200"
               >
                 <span className="font-medium">무료</span>
-                <span className="text-sm text-muted-foreground">기본 기능 사용 가능</span>
+                <span className="text-sm text-grey-600">기본 기능 사용 가능</span>
               </RadioCardItem>
               <RadioCardItem
                 value="pro"
                 className="flex flex-col gap-1 p-4 rounded-lg border-2 data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-50 data-[state=unchecked]:border-gray-200"
               >
                 <span className="font-medium">프로</span>
-                <span className="text-sm text-muted-foreground">모든 기능 사용 가능</span>
+                <span className="text-sm text-grey-600">모든 기능 사용 가능</span>
               </RadioCardItem>
               <RadioCardItem
                 value="enterprise"
                 className="flex flex-col gap-1 p-4 rounded-lg border-2 data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-50 data-[state=unchecked]:border-gray-200"
               >
                 <span className="font-medium">엔터프라이즈</span>
-                <span className="text-sm text-muted-foreground">팀 기능 + 우선 지원</span>
+                <span className="text-sm text-grey-600">팀 기능 + 우선 지원</span>
               </RadioCardItem>
             </RadioCardGroup>
           )}
@@ -211,7 +211,7 @@ function ComplexStepNavigation() {
       <Button type="button" variant="ghost" onClick={goToPrevStep} disabled={isFirstStep}>
         이전
       </Button>
-      <span className="text-sm text-muted-foreground">
+      <span className="text-sm text-grey-600">
         {currentStep + 1} / {totalSteps}
       </span>
       {isLastStep ? (

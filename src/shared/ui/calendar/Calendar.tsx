@@ -19,10 +19,10 @@ const dayVariants = cva(
   {
     variants: {
       state: {
-        default: 'cursor-pointer hover:bg-accent hover:text-accent-foreground',
+        default: 'cursor-pointer hover:bg-blue-100 hover:text-blue-600',
         selected: 'bg-[#3182F6] text-white hover:bg-[#1B64DA] cursor-pointer',
-        disabled: 'text-muted-foreground opacity-50 cursor-not-allowed',
-        outside: 'text-muted-foreground opacity-50 cursor-pointer hover:bg-accent',
+        disabled: 'text-grey-600 opacity-50 cursor-not-allowed',
+        outside: 'text-grey-600 opacity-50 cursor-pointer hover:bg-blue-100',
       },
     },
     defaultVariants: {
@@ -160,7 +160,7 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
             <button
               type="button"
               onClick={handlePrevMonth}
-              className="inline-flex items-center justify-center size-8 rounded-md hover:bg-accent transition-colors"
+              className="inline-flex items-center justify-center size-8 rounded-md hover:bg-blue-100 transition-colors"
               aria-label="이전 달"
             >
               <ChevronLeftIcon />
@@ -168,7 +168,7 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
             <button
               type="button"
               onClick={handleNextMonth}
-              className="inline-flex items-center justify-center size-8 rounded-md hover:bg-accent transition-colors"
+              className="inline-flex items-center justify-center size-8 rounded-md hover:bg-blue-100 transition-colors"
               aria-label="다음 달"
             >
               <ChevronRightIcon />
