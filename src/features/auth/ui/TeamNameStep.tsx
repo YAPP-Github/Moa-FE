@@ -5,7 +5,7 @@ import { Field, FieldLabel } from '@/shared/ui/field/Field';
 import { Input } from '@/shared/ui/input/Input';
 
 export function TeamNameStep() {
-  const { register, watch, setValue } = useFormContext<SigninFormData>();
+  const { register, watch } = useFormContext<SigninFormData>();
 
   const teamName = watch('teamName');
 
@@ -21,9 +21,10 @@ export function TeamNameStep() {
           id="teamName"
           type="text"
           placeholder="팀 이름"
+          maxLength={10}
+          showCount
           {...register('teamName')}
-          clearable
-          onClear={() => setValue('teamName', '')}
+          value={teamName ?? ''}
         />
       </Field>
 
