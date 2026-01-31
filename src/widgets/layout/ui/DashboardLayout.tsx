@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Header } from '@/widgets/header/ui/Header';
+import { BaseLayout } from './BaseLayout';
 import { DashboardSidebar } from '@/widgets/sidebar/ui/DashboardSidebar';
 
 interface DashboardLayoutProps {
@@ -8,12 +8,11 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="min-h-screen bg-[#FFFFFF]">
-      <Header />
-      <div className="flex h-[calc(100vh-54px)]">
+    <BaseLayout>
+      <div className="flex h-full">
         <DashboardSidebar />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
-    </div>
+    </BaseLayout>
   );
 }
