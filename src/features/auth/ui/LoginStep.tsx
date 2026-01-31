@@ -1,4 +1,3 @@
-import imgLogo from '@/shared/assets/images/img_logo.jpeg';
 import IcGoogle from '@/shared/ui/logos/IcGoogle';
 import IcKakao from '@/shared/ui/logos/IcKakao';
 import { useStepContext } from '@/shared/ui/multi-step-form/MultiStepForm';
@@ -20,9 +19,9 @@ export function LoginStep() {
 
   return (
     <>
-      {/* 로고 */}
+      {/* 로고 스켈레톤 */}
       <div className="mb-40">
-        <img src={imgLogo} alt="회고 라운지 로고" className="w-40 h-auto object-contain" />
+        <div className="w-40 h-40 bg-[#E5E5E5] rounded-xl animate-pulse" />
       </div>
 
       {/* 로그인 버튼 그룹 */}
