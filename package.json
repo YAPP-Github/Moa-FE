@@ -23,7 +23,8 @@
     "test:ui": "vitest --ui",
     "generate:icons": "svgr --config-file svgr.icons.config.js src/shared/assets/icons",
     "generate:logos": "svgr --config-file svgr.logos.config.js src/shared/assets/logos",
-    "generate:svg": "pnpm run generate:icons && pnpm run generate:logos && pnpm run lint:fix && pnpm run format"
+    "generate:svg": "pnpm run generate:icons && pnpm run generate:logos && pnpm run lint:fix && pnpm run format",
+    "generate:api": "orval --config ./orval.config.ts && sed -i '' '1,/\\*\\//{ /\\*\\//a\\\n\\\n// TODO: 백엔드 OpenAPI 스펙 수정 후 제거 필요\\\nexport type SocialType = '\"'\"'GOOGLE'\"'\"' | '\"'\"'KAKAO'\"'\"';\\\nexport interface BaseResponse {\\\n  code: number;\\\n  isSuccess: boolean;\\\n  message: string;\\\n  result?: unknown;\\\n}\\\n\n}' src/shared/api/generated/index.ts && pnpm run lint:fix && pnpm run format"
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
@@ -34,6 +35,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@lukemorales/query-key-factory": "^1.3.4",
     "@tanstack/react-query": "^5.90.16",
+    "axios": "^1.13.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -62,10 +64,12 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "@vitest/ui": "^4.0.18",
+    "dotenv": "^17.2.3",
     "dotenv-cli": "^11.0.0",
     "husky": "^9.1.7",
     "jsdom": "^27.4.0",
     "lint-staged": "^16.2.7",
+    "orval": "^8.2.0",
     "storybook": "^8",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
