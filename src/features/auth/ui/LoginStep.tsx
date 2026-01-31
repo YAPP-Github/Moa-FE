@@ -20,7 +20,7 @@ export function LoginStep() {
   return (
     <>
       {/* 로고 스켈레톤 */}
-      <div className="mb-40">
+      <div className="mb-40 flex justify-center">
         <div className="w-40 h-40 bg-[#E5E5E5] rounded-xl animate-pulse" />
       </div>
 
