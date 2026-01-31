@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { Button } from '../button/Button';
+import { IconButton } from '../icon-button/IconButton';
 import { cn } from '@/shared/lib/cn';
 import IcDelete from '@/shared/ui/icons/IcDelete';
 
@@ -50,16 +50,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {clearable && hasValue && !disabled && (
-            <Button
+            <IconButton
               type="button"
               variant="ghost"
-              size="icon"
+              shape="circle"
               onClick={onClear}
-              className="absolute right-4 top-1/2 h-[18px] w-[18px] -translate-y-1/2 rounded-full"
+              className="absolute right-4 top-1/2 size-[18px] -translate-y-1/2"
               aria-label="입력 지우기"
             >
-              <IcDelete className="h-[18px] w-[18px]" />
-            </Button>
+              <IcDelete className="size-[18px]" />
+            </IconButton>
           )}
         </div>
         {showCount && maxLength && (
