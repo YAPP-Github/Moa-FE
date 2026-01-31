@@ -38,6 +38,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/shared/lib/cn';
+import { IconButton } from '@/shared/ui/icon-button/IconButton';
 import IcClose from '@/shared/ui/icons/IcClose';
 
 // ============================================================================
@@ -305,14 +306,15 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
           {...props}
         >
           {!hideCloseButton && (
-            <button
-              type="button"
+            <IconButton
+              variant="ghost"
+              size="md"
               onClick={() => onOpenChange(false)}
-              className="absolute right-5 top-5 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
+              className="absolute right-5 top-5"
               aria-label="닫기"
             >
               <IcClose className="h-6 w-6" />
-            </button>
+            </IconButton>
           )}
           {children}
         </div>
