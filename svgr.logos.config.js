@@ -14,6 +14,7 @@ export default {
         params: {
           overrides: {
             removeViewBox: false,
+            convertPathData: false,
           },
         },
       },
