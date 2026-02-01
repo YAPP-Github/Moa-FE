@@ -25,20 +25,3 @@ export const createRetrospectSchema = z.object({
 });
 
 export type CreateRetrospectFormData = z.infer<typeof createRetrospectSchema>;
-
-// 회고 방식 라벨 매핑
-export const RETROSPECT_METHOD_LABELS: Record<string, string> = {
-  [RetrospectMethod.KPT]: 'KPT',
-  [RetrospectMethod.FOUR_L]: '4L',
-  [RetrospectMethod.FIVE_F]: '5F',
-  [RetrospectMethod.PMI]: 'PMI',
-  [RetrospectMethod.FREE]: '자유 형식',
-};
-
-export const RETROSPECT_METHOD_DESCRIPTIONS: Record<string, string> = {
-  [RetrospectMethod.KPT]: 'Keep, Problem, Try로 회고해요',
-  [RetrospectMethod.FOUR_L]: 'Liked, Learned, Lacked, Longed for',
-  [RetrospectMethod.FIVE_F]: 'Facts, Feelings, Findings, Future, Feedback',
-  [RetrospectMethod.PMI]: 'Plus, Minus, Interesting',
-  [RetrospectMethod.FREE]: '자유롭게 작성해요',
-};

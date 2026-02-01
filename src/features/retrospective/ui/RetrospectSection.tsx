@@ -1,5 +1,5 @@
-import { RetrospectCard } from './RetrospectCard';
 import { RetrospectEmptyState } from './RetrospectEmptyState';
+import { RetrospectRow } from './RetrospectRow';
 import type { RetrospectListItem } from '@/shared/api/generated/index';
 
 interface RetrospectSectionProps {
@@ -21,7 +21,7 @@ export function RetrospectSection({ title, count, items }: RetrospectSectionProp
       ) : (
         <div className="flex flex-col gap-3">
           {items.map((item) => (
-            <RetrospectCard key={item.retrospectId} retrospect={item} />
+            <RetrospectRow key={item.retrospectId} retrospect={item} />
           ))}
         </div>
       )}
