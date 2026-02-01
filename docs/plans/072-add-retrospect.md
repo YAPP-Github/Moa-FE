@@ -480,10 +480,109 @@ npm run lint        # 린트 통과
 
 ## 10. Implementation Summary
 
-> **Note**: 이 섹션은 작업 완료 후 `/task-done` 커맨드가 자동으로 채웁니다.
+**Completion Date**: 2026-02-02
+**Implemented By**: Claude Opus 4.5
+
+### Changes Made
+
+#### Files Created (11 files)
+
+**API & Model:**
+
+- `src/features/retrospective/api/retrospective.mutations.ts` - useCreateRetrospect mutation hook
+- `src/features/retrospective/model/schema.ts` - Zod 스키마 정의 (CreateRetrospectFormData)
+- `src/features/retrospective/model/constants.ts` - 회고 방식 라벨/설명 상수
+
+**UI Components:**
+
+- `src/features/retrospective/ui/CreateRetrospectDialog.tsx` - Dialog wrapper
+- `src/features/retrospective/ui/CreateRetrospectForm.tsx` - MultiStepForm 기반 회고 생성 폼
+- `src/features/retrospective/ui/RetrospectRow.tsx` - 회고 목록 Row 컴포넌트
+- `src/features/retrospective/ui/steps/ProjectNameStep.tsx` - Step 1: 프로젝트명 입력
+- `src/features/retrospective/ui/steps/DateTimeStep.tsx` - Step 2: 날짜/시간 선택
+- `src/features/retrospective/ui/steps/MethodStep.tsx` - Step 3: 회고 방식 선택
+- `src/features/retrospective/ui/steps/ReferenceStep.tsx` - Step 4: 참고자료 URL
+- `src/features/retrospective/ui/steps/CompleteStep.tsx` - 완료 화면
+- `src/features/retrospective/ui/steps/MethodSelector.tsx` - Accordion + RadioCard 조합
+- `src/features/retrospective/ui/steps/FormHeader.tsx` - 폼 헤더 (닫기 버튼)
+- `src/features/retrospective/ui/steps/StepIndicator.tsx` - 스텝 진행률 표시
+- `src/features/retrospective/ui/steps/TimeSelector.tsx` - 30분 단위 시간 선택
+
+#### Files Modified (5 files)
+
+- `src/pages/team-dashboard/ui/TeamDashboardPage.tsx` - CreateRetrospectDialog 연동
+- `src/features/retrospective/ui/RetrospectSection.tsx` - RetrospectRow 사용
+- `src/shared/ui/accordion/Accordion.tsx` - AccordionTrigger asChild prop 추가
+- `src/shared/ui/radio-card/RadioCard.tsx` - tabIndex, focus 스타일 개선
+- `src/shared/ui/calendar/Calendar.tsx` - react-hook-form Controller 호환성 개선
+
+### Key Implementation Details
+
+1. **MultiStepForm 기반 4단계 폼 구현**
+
+   - 계획에서는 단일 스텝 폼 예정이었으나, 사용자 요청에 따라 MultiStepForm으로 변경
+   - 각 스텝별 독립 컴포넌트로 분리
+
+2. **회고 방식 선택 UI (Accordion + RadioCard 조합)**
+
+   - RadioCard 내부에 Accordion 배치
+   - 카드 선택과 Accordion 토글이 독립적으로 동작
+   - AccordionTrigger에 asChild prop 추가하여 유연한 렌더링
+
+3. **시간 선택 UI**
+
+   - 계획에서는 Input + pattern 검증 예정이었으나, TimeSelector 컴포넌트로 구현
+   - 30분 단위 버튼 그리드 형태
+
+4. **참고자료 URL 동적 추가**
+
+   - useFieldArray 사용
+   - 기본 1개 row, "추가하기" 버튼으로 동적 추가/삭제
+
+5. **완료 화면**
+   - 폼 제출 성공 시 CompleteStep 렌더링
+   - "확인" 버튼 클릭 시 Dialog 닫기
+
+### Quality Validation
+
+- [x] Build: Success (508KB)
+- [x] Type Check: Passed (no errors)
+- [x] Lint: Passed (no errors)
+- [x] API 연동: createRetrospect mutation 연결 완료
+
+### Deviations from Plan
+
+**Changed**:
+
+- 단일 스텝 폼 → MultiStepForm (4단계) - 사용자 UX 요청
+- Input 기반 시간 입력 → TimeSelector 컴포넌트 (버튼 그리드)
+
+**Added**:
+
+- CompleteStep (완료 화면)
+- RetrospectRow (회고 목록 Row 스타일)
+- MethodSelector (Accordion + RadioCard 조합 컴포넌트)
+- constants.ts (회고 방식 라벨/설명 분리)
+
+**Skipped**:
+
+- 오늘 회고 Swiper (다른 이슈에서 처리)
+
+### Follow-up Tasks
+
+- [ ] 오늘 회고 Swiper 구현 (별도 이슈)
+- [ ] 회고 수정/삭제 기능
+- [ ] 회고 상세 페이지
+
+### Commits
+
+```
+c45c1c2 docs(plans): 회고 추가 기능 구현 계획 문서
+2f1053c fix(ui): RadioCard, Swiper 상호작용 개선
+7ca64f4 feat(retrospective): 회고 추가 다이얼로그 및 멀티스텝 폼 구현
+```
 
 ---
 
-**Plan Status**: Planning
-**Last Updated**: 2026-02-01
-**Next Action**: Phase 1 시작 (Mutation Hook, Schema 작성)
+**Plan Status**: Completed
+**Last Updated**: 2026-02-02
