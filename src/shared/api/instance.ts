@@ -1,4 +1,5 @@
 import Axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
+import { getAccessToken } from '@/features/auth/lib/token';
 
 export const axiosInstance = Axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -6,6 +7,16 @@ export const axiosInstance = Axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+});
+
+axiosInstance.interceptors.request.use((config) => {
+  const token = getAccessToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
 });
 
 // Orval mutator function
