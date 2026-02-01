@@ -1,27 +1,85 @@
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useEmailLogin } from '@/features/auth/api/auth.mutations';
+import { getGoogleOAuthUrl, getKakaoOAuthUrl } from '@/features/auth/lib/oauth';
+import { useAuthStore } from '@/features/auth/model/store';
 import IcGoogle from '@/shared/ui/logos/IcGoogle';
 import IcKakao from '@/shared/ui/logos/IcKakao';
 import { useStepContext } from '@/shared/ui/multi-step-form/MultiStepForm';
 
 export function LoginStep() {
+  const navigate = useNavigate();
+  const { signupToken, login } = useAuthStore();
   const { goToNextStep } = useStepContext();
+  const hasNavigatedRef = useRef(false);
+
+  // TODO: 테스트용 이메일 로그인 상태 - 추후 삭제 필요
+  const [email, setEmail] = useState('');
+  const emailLoginMutation = useEmailLogin();
+
+  useEffect(() => {
+    if (signupToken && !hasNavigatedRef.current) {
+      hasNavigatedRef.current = true;
+      goToNextStep();
+    }
+  }, [signupToken, goToNextStep]);
+
+  // TODO: 테스트용 이메일 로그인 핸들러 - 추후 삭제 필요
+  const handleEmailLogin = async () => {
+    if (!email.trim()) return;
+
+    try {
+      const response = await emailLoginMutation.mutateAsync(email);
+
+      if (response.isSuccess && response.result) {
+        // TODO: 온보딩 플로우 없이 바로 토큰 저장 및 리다이렉트
+        login(response.result.accessToken, response.result.refreshToken);
+        navigate('/');
+      }
+    } catch {
+      // TODO: 에러 처리 필요
+      console.error('이메일 로그인 실패');
+    }
+  };
 
   const handleKakaoLogin = () => {
-    console.log('Kakao login clicked');
-    // TODO: OAuth 인증 후 goToNextStep 호출
-    goToNextStep();
+    window.location.href = getKakaoOAuthUrl();
   };
 
   const handleGoogleLogin = () => {
-    console.log('Google login clicked');
-    // TODO: OAuth 인증 후 goToNextStep 호출
-    goToNextStep();
+    window.location.href = getGoogleOAuthUrl();
   };
 
   return (
     <>
       {/* 로고 스켈레톤 */}
-      <div className="mb-40 flex justify-center">
+      <div className="mb-10 flex justify-center">
         <div className="w-40 h-40 bg-[#E5E5E5] rounded-xl animate-pulse" />
+      </div>
+
+      {/* TODO: 테스트용 이메일 로그인 폼 - 추후 삭제 필요 */}
+      <div className="w-[368px] mb-8 p-4 border border-dashed border-orange-400 rounded-lg bg-orange-50">
+        <p className="text-xs text-orange-600 mb-2 font-medium">
+          ⚠️ 테스트용 이메일 로그인 (개발 전용)
+        </p>
+        <div className="flex gap-2">
+          <input
+            type="email"
+            placeholder="이메일 입력"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
+            onKeyDown={(e) => e.key === 'Enter' && handleEmailLogin()}
+          />
+          <button
+            type="button"
+            onClick={handleEmailLogin}
+            disabled={emailLoginMutation.isPending || !email.trim()}
+            className="px-4 py-2 bg-orange-500 text-white rounded-md text-sm font-medium hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {emailLoginMutation.isPending ? '...' : '로그인'}
+          </button>
+        </div>
       </div>
 
       {/* 로그인 버튼 그룹 */}
