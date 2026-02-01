@@ -104,20 +104,17 @@ const SwiperContent = forwardRef<HTMLDivElement, SwiperContentProps>(
       [ref]
     );
 
-    const handleMouseDown = useCallback(
-      (e: React.MouseEvent) => {
-        const container = containerRef.current;
-        if (!container) return;
+    const handleMouseDown = useCallback((e: React.MouseEvent) => {
+      const container = containerRef.current;
+      if (!container) return;
 
-        dragState.current = {
-          isDown: true,
-          startX: e.pageX - container.offsetLeft,
-          scrollLeft: container.scrollLeft,
-        };
-        setIsDragging(true);
-      },
-      [setIsDragging]
-    );
+      dragState.current = {
+        isDown: true,
+        startX: e.pageX - container.offsetLeft,
+        scrollLeft: container.scrollLeft,
+      };
+      // isDragging은 실제 움직임이 있을 때만 설정 (handleMouseMove에서)
+    }, []);
 
     const handleMouseUp = useCallback(() => {
       dragState.current.isDown = false;
@@ -131,51 +128,70 @@ const SwiperContent = forwardRef<HTMLDivElement, SwiperContentProps>(
       }
     }, [setIsDragging]);
 
-    const handleMouseMove = useCallback((e: React.MouseEvent) => {
-      if (!dragState.current.isDown) return;
-      e.preventDefault();
+    const handleMouseMove = useCallback(
+      (e: React.MouseEvent) => {
+        if (!dragState.current.isDown) return;
 
-      const container = containerRef.current;
-      if (!container) return;
-
-      const x = e.pageX - container.offsetLeft;
-      const walk = (x - dragState.current.startX) * 1.5; // 스크롤 속도 조절
-      container.scrollLeft = dragState.current.scrollLeft - walk;
-    }, []);
-
-    // Touch events
-    const handleTouchStart = useCallback(
-      (e: React.TouchEvent) => {
         const container = containerRef.current;
         if (!container) return;
 
-        const touch = e.touches[0];
-        dragState.current = {
-          isDown: true,
-          startX: touch.pageX - container.offsetLeft,
-          scrollLeft: container.scrollLeft,
-        };
-        setIsDragging(true);
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - dragState.current.startX) * 1.5; // 스크롤 속도 조절
+
+        // 실제 움직임이 있을 때만 드래그 상태로 전환
+        if (Math.abs(walk) > 5 && !isDragging) {
+          setIsDragging(true);
+        }
+
+        if (isDragging) {
+          e.preventDefault();
+          container.scrollLeft = dragState.current.scrollLeft - walk;
+        }
       },
-      [setIsDragging]
+      [isDragging, setIsDragging]
     );
+
+    // Touch events
+    const handleTouchStart = useCallback((e: React.TouchEvent) => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const touch = e.touches[0];
+      dragState.current = {
+        isDown: true,
+        startX: touch.pageX - container.offsetLeft,
+        scrollLeft: container.scrollLeft,
+      };
+      // isDragging은 실제 움직임이 있을 때만 설정 (handleTouchMove에서)
+    }, []);
 
     const handleTouchEnd = useCallback(() => {
       dragState.current.isDown = false;
       setIsDragging(false);
     }, [setIsDragging]);
 
-    const handleTouchMove = useCallback((e: React.TouchEvent) => {
-      if (!dragState.current.isDown) return;
+    const handleTouchMove = useCallback(
+      (e: React.TouchEvent) => {
+        if (!dragState.current.isDown) return;
 
-      const container = containerRef.current;
-      if (!container) return;
+        const container = containerRef.current;
+        if (!container) return;
 
-      const touch = e.touches[0];
-      const x = touch.pageX - container.offsetLeft;
-      const walk = (x - dragState.current.startX) * 1.5;
-      container.scrollLeft = dragState.current.scrollLeft - walk;
-    }, []);
+        const touch = e.touches[0];
+        const x = touch.pageX - container.offsetLeft;
+        const walk = (x - dragState.current.startX) * 1.5;
+
+        // 실제 움직임이 있을 때만 드래그 상태로 전환
+        if (Math.abs(walk) > 5 && !isDragging) {
+          setIsDragging(true);
+        }
+
+        if (isDragging) {
+          container.scrollLeft = dragState.current.scrollLeft - walk;
+        }
+      },
+      [isDragging, setIsDragging]
+    );
 
     return (
       // biome-ignore lint/a11y/noStaticElementInteractions: 드래그는 보조 기능, 기본 스크롤과 내부 요소 Tab 접근 가능

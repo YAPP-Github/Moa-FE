@@ -277,4 +277,77 @@ describe('Calendar', () => {
       await expect(user.click(dayButton)).resolves.not.toThrow();
     });
   });
+
+  describe('minDate', () => {
+    it('minDate 이전 날짜는 비활성화된다', () => {
+      const minDate = new Date(2026, 0, 10); // 2026년 1월 10일
+
+      render(<Calendar selected={FIXED_DATE} minDate={minDate} />);
+
+      // 1월 9일은 비활성화
+      const beforeMinDate = screen.getByTitle('2026년 1월 9일');
+      expect(beforeMinDate).toBeDisabled();
+
+      // 1월 10일은 활성화
+      const onMinDate = screen.getByTitle('2026년 1월 10일');
+      expect(onMinDate).not.toBeDisabled();
+
+      // 1월 11일은 활성화
+      const afterMinDate = screen.getByTitle('2026년 1월 11일');
+      expect(afterMinDate).not.toBeDisabled();
+    });
+
+    it('minDate가 현재 월이면 이전 달 버튼이 비활성화된다', () => {
+      const minDate = new Date(2026, 0, 10); // 2026년 1월 10일
+
+      render(<Calendar selected={FIXED_DATE} minDate={minDate} />);
+
+      const prevButton = screen.getByRole('button', { name: '이전 달' });
+      expect(prevButton).toBeDisabled();
+    });
+
+    it('minDate가 이전 월이면 이전 달 버튼이 활성화된다', () => {
+      const minDate = new Date(2025, 11, 1); // 2025년 12월 1일
+
+      render(<Calendar selected={FIXED_DATE} minDate={minDate} />);
+
+      const prevButton = screen.getByRole('button', { name: '이전 달' });
+      expect(prevButton).not.toBeDisabled();
+    });
+
+    it('minDate가 있어도 다음 달 버튼은 항상 활성화된다', () => {
+      const minDate = new Date(2026, 0, 10);
+
+      render(<Calendar selected={FIXED_DATE} minDate={minDate} />);
+
+      const nextButton = screen.getByRole('button', { name: '다음 달' });
+      expect(nextButton).not.toBeDisabled();
+    });
+
+    it('이전 달 버튼이 비활성화되면 클릭해도 월이 변경되지 않는다', async () => {
+      const user = setupUser();
+      const minDate = new Date(2026, 0, 10);
+
+      render(<Calendar selected={FIXED_DATE} minDate={minDate} />);
+
+      const prevButton = screen.getByRole('button', { name: '이전 달' });
+      await user.click(prevButton);
+
+      // 여전히 1월
+      expect(screen.getByText('2026년 1월')).toBeInTheDocument();
+    });
+
+    it('minDate 이전 날짜 클릭 시 onSelect가 호출되지 않는다', async () => {
+      const user = setupUser();
+      const onSelect = vi.fn();
+      const minDate = new Date(2026, 0, 10);
+
+      render(<Calendar selected={FIXED_DATE} onSelect={onSelect} minDate={minDate} />);
+
+      const disabledButton = screen.getByTitle('2026년 1월 5일');
+      await user.click(disabledButton);
+
+      expect(onSelect).not.toHaveBeenCalled();
+    });
+  });
 });
