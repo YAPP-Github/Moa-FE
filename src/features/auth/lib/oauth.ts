@@ -8,7 +8,7 @@ const KAKAO_TOKEN_URL = 'https://kauth.kakao.com/oauth/token';
 
 function getRedirectUri(): string {
   const baseUrl = window.location.origin;
-  return `${baseUrl}/signin`;
+  return `${baseUrl}/callback`;
 }
 
 export function getGoogleOAuthUrl(): string {
@@ -122,11 +122,4 @@ export async function exchangeCodeForToken(code: string, provider: Provider): Pr
   }
 
   throw new Error(`Unknown provider: ${provider}`);
-}
-
-export function clearOAuthParams(): void {
-  const url = new URL(window.location.href);
-  url.searchParams.delete('code');
-  url.searchParams.delete('state');
-  window.history.replaceState({}, '', url.pathname);
 }

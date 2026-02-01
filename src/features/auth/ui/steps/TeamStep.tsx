@@ -6,17 +6,9 @@ import { RadioCardGroup, RadioCardItem } from '@/shared/ui/radio-card/RadioCard'
 
 export function TeamStep() {
   const { control, watch } = useFormContext<SigninFormData>();
-  const { goToStep } = useStepContext();
+  const { goToNextStep } = useStepContext();
 
   const teamOption = watch('teamOption');
-
-  const handleSubmit = () => {
-    if (teamOption === 'create') {
-      goToStep(3); // TeamNameStep
-    } else if (teamOption === 'join') {
-      goToStep(4); // InviteLinkStep
-    }
-  };
 
   return (
     <div className="w-[368px] flex flex-col">
@@ -60,7 +52,7 @@ export function TeamStep() {
       />
 
       {/* 다음 버튼 */}
-      <Button onClick={handleSubmit} disabled={!teamOption} size="xl" fullWidth>
+      <Button onClick={goToNextStep} disabled={!teamOption} size="xl" fullWidth>
         다음
       </Button>
     </div>

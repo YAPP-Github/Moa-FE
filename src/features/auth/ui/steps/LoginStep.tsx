@@ -1,28 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useEmailLogin } from '@/features/auth/api/auth.mutations';
 import { getGoogleOAuthUrl, getKakaoOAuthUrl } from '@/features/auth/lib/oauth';
 import { useAuthStore } from '@/features/auth/model/store';
 import IcGoogle from '@/shared/ui/logos/IcGoogle';
 import IcKakao from '@/shared/ui/logos/IcKakao';
-import { useStepContext } from '@/shared/ui/multi-step-form/MultiStepForm';
 
 export function LoginStep() {
   const navigate = useNavigate();
-  const { signupToken, login } = useAuthStore();
-  const { goToNextStep } = useStepContext();
-  const hasNavigatedRef = useRef(false);
+  const { login } = useAuthStore();
 
   // TODO: 테스트용 이메일 로그인 상태 - 추후 삭제 필요
   const [email, setEmail] = useState('');
   const emailLoginMutation = useEmailLogin();
-
-  useEffect(() => {
-    if (signupToken && !hasNavigatedRef.current) {
-      hasNavigatedRef.current = true;
-      goToNextStep();
-    }
-  }, [signupToken, goToNextStep]);
 
   // TODO: 테스트용 이메일 로그인 핸들러 - 추후 삭제 필요
   const handleEmailLogin = async () => {
@@ -32,12 +22,10 @@ export function LoginStep() {
       const response = await emailLoginMutation.mutateAsync(email);
 
       if (response.isSuccess && response.result) {
-        // TODO: 온보딩 플로우 없이 바로 토큰 저장 및 리다이렉트
         login(response.result.accessToken, response.result.refreshToken);
         navigate('/');
       }
     } catch {
-      // TODO: 에러 처리 필요
       console.error('이메일 로그인 실패');
     }
   };
@@ -86,7 +74,7 @@ export function LoginStep() {
       <div className="flex flex-col gap-3">
         {/* 카카오톡 로그인 버튼 */}
         <button
-          className="w-[368px] h-12 bg-[#FFEB00] hover:bg-[#FFE500] text-black font-semibold text-base rounded-md cursor-pointer"
+          className="w-[368px] h-12 bg-[#FFEB00] hover:bg-[#FFE500] rounded-md cursor-pointer"
           onClick={handleKakaoLogin}
           type="button"
           aria-label="카카오톡으로 시작하기"
@@ -101,7 +89,7 @@ export function LoginStep() {
 
         {/* 구글 로그인 버튼 */}
         <button
-          className="w-[368px] h-12 bg-[#F8F9FC] hover:bg-gray-50 text-gray-700 font-semibold text-base rounded-md cursor-pointer"
+          className="w-[368px] h-12 bg-[#F8F9FC] hover:bg-gray-50 rounded-md cursor-pointer"
           onClick={handleGoogleLogin}
           type="button"
           aria-label="구글로 시작하기"
