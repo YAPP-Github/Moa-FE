@@ -5,6 +5,7 @@ import {
   endOfMonth,
   format,
   getDay,
+  isBefore,
   isSameDay,
   isSameMonth,
   startOfMonth,
@@ -13,6 +14,7 @@ import {
 import { ko } from 'date-fns/locale';
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/shared/lib/cn';
+import { IconButton } from '@/shared/ui/icon-button/IconButton';
 
 const dayVariants = cva(
   'inline-flex items-center justify-center size-[27px] rounded-full text-[15px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3182F6]/30',
@@ -37,12 +39,14 @@ export interface CalendarProps {
   selected?: Date;
   onSelect?: (date: Date) => void;
   disabled?: (date: Date) => boolean;
+  /** 선택 가능한 최소 날짜 (이 날짜 이전은 선택 불가, 이전 월 이동도 제한) */
+  minDate?: Date;
 }
 
 type DayState = VariantProps<typeof dayVariants>['state'];
 
 const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
-  ({ selected, onSelect, disabled }, ref) => {
+  ({ selected, onSelect, disabled, minDate }, ref) => {
     const [currentMonth, setCurrentMonth] = useState(() => selected ?? new Date());
     const [focusedDate, setFocusedDate] = useState<Date | null>(null);
     const gridRef = useRef<HTMLDivElement>(null);
@@ -75,10 +79,18 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       return Array.from({ length: startDayOfWeek }, (_, i) => i);
     }, [startDayOfWeek]);
 
+    // 이전 월 이동 가능 여부 (minDate가 있으면 해당 월 이전으로 이동 불가)
+    const canGoPrevMonth = useMemo(() => {
+      if (!minDate) return true;
+      const prevMonth = subMonths(currentMonth, 1);
+      return !isBefore(endOfMonth(prevMonth), startOfMonth(minDate));
+    }, [currentMonth, minDate]);
+
     // 이전 월로 이동
     const handlePrevMonth = useCallback(() => {
+      if (!canGoPrevMonth) return;
       setCurrentMonth((prev) => subMonths(prev, 1));
-    }, []);
+    }, [canGoPrevMonth]);
 
     // 다음 월로 이동
     const handleNextMonth = useCallback(() => {
@@ -97,12 +109,13 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     // 날짜 상태 결정
     const getDayState = useCallback(
       (date: Date): DayState => {
+        if (minDate && isBefore(date, minDate)) return 'disabled';
         if (disabled?.(date)) return 'disabled';
         if (selected && isSameDay(date, selected)) return 'selected';
         if (!isSameMonth(date, currentMonth)) return 'outside';
         return 'default';
       },
-      [disabled, selected, currentMonth]
+      [disabled, selected, currentMonth, minDate]
     );
 
     // 키보드 네비게이션
@@ -150,29 +163,25 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     );
 
     return (
-      <div ref={ref} className="p-3 w-full">
+      <div ref={ref} className="w-full">
         {/* Header: 월/년 + 네비게이션 */}
         <div className="flex items-center justify-between">
-          <span className="text-xl font-semibold">
+          <span className="text-sub-title-0 text-gray-1000">
             {format(currentMonth, 'yyyy년 M월', { locale: ko })}
           </span>
           <div className="flex items-center gap-1">
-            <button
-              type="button"
+            <IconButton
+              variant="tertiary"
+              size="sm"
               onClick={handlePrevMonth}
-              className="inline-flex items-center justify-center size-8 rounded-md hover:bg-blue-100 transition-colors"
+              disabled={!canGoPrevMonth}
               aria-label="이전 달"
             >
               <ChevronLeftIcon />
-            </button>
-            <button
-              type="button"
-              onClick={handleNextMonth}
-              className="inline-flex items-center justify-center size-8 rounded-md hover:bg-blue-100 transition-colors"
-              aria-label="다음 달"
-            >
+            </IconButton>
+            <IconButton variant="tertiary" size="sm" onClick={handleNextMonth} aria-label="다음 달">
               <ChevronRightIcon />
-            </button>
+            </IconButton>
           </div>
         </div>
 
@@ -181,7 +190,7 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
           {WEEKDAYS.map((day) => (
             <div
               key={day}
-              className="flex items-center justify-center aspect-square w-full text-[13px] font-medium leading-[150%] text-[#8791A0]"
+              className="flex h-8 items-center justify-center text-[13px] font-medium leading-[150%] text-[#8791A0]"
             >
               {day}
             </div>
@@ -192,7 +201,7 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
         <div ref={gridRef} className="grid grid-cols-7">
           {/* 빈 셀 */}
           {emptyCells.map((i) => (
-            <div key={`empty-${i}`} className="aspect-square" />
+            <div key={`empty-${i}`} className="h-8" />
           ))}
 
           {/* 날짜 셀 */}
@@ -210,10 +219,7 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
               (!focusedDate && !selected && isFirstDay);
 
             return (
-              <div
-                key={date.toISOString()}
-                className="aspect-square flex items-center justify-center"
-              >
+              <div key={date.toISOString()} className="flex h-10 items-center justify-center">
                 <button
                   type="button"
                   data-date={date.toISOString().split('T')[0]}

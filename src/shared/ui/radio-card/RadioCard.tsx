@@ -117,8 +117,8 @@ const RadioCardItem = forwardRef<HTMLLabelElement, RadioCardItemProps>(
         data-state={isChecked ? 'checked' : 'unchecked'}
         data-disabled={isDisabled ? '' : undefined}
         className={cn(
-          'cursor-pointer',
-          'focus-within:outline-none focus-within:ring-[3px] focus-within:ring-[#3182F6]/30',
+          'relative cursor-pointer',
+          'has-[input:focus]:outline-none has-[input:focus]:ring-[3px] has-[input:focus]:ring-[#3182F6]/30',
           'has-disabled:cursor-not-allowed has-disabled:opacity-50',
           className
         )}
@@ -132,7 +132,7 @@ const RadioCardItem = forwardRef<HTMLLabelElement, RadioCardItemProps>(
           checked={isChecked}
           disabled={isDisabled}
           onChange={handleChange}
-          className="sr-only"
+          className="absolute inset-0 opacity-0 pointer-events-none"
         />
         {children}
       </label>

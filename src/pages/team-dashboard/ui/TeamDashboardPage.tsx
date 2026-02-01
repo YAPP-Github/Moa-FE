@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useParams } from 'react-router';
 import { useRetrospects } from '@/features/retrospective/api/retrospective.queries';
+import { CreateRetrospectDialog } from '@/features/retrospective/ui/CreateRetrospectDialog';
 import { RetrospectSection } from '@/features/retrospective/ui/RetrospectSection';
 import { useRetroRooms } from '@/features/team/api/team.queries';
 import { Button } from '@/shared/ui/button/Button';
@@ -8,6 +10,7 @@ import IcPlus from '@/shared/ui/icons/IcPlus';
 export function TeamDashboardPage() {
   const { teamId } = useParams<{ teamId: string }>();
   const retroRoomId = Number(teamId);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: roomData } = useRetroRooms();
   const { data: retrospectsData, isLoading, isError, refetch } = useRetrospects(retroRoomId);
@@ -50,7 +53,12 @@ export function TeamDashboardPage() {
       {/* Header */}
       <div className="mb-28 shrink-0">
         <h1 className="text-title-1 text-grey-1000 mb-5">{currentRoom?.retroRoomName ?? '팀'}</h1>
-        <Button variant="primary" size="md" className="gap-1.5">
+        <Button
+          variant="primary"
+          size="md"
+          className="gap-1.5"
+          onClick={() => setIsDialogOpen(true)}
+        >
           <IcPlus className="w-2 h-2" />
           회고 추가하기
         </Button>
@@ -69,6 +77,13 @@ export function TeamDashboardPage() {
           items={completedRetrospects}
         />
       </div>
+
+      {/* 회고 생성 Dialog */}
+      <CreateRetrospectDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        retroRoomId={retroRoomId}
+      />
     </div>
   );
 }

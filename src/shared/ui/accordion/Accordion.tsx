@@ -21,6 +21,7 @@
  */
 
 import { createContext, forwardRef, useContext, useId, useState } from 'react';
+import { Button } from '../button/Button';
 
 // ============================================================================
 // Types
@@ -170,9 +171,10 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
     };
 
     return (
-      <button
+      <Button
         ref={ref}
         type="button"
+        variant="ghost"
         id={itemContext.triggerId}
         aria-expanded={itemContext.isOpen}
         aria-controls={itemContext.contentId}
@@ -182,7 +184,7 @@ const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
         {...props}
       >
         {children}
-      </button>
+      </Button>
     );
   }
 );
