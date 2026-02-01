@@ -1,0 +1,26 @@
+import { Link } from 'react-router';
+import type { RetroRoomListItem } from '@/shared/api/generated/index';
+import { cn } from '@/shared/lib/cn';
+
+interface SidebarTeamItemProps {
+  team: RetroRoomListItem;
+  isActive: boolean;
+}
+
+export function SidebarTeamItem({ team, isActive }: SidebarTeamItemProps) {
+  return (
+    <li>
+      <Link
+        to={`/teams/${team.retroRoomId}`}
+        className={cn(
+          'block w-full px-4 py-2 text-body-2 rounded-lg transition-colors',
+          isActive
+            ? 'bg-primary-100 text-primary-500 font-medium'
+            : 'text-gray-700 hover:bg-gray-100'
+        )}
+      >
+        {team.retroRoomName}
+      </Link>
+    </li>
+  );
+}
