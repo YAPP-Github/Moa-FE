@@ -118,7 +118,7 @@ const RadioCardItem = forwardRef<HTMLLabelElement, RadioCardItemProps>(
         data-disabled={isDisabled ? '' : undefined}
         className={cn(
           'relative cursor-pointer',
-          'focus-within:outline-none focus-within:ring-[3px] focus-within:ring-[#3182F6]/30',
+          'has-[input:focus]:outline-none has-[input:focus]:ring-[3px] has-[input:focus]:ring-[#3182F6]/30',
           'has-disabled:cursor-not-allowed has-disabled:opacity-50',
           className
         )}
