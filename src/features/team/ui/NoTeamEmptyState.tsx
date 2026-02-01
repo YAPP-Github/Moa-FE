@@ -1,14 +1,17 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { CreateTeamDialog } from '@/features/team/ui/CreateTeamDialog';
+import type { RetroRoomCreateResponse } from '@/shared/api/generated/index';
 import { Button } from '@/shared/ui/button/Button';
 import IcPlus from '@/shared/ui/icons/IcPlus';
 import IcNote from '@/shared/ui/logos/IcNote';
 
 export function NoTeamEmptyState() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSuccess = () => {
-    // 팀 생성 성공 시 추가 동작 (필요 시 페이지 이동 등)
+  const handleSuccess = (result: RetroRoomCreateResponse) => {
+    navigate(`/teams/${result.retroRoomId}`);
   };
 
   return (
