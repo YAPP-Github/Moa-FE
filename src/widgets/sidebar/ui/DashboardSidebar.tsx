@@ -7,11 +7,9 @@ interface DashboardSidebarProps {
 
 export function DashboardSidebar({ className }: DashboardSidebarProps) {
   return (
-    <aside
-      className={`w-[240px] bg-[#FFFFFF] h-full shrink-0 pl-[34px] py-[20px] ${className ?? ''}`}
-    >
+    <aside className={`w-[240px] h-full shrink-0 pl-[34px] pr-[10px] py-[20px] ${className ?? ''}`}>
       <SidebarListHeader title="목록" />
-      <nav className="mt-2 pr-[34px]">
+      <nav className="mt-2">
         <SidebarTeamList />
       </nav>
     </aside>
