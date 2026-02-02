@@ -7,7 +7,7 @@ import { useAuthStore } from '@/features/auth/model/store';
 export function CallbackPage() {
   const navigate = useNavigate();
   const { isAuthenticated, login, setSignupData } = useAuthStore();
-  const socialLoginMutation = useSocialLogin();
+  const { mutateAsync: socialLogin } = useSocialLogin();
 
   useEffect(() => {
     // 이미 로그인된 상태면 메인으로 리다이렉트
@@ -27,7 +27,7 @@ export function CallbackPage() {
       try {
         const accessToken = await exchangeCodeForToken(oauthData.code, oauthData.provider);
 
-        const response = await socialLoginMutation.mutateAsync({
+        const response = await socialLogin({
           accessToken,
           provider: oauthData.provider as unknown as 'GOOGLE' | 'KAKAO',
         });
@@ -52,7 +52,7 @@ export function CallbackPage() {
     };
 
     processOAuth();
-  }, [isAuthenticated, login, navigate, setSignupData, socialLoginMutation]);
+  }, [isAuthenticated, login, navigate, setSignupData, socialLogin]);
 
   return (
     <div className="flex h-screen items-center justify-center bg-white">
