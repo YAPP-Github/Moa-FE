@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './DropdownMenu';
+import { Avatar } from '@/shared/ui/avatar/Avatar';
 import { Button } from '@/shared/ui/button/Button';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
 import IcMeatball from '@/shared/ui/icons/IcMeatball';
@@ -313,6 +314,55 @@ export const WithDangerItem: Story = {
               onSelect={() => console.log('삭제')}
             >
               삭제
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenuRoot>
+    );
+  },
+};
+
+const sampleImageUrl =
+  'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=128&h=128&fit=crop&crop=face';
+
+export const WithAvatarTrigger: Story = {
+  name: 'With Avatar Trigger (프로필 드롭다운)',
+  render: () => {
+    return (
+      <DropdownMenuRoot>
+        <DropdownMenuTrigger>
+          <button
+            type="button"
+            className="inline-flex p-0 border-0 bg-transparent rounded-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#3182F6]/30"
+          >
+            <Avatar size="md" src={sampleImageUrl} alt="홍길동" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuPortal>
+          <DropdownMenuContent
+            align="end"
+            className="min-w-[180px] rounded-lg border border-[#EBEBEB] bg-white p-1 shadow-lg"
+          >
+            <div className="flex items-center gap-3 px-3 py-2">
+              <Avatar size="sm" src={sampleImageUrl} alt="홍길동" />
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-[#333D4B]">홍길동</span>
+                <span className="text-xs text-[#6B7583]">hong@example.com</span>
+              </div>
+            </div>
+            <DropdownMenuSeparator className={separatorClassName} />
+            <DropdownMenuItem className={itemClassName} onSelect={() => console.log('프로필')}>
+              프로필
+            </DropdownMenuItem>
+            <DropdownMenuItem className={itemClassName} onSelect={() => console.log('설정')}>
+              설정
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className={separatorClassName} />
+            <DropdownMenuItem
+              className={`${itemClassName} text-red-500 hover:bg-red-50 data-[highlighted]:bg-red-50`}
+              onSelect={() => console.log('로그아웃')}
+            >
+              로그아웃
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenuPortal>
