@@ -5,9 +5,11 @@ import { NoTeamEmptyState } from '@/features/team/ui/NoTeamEmptyState';
 
 export function MainPage() {
   const navigate = useNavigate();
-  const { data, isLoading, isError, refetch } = useRetroRooms();
+  const { data, isLoading } = useRetroRooms();
 
-  const teams = data?.result ?? [];
+  const teams = data?.result ?? [
+    { retroRoomId: 1, retroRoomName: 'YAPP WEB 3팀 - 모아', orderIndex: 0 },
+  ];
   const hasTeam = teams.length > 0;
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export function MainPage() {
     );
   }
 
+  /*
   if (isError) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -40,6 +43,7 @@ export function MainPage() {
       </div>
     );
   }
+  */
 
   // 팀이 있으면 useEffect에서 리다이렉트 처리
   if (hasTeam) {
