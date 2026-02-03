@@ -16,7 +16,7 @@ interface SidebarListHeaderProps {
 export function SidebarListHeader({ title, onAddTeam }: SidebarListHeaderProps) {
   return (
     <div className="h-9 px-4 py-2 flex items-center justify-between">
-      <span className="text-sub-title-1 text-gray-800 truncate">{title}</span>
+      <span className="text-sub-title-1 text-grey-900 truncate">{title}</span>
       <DropdownMenuRoot>
         <DropdownMenuTrigger>
           <IconButton variant="ghost" size="xs" aria-label="팀 메뉴">
