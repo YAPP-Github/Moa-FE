@@ -17,6 +17,7 @@
 ### Objective
 
 사용자가 "팀 나가기"를 선택했을 때 확인 모달을 표시하여:
+
 1. 사용자에게 중요한 작업임을 인지시키고
 2. 확인 체크박스를 통해 의도적인 선택임을 확인하며
 3. 취소/확인 버튼을 통해 최종 결정을 할 수 있도록 합니다
@@ -24,6 +25,7 @@
 ### Scope
 
 **In Scope**:
+
 - 팀 나가기 확인 모달 컴포넌트 구현 (`LeaveTeamModal.tsx`)
 - 체크박스 상태 관리 (확인 필수)
 - 모달 열기/닫기 상태 관리
@@ -31,6 +33,7 @@
 - 접근성(a11y) 준수 (ESC 키, 외부 클릭, 키보드 내비게이션)
 
 **Out of Scope**:
+
 - 실제 팀 나가기 API 호출 (추후 구현)
 - 에러 처리 및 로딩 상태
 - 다른 팀 관리 기능 (편집, 삭제 등)
@@ -59,10 +62,12 @@
 ### Functional Requirements (FR)
 
 **FR-1**: "팀 나가기" 선택 시 모달 표시
+
 - 사용자가 `SidebarTeamItem`의 드롭다운에서 "팀 나가기"를 선택하면 확인 모달이 표시됨
 - 드롭다운 메뉴는 자동으로 닫힘
 
 **FR-2**: 모달 UI 구조
+
 - **제목**: "YAPP WEB 7팀을 탈퇴하시겠어요?" (title2, grey1000)
 - **설명**: "팀을 나가면, 작성한 회고와 댓글들을 더이상 삭제할 수 없어요." (caption1, grey800)
 - **구분선**: 전체 너비, grey100, 1px, 상하 마진 12px
@@ -73,18 +78,21 @@
   - 확인 버튼: 취소 버튼과 10px 간격, 비활성(blue300)/활성(blue500)
 
 **FR-3**: 체크박스 상태 관리
+
 - 초기값: 체크되지 않음
 - 체크 시: IcCheckCircleActive 표시
 - 미체크 시: IcCheckCircleInactive 표시
 - 확인 버튼 활성화는 체크박스 상태에 따라 결정
 
 **FR-4**: 버튼 동작
+
 - **취소 버튼**: 모달 닫기, 체크박스 상태 초기화
 - **확인 버튼**:
   - 체크박스 미체크 시: 비활성(클릭 불가)
   - 체크박스 체크 시: 활성, 클릭 시 `onConfirm` 콜백 호출 후 모달 닫기
 
 **FR-5**: 모달 닫기
+
 - ESC 키 누르면 닫힘
 - 모달 외부 클릭 시 닫힘
 - 닫힐 때마다 체크박스 상태 초기화
@@ -206,6 +214,7 @@
 **현재 상태 분석**:
 
 **`SidebarListHeader.tsx` (이미 구현됨)**:
+
 ```typescript
 // ✅ 이미 DropdownMenu로 구현됨
 <DropdownMenuRoot>
@@ -216,15 +225,14 @@
   </DropdownMenuTrigger>
   <DropdownMenuPortal>
     <DropdownMenuContent align="end">
-      <DropdownMenuItem onSelect={onAddTeam}>
-        팀 추가
-      </DropdownMenuItem>
+      <DropdownMenuItem onSelect={onAddTeam}>팀 추가</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenuPortal>
 </DropdownMenuRoot>
 ```
 
 **개선 방향** (필요 시):
+
 - 추가 메뉴 항목 (예: "설정", "도움말")
 - 구분선 (`DropdownMenuSeparator`) 추가
 - 아이콘 추가
@@ -232,6 +240,7 @@
 ### Data Models
 
 **팀 데이터 타입** (이미 정의됨):
+
 ```typescript
 // src/shared/api/generated/index.ts
 interface RetroRoomListItem {
@@ -250,6 +259,7 @@ interface RetroRoomListItem {
 **파일**: `src/features/team/ui/LeaveTeamModal.tsx`
 
 **작업**:
+
 1. Props interface 정의 (`LeaveTeamModalProps`)
 2. 컴포넌트 구조 작성 (Dialog primitive 사용)
 3. 체크박스 상태 관리 (`useState`)
@@ -266,6 +276,7 @@ interface RetroRoomListItem {
 7. 접근성 속성 추가 (aria-labels, DialogTitle)
 
 **Component Structure**:
+
 ```typescript
 interface LeaveTeamModalProps {
   open: boolean;
@@ -277,9 +288,11 @@ interface LeaveTeamModalProps {
 ```
 
 **State**:
+
 - `isConfirmed: boolean` - 체크박스 상태 (초기값: false)
 
 **Event Handlers**:
+
 - `handleCheckboxChange`: 체크박스 토글
 - `handleCancel`: 모달 닫기 + 체크박스 초기화
 - `handleConfirm`: onConfirm 콜백 호출 + 모달 닫기 + 체크박스 초기화
@@ -287,6 +300,7 @@ interface LeaveTeamModalProps {
 **Estimated Effort**: 60분
 
 **체크리스트**:
+
 - [ ] Props interface 정의
 - [ ] Dialog 구조 구현
 - [ ] 체크박스 상태 관리
@@ -301,6 +315,7 @@ interface LeaveTeamModalProps {
 **파일**: `src/widgets/sidebar/ui/SidebarTeamItem.tsx`
 
 **작업**:
+
 1. LeaveTeamModal import 추가
 2. `isLeaveModalOpen` state 추가
 3. "팀 나가기" 드롭다운 아이템의 `onSelect` 수정:
@@ -316,6 +331,7 @@ interface LeaveTeamModalProps {
 **Estimated Effort**: 15분
 
 **체크리스트**:
+
 - [ ] LeaveTeamModal import
 - [ ] isLeaveModalOpen state 추가
 - [ ] 드롭다운 아이템 onSelect 수정
@@ -326,6 +342,7 @@ interface LeaveTeamModalProps {
 ### Phase 3: 검증 및 테스트
 
 **작업**:
+
 1. 빌드 검증: `npm run build`
 2. TypeScript 검증: `npx tsc --noEmit`
 3. Lint 검증: `npm run lint`
@@ -340,6 +357,7 @@ interface LeaveTeamModalProps {
 **Estimated Effort**: 20분
 
 **체크리스트**:
+
 - [ ] Build 성공
 - [ ] TypeScript 에러 없음
 - [ ] Lint 통과
@@ -397,11 +415,13 @@ npm run lint        # 린트 통과
 ### Acceptance Criteria
 
 **Phase 1 완료 기준**:
+
 - [ ] Favicon이 브라우저 탭에 표시됨
 - [ ] 페이지 title이 변경됨
 - [ ] 강제 새로고침 후에도 정상 표시
 
 **Phase 2 완료 기준**:
+
 - [ ] MainPage 로딩 상태 정상 동작
 - [ ] 에러 상태 UI 정상 표시
 - [ ] 빈 상태 UI 정상 표시
@@ -409,6 +429,7 @@ npm run lint        # 린트 통과
 - [ ] 더미 데이터 필요 여부 결정됨
 
 **Phase 3 완료 기준**:
+
 - [ ] 드롭다운 메뉴 클릭 동작
 - [ ] ESC 키로 메뉴 닫힘
 - [ ] 메뉴 외부 클릭 시 닫힘
@@ -416,6 +437,7 @@ npm run lint        # 린트 통과
 - [ ] 메뉴 항목 클릭 시 동작 실행
 
 **전체 완료 기준**:
+
 - [ ] Build 성공 (`npm run build`)
 - [ ] Type check 통과 (`npx tsc --noEmit`)
 - [ ] Lint 통과 (`npm run lint`)
@@ -649,6 +671,7 @@ npm run lint        # 린트 통과
 ## 10. Implementation Summary
 
 **Phase 2: 더미 데이터 및 홈 UI 검토 (Partially Completed)**
+
 - [x] 더미 데이터 생성 및 적용 (`MainPage`, `TeamDashboardPage`, `SidebarTeamList`)
 - [x] 팀 이름 "YAPP WEB 3팀 - 모아" 적용
 - [x] "오늘 3차 스프린트 회고" UI (Bubbles) 구현
@@ -667,6 +690,7 @@ npm run lint        # 린트 통과
 #### Phase 1: 팀 나가기 확인 모달 구현 ✅
 
 **New Files Created**:
+
 - [src/features/team/ui/LeaveTeamModal.tsx](../../src/features/team/ui/LeaveTeamModal.tsx) - 팀 나가기 확인 모달 컴포넌트
   - Dialog primitive 사용
   - 체크박스 상태 관리 (확인 필수)
@@ -675,6 +699,7 @@ npm run lint        # 린트 통과
   - 문구: "{teamName}팀을 탈퇴하시겠어요?"
 
 **Icons Added**:
+
 - [src/shared/assets/icons/ic_check_circle_active.svg](../../src/shared/assets/icons/ic_check_circle_active.svg) - 활성 체크 아이콘 (#3182F6)
 - [src/shared/assets/icons/ic_check_circle_inactive.svg](../../src/shared/assets/icons/ic_check_circle_inactive.svg) - 비활성 체크 아이콘 (#DEE0E4)
 - [src/shared/ui/icons/IcCheckCircleActive.tsx](../../src/shared/ui/icons/IcCheckCircleActive.tsx) - React 컴포넌트
@@ -683,6 +708,7 @@ npm run lint        # 린트 통과
 - [src/shared/ui/icons/IcChevronDown.tsx](../../src/shared/ui/icons/IcChevronDown.tsx) - React 컴포넌트
 
 **Integration**:
+
 - [src/widgets/sidebar/ui/SidebarTeamItem.tsx](../../src/widgets/sidebar/ui/SidebarTeamItem.tsx#L1-L120)
   - LeaveTeamModal import 및 통합
   - isLeaveModalOpen state 추가
@@ -691,6 +717,7 @@ npm run lint        # 린트 통과
 #### Phase 2: 프로필 메뉴 모달 구현 ✅
 
 **New Files Created**:
+
 - [src/widgets/header/ui/ProfileMenu.tsx](../../src/widgets/header/ui/ProfileMenu.tsx) - 프로필 메뉴 드롭다운
   - 200px 고정 너비
   - 프로필 상자 (h-10 w-10 bg-E5E5E5)
@@ -699,10 +726,12 @@ npm run lint        # 린트 통과
   - 외부 클릭 시 자동 닫힘
 
 **Icons Added**:
+
 - [src/shared/assets/icons/ic_user_profile.svg](../../src/shared/assets/icons/ic_user_profile.svg) - 유저 프로필 아이콘
 - [src/shared/ui/icons/IcUserProfile.tsx](../../src/shared/ui/icons/IcUserProfile.tsx) - React 컴포넌트
 
 **Integration**:
+
 - [src/widgets/header/ui/Header.tsx](../../src/widgets/header/ui/Header.tsx#L1-L58)
   - ProfileMenu import 및 통합
   - isProfileMenuOpen state 추가
@@ -712,7 +741,9 @@ npm run lint        # 린트 통과
 #### Phase 3: RetrospectRow UI 개선 ✅
 
 **Modified Files**:
+
 - [src/features/retrospective/ui/RetrospectRow.tsx](../../src/features/retrospective/ui/RetrospectRow.tsx#L1-L110)
+
   - 참여인원 드롭다운 외부 클릭 시 닫힘 (useEffect + useRef)
   - 날짜 영역 고정 너비 (w-[60px]) - 정렬 개선
   - 중첩 버튼 HTML 검증 오류 수정 (button → div)
@@ -731,12 +762,15 @@ npm run lint        # 린트 통과
 ### Deviations from Plan
 
 **Added (Not in Original Plan)**:
+
 1. **프로필 메뉴 모달** - 사용자 요청으로 추가 구현
+
    - 우측 상단 프로필 버튼 클릭 시 표시
    - 로그아웃, 서비스 탈퇴 기능
    - 200px 고정 너비, 외부 클릭 닫기
 
 2. **RetrospectRow 개선**
+
    - 참여인원 드롭다운 외부 클릭 닫기
    - 날짜 정렬 문제 수정 (플레이스홀더 영역)
    - 12명 참여자 테스트 데이터
@@ -747,7 +781,9 @@ npm run lint        # 린트 통과
    - IcCheckCircleInactive: #DEE0E4
 
 **Changed**:
+
 1. **LeaveTeamModal 문구**
+
    - 원래: "{teamName}을 탈퇴하시겠어요?"
    - 변경: "{teamName}팀을 탈퇴하시겠어요?"
 
@@ -756,6 +792,7 @@ npm run lint        # 린트 통과
    - stopPropagation으로 이벤트 전파 방지
 
 **Technical Decisions**:
+
 1. useEffect + useRef 패턴으로 외부 클릭 감지
 2. Dialog primitive 재사용 (기존 Dialog 컴포넌트)
 3. 직접 import 방식 유지 (tree-shaking 최적화)
@@ -787,4 +824,3 @@ npm run lint        # 린트 통과
 **Last Updated**: 2026-02-03
 **Implementation Time**: ~3 hours
 **Ready for PR**: Yes
-

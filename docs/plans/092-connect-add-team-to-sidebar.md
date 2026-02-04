@@ -169,8 +169,8 @@ src/
 - **Rationale**: Tree-shaking 최적화, 프로젝트 컨벤션 준수
 - **Implementation**:
   ```typescript
-  import { DashboardSidebar } from '@/widgets/sidebar/ui/DashboardSidebar';
-  import { CreateTeamDialog } from '@/features/team/ui/CreateTeamDialog';
+  import { DashboardSidebar } from "@/widgets/sidebar/ui/DashboardSidebar";
+  import { CreateTeamDialog } from "@/features/team/ui/CreateTeamDialog";
   ```
 - **Benefit**: 번들 크기 최적화, 명확한 의존성
 
@@ -180,11 +180,11 @@ src/
 
 ```typescript
 // src/widgets/layout/ui/DashboardLayout.tsx
-import { useState } from 'react';
-import type { ReactNode } from 'react';
-import { BaseLayout } from './BaseLayout';
-import { DashboardSidebar } from '@/widgets/sidebar/ui/DashboardSidebar';
-import { CreateTeamDialog } from '@/features/team/ui/CreateTeamDialog';
+import { useState } from "react";
+import type { ReactNode } from "react";
+import { BaseLayout } from "./BaseLayout";
+import { DashboardSidebar } from "@/widgets/sidebar/ui/DashboardSidebar";
+import { CreateTeamDialog } from "@/features/team/ui/CreateTeamDialog";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -209,7 +209,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         onOpenChange={setIsAddTeamDialogOpen}
         onSuccess={(result) => {
           // Optional: 생성된 팀으로 이동 (미래 기능)
-          console.log('Team created:', result);
+          console.log("Team created:", result);
         }}
       />
     </BaseLayout>
@@ -221,17 +221,24 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
 ```typescript
 // src/widgets/sidebar/ui/DashboardSidebar.tsx
-import { SidebarListHeader } from './SidebarListHeader';
-import { SidebarTeamList } from './SidebarTeamList';
+import { SidebarListHeader } from "./SidebarListHeader";
+import { SidebarTeamList } from "./SidebarTeamList";
 
 interface DashboardSidebarProps {
   className?: string;
-  onAddTeam?: () => void;  // 추가
+  onAddTeam?: () => void; // 추가
 }
 
-export function DashboardSidebar({ className, onAddTeam }: DashboardSidebarProps) {
+export function DashboardSidebar({
+  className,
+  onAddTeam,
+}: DashboardSidebarProps) {
   return (
-    <aside className={`w-[240px] h-full shrink-0 pl-[34px] pr-[10px] py-[20px] ${className ?? ''}`}>
+    <aside
+      className={`w-[240px] h-full shrink-0 pl-[34px] pr-[10px] py-[20px] ${
+        className ?? ""
+      }`}
+    >
       <SidebarListHeader title="목록" onAddTeam={onAddTeam} />
       <nav className="mt-2">
         <SidebarTeamList />
@@ -298,6 +305,7 @@ interface RetroRoomListItem {
 **API 통합 없음** - 기존 API 및 React Query 설정 재사용
 
 **기존 Mutation** (`features/team/api/team.mutations.ts`):
+
 - `useCreateRetroRoom()`: 팀 생성
 - 성공 시 자동으로 `retroRooms` 쿼리 무효화
 - 추가 통합 작업 불필요
@@ -364,6 +372,7 @@ interface RetroRoomListItem {
 **MEDIUM**:
 
 - **rerender-memo**:
+
   - DashboardSidebar가 `onAddTeam` prop으로 인해 불필요하게 리렌더링될 수 있음
   - 현재 구현에서는 `handleAddTeam`이 안정적이므로 문제없음
   - 미래 최적화: `useCallback`으로 `handleAddTeam` 메모이제이션 가능
@@ -379,6 +388,7 @@ interface RetroRoomListItem {
 - **server-cache-react**: 해당 없음 (클라이언트 상태만)
 
 **적용 전략**:
+
 - 현재 구현은 간단하므로 기본 패턴만 사용
 - 성능 이슈 발견 시 `useCallback` 추가 고려
 
@@ -516,10 +526,12 @@ npm run lint        # 린트 통과
 ### Deployment Strategy
 
 **단일 배포**:
+
 - 기능이 간단하고 위험도가 낮아 단계적 배포 불필요
 - PR 머지 후 즉시 프로덕션 배포 가능
 
 **Rollback Plan**:
+
 - Git revert로 즉시 롤백 가능
 - 백엔드 API 변경 없음 (기존 API 재사용)
 - 데이터베이스 마이그레이션 없음
@@ -635,11 +647,13 @@ npm run lint        # 린트 통과
 ### Key Learnings
 
 **FSD 레이어 분리의 중요성**:
+
 - widgets가 features를 직접 참조하지 않도록 상위 레이어에서 연결
 - Props drilling 1단계는 허용 가능한 복잡도
 - 명확한 책임 분리로 유지보수성 향상
 
 **기존 패턴 재사용의 이점**:
+
 - `CreateTeamDialog`는 이미 완전히 구현되어 있어 재사용만으로 충분
 - 프로젝트 내 모달 패턴이 일관되어 통합이 간단함
 - React Query 캐시 무효화가 자동으로 동작
@@ -656,12 +670,14 @@ npm run lint        # 린트 통과
 #### Modified Files
 
 - [src/widgets/layout/ui/DashboardLayout.tsx](../../../src/widgets/layout/ui/DashboardLayout.tsx) - 모달 상태 관리 추가
+
   - `useState`로 `isAddTeamDialogOpen` 상태 관리
   - `handleAddTeam` callback 함수 생성
   - `CreateTeamDialog` import 및 렌더링
   - `DashboardSidebar`에 `onAddTeam` prop 전달
 
 - [src/widgets/sidebar/ui/DashboardSidebar.tsx](../../../src/widgets/sidebar/ui/DashboardSidebar.tsx) - onAddTeam prop 추가
+
   - `DashboardSidebarProps` 인터페이스에 `onAddTeam?: () => void` 추가
   - `SidebarListHeader`에 `onAddTeam` prop 전달
 

@@ -151,7 +151,7 @@ src/shared/ui/
 ```typescript
 interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Toast 상태 */
-  variant: 'success' | 'warning';
+  variant: "success" | "warning";
   /** 표시할 메시지 */
   message: string;
   /** 표시 여부 */
@@ -177,7 +177,7 @@ interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
 ### Data Models
 
 ```typescript
-type ToastVariant = 'success' | 'warning';
+type ToastVariant = "success" | "warning";
 
 interface ToastProps {
   variant: ToastVariant;
@@ -424,14 +424,15 @@ npm run lint        # 린트 통과
 | 자동 닫힘 | 3초 (커스터마이징 가능) |
 
 **사용법**:
+
 ```tsx
 // 1. ToastContainer 추가 (앱 레벨)
-<ToastContainer />
+<ToastContainer />;
 
 // 2. useToast 훅으로 토스트 표시
 const { showToast } = useToast();
-showToast({ variant: 'success', message: '팀 생성이 완료되었어요!' });
-showToast({ variant: 'warning', message: '저장되지 않은 변경사항이 있어요!' });
+showToast({ variant: "success", message: "팀 생성이 완료되었어요!" });
+showToast({ variant: "warning", message: "저장되지 않은 변경사항이 있어요!" });
 ```
 
 ### Performance Impact
