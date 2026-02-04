@@ -4,7 +4,7 @@ export type Provider = 'Google' | 'Kakao';
 const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
 const KAKAO_AUTH_URL = 'https://kauth.kakao.com/oauth/authorize';
 
-function getRedirectUri(): string {
+export function getRedirectUri(): string {
   const baseUrl = window.location.origin;
   return `${baseUrl}/callback`;
 }
