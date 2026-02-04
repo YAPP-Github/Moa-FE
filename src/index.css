@@ -75,13 +75,17 @@
   --text-title-4--line-height: 1.5;
   --text-title-4--font-weight: 700;
 
-  --text-title-5: 0.875rem;
+  --text-title-5: 0.9375rem;
   --text-title-5--line-height: 1.5;
   --text-title-5--font-weight: 700;
 
-  --text-title-6: 0.8125rem;
-  --text-title-6--line-height: 1.4;
+  --text-title-6: 0.875rem;
+  --text-title-6--line-height: 1.5;
   --text-title-6--font-weight: 700;
+
+  --text-title-7: 0.8125rem;
+  --text-title-7--line-height: 1.4;
+  --text-title-7--font-weight: 700;
 
   /* Sub-title (SemiBold / 600) */
   --text-sub-title-0: 1.125rem;

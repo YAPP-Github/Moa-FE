@@ -11,7 +11,7 @@ const SvgIcPlusBlue = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="currentColor"
+      stroke="#3182F6"
       strokeLinecap="round"
       strokeWidth={1.5}
       d="M.75 4.387h7.273M4.385.75v7.273"

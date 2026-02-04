@@ -14,12 +14,40 @@ import {
 import IcChevronDown from '@/shared/ui/icons/IcChevronDown';
 import IcPlus from '@/shared/ui/icons/IcPlus';
 import IcUserProfile from '@/shared/ui/icons/IcUserProfile';
+import { SidePanel } from '@/shared/ui/side-panel/SidePanel';
+import { RetrospectiveDetailPanel } from '@/widgets/retrospective-detail-panel/ui/RetrospectiveDetailPanel';
+
+interface TodayRetrospect {
+  retrospectId: number;
+  projectName: string;
+  retrospectDate: string;
+  retrospectMethod: string;
+  retrospectTime: string;
+  participantCount: number;
+}
 
 export function TeamDashboardPage() {
   const { teamId } = useParams<{ teamId: string }>();
   const navigate = useNavigate();
   const retroRoomId = Number(teamId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedRetrospect, setSelectedRetrospect] = useState<TodayRetrospect | null>(null);
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+  const [isPanelExpanded, setIsPanelExpanded] = useState(false);
+
+  const handleTodayRetrospectClick = (retrospect: TodayRetrospect) => {
+    setSelectedRetrospect(retrospect);
+    setIsSidePanelOpen(true);
+  };
+
+  const handleSidePanelClose = () => {
+    setIsSidePanelOpen(false);
+    setIsPanelExpanded(false);
+  };
+
+  const handleScaleToggle = () => {
+    setIsPanelExpanded((prev) => !prev);
+  };
 
   const { data: roomData } = useRetroRooms();
   const { data: retrospectsData, isLoading, isError } = useRetrospects(retroRoomId);
@@ -128,9 +156,11 @@ export function TeamDashboardPage() {
           {/* Today's Retrospects */}
           <div className="flex gap-2 min-h-16">
             {todayRetrospects.map((retro) => (
-              <div
+              <button
+                type="button"
                 key={retro.retrospectId}
-                className="flex items-center gap-[10px] bg-white px-[10px] py-3 rounded-[20px] w-48 h-16"
+                onClick={() => handleTodayRetrospectClick(retro)}
+                className="flex items-center gap-[10px] bg-white px-[10px] py-3 rounded-[20px] w-48 h-16 hover:bg-grey-50 transition-colors cursor-pointer text-left"
               >
                 <div className="w-[38px] h-[38px] bg-grey-100 rounded-[10px] flex items-center justify-center shrink-0">
                   <span className="text-sub-title-5 text-grey-900">오늘</span>
@@ -149,7 +179,7 @@ export function TeamDashboardPage() {
                     </span>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -179,6 +209,24 @@ export function TeamDashboardPage() {
         onOpenChange={setIsDialogOpen}
         retroRoomId={retroRoomId}
       />
+
+      {/* 회고 진행 사이드 패널 */}
+      <SidePanel
+        open={isSidePanelOpen}
+        onOpenChange={setIsSidePanelOpen}
+        showBackdrop={false}
+        topOffset="54px"
+        width={isPanelExpanded ? 'calc(100% - 240px)' : 'calc(50% - 120px)'}
+      >
+        {selectedRetrospect && (
+          <RetrospectiveDetailPanel
+            retrospect={selectedRetrospect}
+            onClose={handleSidePanelClose}
+            isExpanded={isPanelExpanded}
+            onScaleToggle={handleScaleToggle}
+          />
+        )}
+      </SidePanel>
     </div>
   );
 }

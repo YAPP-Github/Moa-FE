@@ -11,7 +11,7 @@ const SvgIcChevronDown = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="currentColor"
+      stroke="#6B7583"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.4}
