@@ -12,8 +12,7 @@ import { useToast } from '@/shared/ui/toast/Toast';
 
 export function OnboardingPage() {
   const navigate = useNavigate();
-  const { signupEmail, login, clearOnboarding } = useAuthStore();
-  const { signupToken, signupEmail, login, clearSignupData } = useAuthStore();
+  const { login, clearOnboarding } = useAuthStore();
   const { showToast } = useToast();
   const signupMutation = useSignup();
   const createRetroRoomMutation = useCreateRetroRoom();
@@ -23,7 +22,6 @@ export function OnboardingPage() {
     try {
       // signupToken은 쿠키로 자동 전송됨
       await signupMutation.mutateAsync({
-        email: signupEmail || '',
         nickname: data.nickname,
       });
 

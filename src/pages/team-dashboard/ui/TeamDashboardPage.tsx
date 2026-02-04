@@ -23,7 +23,7 @@ interface TodayRetrospect {
   retrospectDate: string;
   retrospectMethod: string;
   retrospectTime: string;
-  participantCount: number;
+  participantCount?: number;
 }
 
 export function TeamDashboardPage() {

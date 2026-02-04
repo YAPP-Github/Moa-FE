@@ -19,8 +19,6 @@ interface HeaderProps {
 export function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
   const { logoutWithServer } = useAuthStore();
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const { logout } = useAuthStore();
   // TODO: API에서 사용자 이름 가져오기
   const userName = '사용자';
 
