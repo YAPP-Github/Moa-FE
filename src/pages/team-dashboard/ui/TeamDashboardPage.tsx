@@ -1,135 +1,68 @@
-import { useState } from 'react';
-import { useParams } from 'react-router';
-// import { useRetrospects } from '@/features/retrospective/api/retrospective.queries';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
+import { useRetrospects } from '@/features/retrospective/api/retrospective.queries';
 import { CreateRetrospectDialog } from '@/features/retrospective/ui/CreateRetrospectDialog';
 import { RetrospectSection } from '@/features/retrospective/ui/RetrospectSection';
-// import { useRetroRooms } from '@/features/team/api/team.queries';
+import { useRetroRooms } from '@/features/team/api/team.queries';
 import { Button } from '@/shared/ui/button/Button';
+import {
+  DropdownMenuContent,
+  DropdownMenuPortal,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu/DropdownMenu';
 import IcChevronDown from '@/shared/ui/icons/IcChevronDown';
 import IcPlus from '@/shared/ui/icons/IcPlus';
 import IcUserProfile from '@/shared/ui/icons/IcUserProfile';
 
 export function TeamDashboardPage() {
   const { teamId } = useParams<{ teamId: string }>();
+  const navigate = useNavigate();
   const retroRoomId = Number(teamId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // const { data: roomData } = useRetroRooms();
-  // const { data: retrospectsData, isLoading, isError, refetch } = useRetrospects(retroRoomId);
+  const { data: roomData } = useRetroRooms();
+  const { data: retrospectsData, isLoading, isError } = useRetrospects(retroRoomId);
 
-  // const currentRoom = roomData?.result?.find((r) => r.retroRoomId === retroRoomId);
-  // const retrospects = retrospectsData?.result ?? [];
+  // 존재하지 않는 팀이거나 접근 권한이 없는 경우 리다이렉트
+  useEffect(() => {
+    if (isError && roomData) {
+      const teams = roomData.result ?? [];
+      if (teams.length > 0) {
+        navigate(`/teams/${teams[0].retroRoomId}`, { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
+    }
+  }, [isError, roomData, navigate]);
 
-  const isSopt = retroRoomId === 2;
+  const currentRoom = roomData?.result?.find((r) => r.retroRoomId === retroRoomId);
+  const retrospects = retrospectsData?.result ?? [];
 
-  const currentRoom = isSopt
-    ? { retroRoomId: 2, retroRoomName: 'SOPT' }
-    : { retroRoomId: 1, retroRoomName: 'YAPP WEB 3팀 - 모아' };
+  // 날짜 기반으로 회고 분류
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  const memberCount = isSopt ? 1 : 12;
-  const isLoading = false; // Dummy loading state
+  const todayRetrospects = retrospects.filter((r) => {
+    const retroDate = new Date(r.retrospectDate);
+    retroDate.setHours(0, 0, 0, 0);
+    return retroDate.getTime() === today.getTime();
+  });
 
-  const dummyTodayRetrospects = [
-    {
-      retrospectId: 1,
-      projectName: '3차 스프린트 회고',
-      retrospectDate: '2025-01-12',
-      retrospectMethod: 'KPT',
-      retrospectTime: '오후 8:00',
-      participantCount: 2,
-    },
-    {
-      retrospectId: 2,
-      projectName: '3차 스프린트 회고',
-      retrospectDate: '2025-01-12',
-      retrospectMethod: 'KPT',
-      retrospectTime: '오후 10:00',
-      participantCount: 2,
-    },
-  ];
+  const pendingRetrospects = retrospects.filter((r) => {
+    const retroDate = new Date(r.retrospectDate);
+    retroDate.setHours(0, 0, 0, 0);
+    return retroDate.getTime() > today.getTime();
+  });
 
-  const dummyPendingRetrospects = [
-    {
-      retrospectId: 3,
-      projectName: '1차 스프린트 회고',
-      retrospectDate: '2025-01-12',
-      retrospectMethod: 'KPT',
-      retrospectTime: '20:00',
-      participantCount: 2,
-    },
-    {
-      retrospectId: 4,
-      projectName: '1차 스프린트 회고',
-      retrospectDate: '2025-01-12',
-      retrospectMethod: 'KPT',
-      retrospectTime: '22:00',
-      participantCount: 2,
-    },
-  ];
+  const completedRetrospects = retrospects.filter((r) => {
+    const retroDate = new Date(r.retrospectDate);
+    retroDate.setHours(0, 0, 0, 0);
+    return retroDate.getTime() < today.getTime();
+  });
 
-  const dummyCompletedRetrospects = [
-    {
-      retrospectId: 5,
-      projectName: '2차 스프린트 회고',
-      retrospectDate: '2025-01-10',
-      retrospectMethod: 'KPT',
-      retrospectTime: '20:00',
-      participantCount: 3,
-    },
-    {
-      retrospectId: 6,
-      projectName: '프로젝트 킥오프 회고',
-      retrospectDate: '2025-01-08',
-      retrospectMethod: 'KPT',
-      retrospectTime: '18:00',
-      participantCount: 5,
-    },
-    {
-      retrospectId: 7,
-      projectName: '1차 스프린트 회고',
-      retrospectDate: '2025-01-05',
-      retrospectMethod: 'KPT',
-      retrospectTime: '19:00',
-      participantCount: 4,
-    },
-    {
-      retrospectId: 8,
-      projectName: '디자인 시스템 구축 회고',
-      retrospectDate: '2025-01-03',
-      retrospectMethod: 'KPT',
-      retrospectTime: '20:30',
-      participantCount: 6,
-    },
-    {
-      retrospectId: 9,
-      projectName: '온보딩 프로세스 개선 회고',
-      retrospectDate: '2025-01-01',
-      retrospectMethod: 'KPT',
-      retrospectTime: '18:30',
-      participantCount: 4,
-    },
-    {
-      retrospectId: 10,
-      projectName: '연말 종합 회고',
-      retrospectDate: '2024-12-30',
-      retrospectMethod: 'KPT',
-      retrospectTime: '17:00',
-      participantCount: 8,
-    },
-    {
-      retrospectId: 11,
-      projectName: '전체 팀 회고',
-      retrospectDate: '2024-12-28',
-      retrospectMethod: 'KPT',
-      retrospectTime: '19:00',
-      participantCount: 12,
-    },
-  ];
-
-  // TODO: API에서 status 필드를 제공하면 실제 상태로 구분
-  // 현재는 임시로 전체를 "대기 중"으로 표시
-  const pendingRetrospects = isSopt ? [] : dummyPendingRetrospects;
-  const completedRetrospects = isSopt ? [] : dummyCompletedRetrospects;
+  // TODO: API에서 멤버 수 제공 시 대체
+  const memberCount = 0;
 
   if (isLoading) {
     return (
@@ -138,27 +71,6 @@ export function TeamDashboardPage() {
       </div>
     );
   }
-
-  /*
-  if (isError) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <div className="text-center">
-          <p className="text-body-1 text-gray-600 mb-4">회고 목록을 불러오는데 실패했습니다.</p>
-          <button
-            type="button"
-            onClick={() => refetch()}
-            className="text-primary-500 hover:text-primary-600 font-medium"
-          >
-            다시 시도
-          </button>
-        </div>
-      </div>
-    );
-  }
-  */
-
-  const todayRetrospects = isSopt ? [] : dummyTodayRetrospects;
 
   return (
     <div className="h-full p-4 sm:p-6 lg:p-8 flex flex-col">
@@ -175,21 +87,42 @@ export function TeamDashboardPage() {
             <Button
               variant="primary"
               size="md"
-              className="gap-1.5 px-[10px] py-2 text-[13px] font-semibold text-white"
+              className="gap-1.5"
               onClick={() => setIsDialogOpen(true)}
             >
               <IcPlus className="w-2 h-2" />
               회고 추가하기
             </Button>
 
-            <button
-              type="button"
-              className="flex items-center gap-1 p-2 rounded-lg bg-grey-100 text-body-2 font-medium text-gray-700 hover:bg-grey-200 transition-colors"
-            >
-              <IcUserProfile className="w-5 h-5 text-gray-500" />
-              <span className="mr-0.5">멤버 {memberCount}</span>
-              <IcChevronDown className="w-4 h-4 text-gray-500" />
-            </button>
+            <DropdownMenuRoot>
+              <DropdownMenuTrigger>
+                <Button
+                  variant="tertiary"
+                  size="md"
+                  className="gap-1.5 data-[state=open]:bg-[#DEE0E4]"
+                >
+                  <IcUserProfile className="w-5 h-5" />
+                  <span>멤버 {memberCount}</span>
+                  <IcChevronDown className="w-4 h-4 transition-transform data-[state=open]:rotate-180" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuContent
+                  align="end"
+                  sideOffset={4}
+                  className="bg-white p-3 rounded-lg shadow-lg min-w-[160px]"
+                >
+                  <p className="text-caption-4 text-grey-700">멤버 {memberCount}명</p>
+                  {memberCount > 0 ? (
+                    <div className="flex flex-col gap-3 mt-3">
+                      {/* TODO: API 연동 시 멤버 목록 표시 */}
+                    </div>
+                  ) : (
+                    <div className="mt-3 text-caption-4 text-grey-500">멤버 없음</div>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenuPortal>
+            </DropdownMenuRoot>
           </div>
 
           {/* Today's Retrospects */}

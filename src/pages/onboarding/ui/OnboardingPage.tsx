@@ -8,10 +8,12 @@ import { TeamActionStep } from '@/features/auth/ui/steps/TeamActionStep';
 import { TeamStep } from '@/features/auth/ui/steps/TeamStep';
 import { useCreateRetroRoom, useJoinRetroRoom } from '@/features/team/api/team.mutations';
 import { MultiStepForm } from '@/shared/ui/multi-step-form/MultiStepForm';
+import { useToast } from '@/shared/ui/toast/Toast';
 
 export function OnboardingPage() {
   const navigate = useNavigate();
   const { signupToken, signupEmail, login, clearSignupData } = useAuthStore();
+  const { showToast } = useToast();
   const signupMutation = useSignup();
   const createRetroRoomMutation = useCreateRetroRoom();
   const joinRetroRoomMutation = useJoinRetroRoom();
@@ -30,23 +32,31 @@ export function OnboardingPage() {
       clearSignupData();
 
       if (data.teamOption === 'create' && data.teamName) {
-        await createRetroRoomMutation.mutateAsync({
-          title: data.teamName,
-        });
-        navigate('/');
+        try {
+          await createRetroRoomMutation.mutateAsync({
+            title: data.teamName,
+          });
+          navigate('/');
+        } catch {
+          showToast({ variant: 'warning', message: '팀 생성에 실패했습니다.' });
+        }
       }
 
       if (data.teamOption === 'join' && data.inviteLink) {
-        await joinRetroRoomMutation.mutateAsync({
-          inviteUrl: data.inviteLink,
-        });
-        navigate('/');
+        try {
+          await joinRetroRoomMutation.mutateAsync({
+            inviteUrl: data.inviteLink,
+          });
+          navigate('/');
+        } catch {
+          showToast({
+            variant: 'warning',
+            message: '초대 링크가 유효하지 않습니다.',
+          });
+        }
       }
-    } catch (error) {
-      // @todo: 에러 처리
-      console.error(
-        `Failed to signup: ${error instanceof Error ? error.message : 'Unknown error'}`
-      );
+    } catch {
+      showToast({ variant: 'warning', message: '회원가입에 실패했습니다.' });
     }
   };
 

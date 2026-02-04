@@ -81,7 +81,7 @@ export function SidebarTeamItem({
   return (
     <li
       className={cn(
-        'group flex items-center justify-between pl-[14px] pr-4 py-3 rounded-[8px] transition-colors relative',
+        'group flex items-center justify-between pl-[14px] pr-4 h-10 rounded-[8px] transition-colors relative',
         isActive ? 'bg-gray-100' : 'hover:bg-gray-100'
       )}
     >

@@ -45,7 +45,10 @@ export const Warning: Story = {
     return (
       <Button
         onClick={() =>
-          showToast({ variant: 'warning', message: '저장되지 않은 변경사항이 있어요!' })
+          showToast({
+            variant: 'warning',
+            message: '저장되지 않은 변경사항이 있어요!',
+          })
         }
       >
         Warning 토스트 보기
