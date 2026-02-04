@@ -11,7 +11,7 @@ const SvgIcCaretDown = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="currentColor"
+      stroke="#6B7684"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.4}

@@ -11,7 +11,7 @@ const SvgIcBack = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="currentColor"
+      stroke="#4E5968"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.6}

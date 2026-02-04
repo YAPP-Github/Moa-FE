@@ -10,9 +10,9 @@ const SvgIcCheck = (props: SVGProps<SVGSVGElement>) => (
     aria-hidden="true"
     {...props}
   >
-    <circle cx={22.494} cy={22.494} r={22.494} fill="currentColor" />
+    <circle cx={22.494} cy={22.494} r={22.494} fill="#1C8AFF" />
     <path
-      stroke="currentColor"
+      stroke="#fff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={3.272}

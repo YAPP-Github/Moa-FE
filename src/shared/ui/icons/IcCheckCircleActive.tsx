@@ -12,7 +12,7 @@ const SvgIcCheckCircleActive = (props: SVGProps<SVGSVGElement>) => (
   >
     <rect width={18} height={18} fill="#3182F6" rx={9} />
     <path
-      stroke="white"
+      stroke="#fff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.6}

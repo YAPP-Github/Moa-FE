@@ -9,3 +9,12 @@ export function useRetrospects(retroRoomId: number) {
     enabled: !!retroRoomId && retroRoomId > 0,
   });
 }
+
+export function useRetrospectDetail(retrospectId: number) {
+  return useQuery({
+    queryKey: ['retrospect', retrospectId],
+    queryFn: () => getApi().getRetrospectDetail(retrospectId),
+    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
+    enabled: !!retrospectId && retrospectId > 0,
+  });
+}

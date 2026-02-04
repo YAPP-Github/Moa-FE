@@ -1,13 +1,13 @@
 import { format, getDay } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useEffect, useRef } from 'react';
+import { useRetrospectDetail } from '@/features/retrospective/api/retrospective.queries';
 import { RETROSPECT_METHOD_LABELS } from '@/features/retrospective/model/constants';
 import type { RetrospectListItem } from '@/shared/api/generated/index';
 import IcChevronDown from '@/shared/ui/icons/IcChevronDown';
 
 interface RetrospectRowProps {
   retrospect: RetrospectListItem;
-  participantCount?: number;
   onClick?: () => void;
   index?: number;
   isParticipantOpen?: boolean;
@@ -16,21 +16,8 @@ interface RetrospectRowProps {
 
 const DAY_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
 
-// 더미 참여자 데이터
-const DUMMY_PARTICIPANTS = [
-  '김민지',
-  '손민수',
-  '이지은',
-  '박서준',
-  '최유나',
-  '정하늘',
-  '강민호',
-  '윤서아',
-];
-
 export function RetrospectRow({
   retrospect,
-  participantCount = 0,
   onClick,
   index = 0,
   isParticipantOpen = false,
@@ -44,8 +31,11 @@ export function RetrospectRow({
 
   const hasBackground = index % 2 === 0;
 
-  // participantCount만큼 더미 참여자 표시
-  const participants = DUMMY_PARTICIPANTS.slice(0, participantCount);
+  // 회고 상세 정보 (멤버 목록)
+  const { data: detailData, isLoading: isDetailLoading } = useRetrospectDetail(
+    retrospect.retrospectId
+  );
+  const members = detailData?.result?.members ?? [];
 
   // 참여인원 드롭다운 외부 클릭 감지
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -107,21 +97,27 @@ export function RetrospectRow({
           }}
         >
           <span className="inline-block">참여인원</span>
-          <span className="inline-block w-4 text-right">{participantCount}</span>
+          <span className="inline-block w-4 text-right">{members.length}</span>
           <IcChevronDown className={`w-4 h-4 ${isParticipantOpen ? 'rotate-180' : ''}`} />
         </button>
 
         {/* 참여인원 드롭다운 */}
         {isParticipantOpen && (
           <div className="absolute top-full mt-1 left-0 bg-white p-3 rounded-lg shadow-lg z-10 min-w-[120px]">
-            <p className="text-caption-4 text-grey-700">참여인원 {participantCount}명</p>
-            <div className="flex flex-col gap-3 mt-3">
-              {participants.map((name) => (
-                <span key={name} className="text-sub-title-2 text-grey-900">
-                  {name}
-                </span>
-              ))}
-            </div>
+            <p className="text-caption-4 text-grey-700">참여인원 {members.length}명</p>
+            {isDetailLoading ? (
+              <div className="mt-3 text-caption-4 text-grey-500">로딩 중...</div>
+            ) : members.length > 0 ? (
+              <div className="flex flex-col gap-3 mt-3">
+                {members.map((member) => (
+                  <span key={member.memberId} className="text-sub-title-2 text-grey-900">
+                    {member.userName}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-3 text-caption-4 text-grey-500">참여자 없음</div>
+            )}
           </div>
         )}
       </div>
