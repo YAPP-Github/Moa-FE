@@ -243,12 +243,12 @@ export interface EmailLoginRequest {
   email: string;
 }
 
+/**
+ * 이메일 로그인 응답 DTO (테스트용)
+토큰은 쿠키로 전달됩니다.
+ */
 export interface EmailLoginResponse {
-  /** @nullable */
-  accessToken?: string | null;
   isNewMember: boolean;
-  /** @nullable */
-  refreshToken?: string | null;
 }
 
 /**
@@ -489,39 +489,38 @@ export interface SearchRetrospectItem {
 
 /**
  * [API-002] 회원가입 요청 DTO
+이메일은 signupToken에서 추출됩니다.
  */
 export interface SignupRequest {
-  /** 소셜 로그인에서 반환받은 이메일 */
-  email: string;
   /** 사용자 닉네임 (1~20자, 특수문자 제외) */
   nickname: string;
 }
 
 /**
  * [API-002] 회원가입 응답 DTO
+토큰은 쿠키로 전달됩니다.
  */
 export interface SignupResponse {
-  /** 서비스 Access Token */
-  accessToken: string;
   /** 생성된 회원 ID */
   memberId: number;
   /** 설정된 닉네임 */
   nickname: string;
-  /** 서비스 Refresh Token */
-  refreshToken: string;
 }
 
 /**
  * [API-001] 소셜 로그인 요청 DTO
  */
 export interface SocialLoginRequest {
-  /** 소셜 서비스에서 발급받은 Access Token */
-  accessToken: string;
+  /** 소셜 서비스에서 발급받은 인가 코드 (Authorization Code) */
+  code: string;
   provider: SocialType;
+  /** 인가 코드 발급 시 사용한 리다이렉트 URI */
+  redirectUri: string;
 }
 
 /**
  * [API-001] 소셜 로그인 응답 DTO
+토큰은 쿠키로 전달됩니다. 이메일은 signupToken에 포함되어 있습니다.
  */
 export interface SocialLoginResponse {
   /**
@@ -529,11 +528,6 @@ export interface SocialLoginResponse {
    * @nullable
    */
   accessToken?: string | null;
-  /**
-   * 소셜 계정 이메일 (신규 회원인 경우)
-   * @nullable
-   */
-  email?: string | null;
   /** 신규 회원 여부 */
   isNewMember: boolean;
   /**
@@ -542,7 +536,7 @@ export interface SocialLoginResponse {
    */
   refreshToken?: string | null;
   /**
-   * 회원가입용 임시 토큰 (신규 회원인 경우)
+   * 회원가입용 임시 토큰 (신규 회원인 경우, 이메일/provider 정보 포함)
    * @nullable
    */
   signupToken?: string | null;
@@ -863,12 +857,10 @@ export interface SuccessSubmitRetrospectResponse {
 
 /**
  * [API-003] 토큰 갱신 응답 DTO
+토큰은 쿠키로 전달됩니다.
  */
 export interface TokenRefreshResponse {
-  /** 새로 발급된 Access Token */
-  accessToken: string;
-  /** 새로 발급된 Refresh Token */
-  refreshToken: string;
+  [key: string]: unknown;
 }
 
 /**
@@ -969,9 +961,10 @@ export type ListResponsesParams = {
 
 export const getApi = () => {
   /**
-   * 비밀번호 없이 이메일만으로 로그인을 진행합니다. (존재하는 유저만 가능)
-   * @summary 이메일 기반 로그인 (테스트/개발용)
-   */
+ * 비밀번호 없이 이메일만으로 로그인을 진행합니다. (존재하는 유저만 가능)
+성공 시 accessToken, refreshToken을 쿠키로 설정합니다.
+ * @summary 이메일 기반 로그인 (테스트/개발용)
+ */
   const loginByEmail = (emailLoginRequest: EmailLoginRequest) => {
     return customInstance<SuccessEmailLoginResponse>({
       url: `/api/auth/login/email`,
@@ -995,21 +988,21 @@ Authorization 헤더에 Bearer 토큰이 필요합니다.
 
   /**
  * 현재 사용자의 로그아웃을 처리합니다.
-서버에 저장된 Refresh Token을 무효화하여 보안을 유지합니다.
+서버에 저장된 Refresh Token을 무효화하고 쿠키를 삭제합니다.
+Refresh Token은 쿠키에서 읽습니다.
  * @summary 로그아웃 API (API-004)
  */
-  const logout = (logoutRequest: LogoutRequest) => {
+  const logout = () => {
     return customInstance<SuccessLogoutResponse>({
       url: `/api/v1/auth/logout`,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: logoutRequest,
     });
   };
 
   /**
  * 소셜 로그인에서 발급받은 signupToken으로 회원가입을 완료합니다.
-Authorization 헤더에 Bearer {signupToken}이 필요합니다.
+signupToken은 쿠키 또는 Authorization 헤더에서 읽습니다.
+성공 시 accessToken, refreshToken을 쿠키로 설정합니다.
  * @summary 회원가입 API (API-002)
  */
   const signup = (signupRequest: SignupRequest) => {
@@ -1023,8 +1016,8 @@ Authorization 헤더에 Bearer {signupToken}이 필요합니다.
 
   /**
  * 카카오/구글 액세스 토큰을 받아 로그인 검증 후 JWT 토큰을 발급합니다.
-- 기존 회원: accessToken, refreshToken 발급
-- 신규 회원: signupToken 발급 (회원가입 필요)
+- 기존 회원: accessToken, refreshToken 쿠키로 발급
+- 신규 회원: signupToken 쿠키로 발급 (회원가입 필요)
  * @summary 소셜 로그인 API (API-001)
  */
   const socialLogin = (socialLoginRequest: SocialLoginRequest) => {
@@ -1038,15 +1031,14 @@ Authorization 헤더에 Bearer {signupToken}이 필요합니다.
 
   /**
  * 만료된 Access Token을 Refresh Token을 이용하여 재발급합니다.
+Refresh Token은 쿠키에서 읽습니다.
 Refresh Token Rotation 정책에 따라 새로운 Refresh Token도 함께 발급됩니다.
  * @summary 토큰 갱신 API (API-003)
  */
-  const refreshToken = (tokenRefreshRequest: TokenRefreshRequest) => {
+  const refreshToken = () => {
     return customInstance<SuccessTokenRefreshResponse>({
       url: `/api/v1/auth/token/refresh`,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: tokenRefreshRequest,
     });
   };
 
