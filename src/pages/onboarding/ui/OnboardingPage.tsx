@@ -12,6 +12,7 @@ import { useToast } from '@/shared/ui/toast/Toast';
 
 export function OnboardingPage() {
   const navigate = useNavigate();
+  const { signupEmail, login, clearOnboarding } = useAuthStore();
   const { signupToken, signupEmail, login, clearSignupData } = useAuthStore();
   const { showToast } = useToast();
   const signupMutation = useSignup();
@@ -20,16 +21,15 @@ export function OnboardingPage() {
 
   const handleSubmit = async (data: SigninFormData) => {
     try {
-      const signupResponse = await signupMutation.mutateAsync({
-        signupToken: signupToken || '',
-        data: {
-          email: signupEmail || '',
-          nickname: data.nickname,
-        },
+      // signupToken은 쿠키로 자동 전송됨
+      await signupMutation.mutateAsync({
+        email: signupEmail || '',
+        nickname: data.nickname,
       });
 
-      login(signupResponse.result.accessToken, signupResponse.result.refreshToken);
-      clearSignupData();
+      // 쿠키 기반 인증: 토큰은 쿠키로 전달됨
+      login();
+      clearOnboarding();
 
       if (data.teamOption === 'create' && data.teamName) {
         try {

@@ -2,9 +2,7 @@
 export type Provider = 'Google' | 'Kakao';
 
 const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
-const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const KAKAO_AUTH_URL = 'https://kauth.kakao.com/oauth/authorize';
-const KAKAO_TOKEN_URL = 'https://kauth.kakao.com/oauth/token';
 
 function getRedirectUri(): string {
   const baseUrl = window.location.origin;
@@ -30,10 +28,10 @@ export function getGoogleOAuthUrl(): string {
 }
 
 export function getKakaoOAuthUrl(): string {
-  const clientId = import.meta.env.VITE_KAKAO_REST_API_KEY;
+  const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID;
 
   if (!clientId) {
-    throw new Error('VITE_KAKAO_REST_API_KEY is not defined');
+    throw new Error('VITE_KAKAO_CLIENT_ID is not defined');
   }
 
   const params = new URLSearchParams({
@@ -63,63 +61,4 @@ export function parseOAuthCallback(): {
   }
 
   return { code, provider: state };
-}
-
-// Exchange authorization code for access token
-export async function exchangeCodeForToken(code: string, provider: Provider): Promise<string> {
-  const redirectUri = getRedirectUri();
-
-  if (provider === 'Google') {
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    const clientSecret = import.meta.env.VITE_GOOGLE_CLIENT_SECRET;
-
-    const response = await fetch(GOOGLE_TOKEN_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        client_id: clientId,
-        client_secret: clientSecret,
-        code,
-        grant_type: 'authorization_code',
-        redirect_uri: redirectUri,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`Google token exchange failed: ${error}`);
-    }
-
-    const data = await response.json();
-    return data.access_token;
-  }
-
-  if (provider === 'Kakao') {
-    const clientId = import.meta.env.VITE_KAKAO_REST_API_KEY;
-
-    const response = await fetch(KAKAO_TOKEN_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        client_id: clientId,
-        code,
-        grant_type: 'authorization_code',
-        redirect_uri: redirectUri,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`Kakao token exchange failed: ${error}`);
-    }
-
-    const data = await response.json();
-    return data.access_token;
-  }
-
-  throw new Error(`Unknown provider: ${provider}`);
 }

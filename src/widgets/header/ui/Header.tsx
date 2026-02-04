@@ -18,13 +18,15 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
+  const { logoutWithServer } = useAuthStore();
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const { logout } = useAuthStore();
   // TODO: API에서 사용자 이름 가져오기
   const userName = '사용자';
 
-  // 로그아웃 핸들러
-  const handleLogout = () => {
-    logout();
+  // 로그아웃 핸들러 (서버에 로그아웃 요청하여 쿠키 삭제)
+  const handleLogout = async () => {
+    await logoutWithServer();
     navigate('/signin');
   };
 
@@ -32,7 +34,7 @@ export function Header({ className }: HeaderProps) {
   const handleWithdraw = async () => {
     try {
       await getApi().withdraw();
-      logout();
+      await logoutWithServer();
       navigate('/signin');
     } catch (error) {
       console.error('탈퇴 실패:', error);
