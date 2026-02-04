@@ -37,7 +37,7 @@ interface Retrospect {
   retrospectDate: string;
   retrospectMethod: string;
   retrospectTime: string;
-  participantCount: number;
+  participantCount?: number;
 }
 
 interface RetrospectiveDetailPanelProps {
@@ -131,7 +131,10 @@ function RetrospectiveDetailPanel({
   const handleSubmit = () => {
     const hasEmptyAnswer = answers.some((answer) => answer.trim() === '');
     if (hasEmptyAnswer) {
-      showToast({ variant: 'warning', message: '모든 회고에 답변을 작성해야 제출할 수 있어요' });
+      showToast({
+        variant: 'warning',
+        message: '모든 회고에 답변을 작성해야 제출할 수 있어요',
+      });
       return;
     }
     // TODO: API 호출 로직 추가
@@ -293,7 +296,9 @@ function RetrospectiveDetailPanel({
         }`}
       >
         <div
-          className={`${isMemberActive ? 'opacity-100' : 'opacity-0'} transition-opacity duration-200 min-w-[240px]`}
+          className={`${
+            isMemberActive ? 'opacity-100' : 'opacity-0'
+          } transition-opacity duration-200 min-w-[240px]`}
         >
           {/* 전체 질문 섹션 */}
           <div>
@@ -357,7 +362,9 @@ function RetrospectiveDetailPanel({
             aria-label="참여자"
           >
             <div
-              className={`flex h-[30px] w-[30px] items-center justify-center rounded-md transition-colors ${isMemberActive ? 'bg-[#DEE0E4]' : ''}`}
+              className={`flex h-[30px] w-[30px] items-center justify-center rounded-md transition-colors ${
+                isMemberActive ? 'bg-[#DEE0E4]' : ''
+              }`}
             >
               {isMemberActive ? (
                 <IcMemberActive className="h-[30px] w-[30px] text-grey-600" />
@@ -376,7 +383,9 @@ function RetrospectiveDetailPanel({
             aria-label="참고자료"
           >
             <div
-              className={`flex h-[30px] w-[30px] items-center justify-center rounded-md transition-colors ${isLinkActive ? 'bg-[#DEE0E4]' : ''}`}
+              className={`flex h-[30px] w-[30px] items-center justify-center rounded-md transition-colors ${
+                isLinkActive ? 'bg-[#DEE0E4]' : ''
+              }`}
             >
               {isLinkActive ? (
                 <IcLinkActive className="h-[30px] w-[30px] text-grey-600" />

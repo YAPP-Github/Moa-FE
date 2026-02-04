@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import type { Provider } from '@/features/auth/lib/oauth';
+import { getRedirectUri, type Provider } from '@/features/auth/lib/oauth';
 import type { SignupRequest, SuccessSignupResponse } from '@/shared/api/generated';
 import { axiosInstance } from '@/shared/api/instance';
 
@@ -51,6 +51,7 @@ export function useSocialLogin() {
       const response = await axiosInstance.post<SocialLoginResponse>('/api/v1/auth/social-login', {
         provider,
         code,
+        redirectUri: getRedirectUri(),
       });
       return response.data;
     },
