@@ -10,17 +10,9 @@ const SvgIcInfo = (props: SVGProps<SVGSVGElement>) => (
     aria-hidden="true"
     {...props}
   >
-    <rect
-      width={20}
-      height={20}
-      x={0.75}
-      y={0.75}
-      stroke="currentColor"
-      strokeWidth={1.5}
-      rx={10}
-    />
+    <rect width={20} height={20} x={0.75} y={0.75} stroke="#B6B6B6" strokeWidth={1.5} rx={10} />
     <path
-      stroke="currentColor"
+      stroke="#B6B6B6"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}

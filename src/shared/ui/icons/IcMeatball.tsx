@@ -10,9 +10,9 @@ const SvgIcMeatball = (props: SVGProps<SVGSVGElement>) => (
     aria-hidden="true"
     {...props}
   >
-    <circle cx={7.714} cy={12.001} r={1.286} fill="currentColor" />
-    <circle cx={12} cy={12.001} r={1.286} fill="currentColor" />
-    <circle cx={16.286} cy={12.001} r={1.286} fill="currentColor" />
+    <circle cx={7.714} cy={12.001} r={1.286} fill="#273959" />
+    <circle cx={12} cy={12.001} r={1.286} fill="#273959" />
+    <circle cx={16.286} cy={12.001} r={1.286} fill="#273959" />
   </svg>
 );
 export default SvgIcMeatball;

@@ -11,16 +11,16 @@ const SvgIcToastWarning = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <g clipPath="url(#a)">
-      <circle cx={8} cy={8} r={8} fill="currentColor" />
+      <circle cx={8} cy={8} r={8} fill="#FFC342" />
       <path
-        fill="#FFFFFF"
+        fill="#212124"
         d="M7.126 5.256a.875.875 0 1 1 1.749 0l-.16 3.659a.716.716 0 0 1-1.43 0z"
       />
-      <rect width={1.778} height={1.778} x={7.111} y={10.311} fill="#FFFFFF" rx={0.889} />
+      <rect width={1.778} height={1.778} x={7.111} y={10.311} fill="#212124" rx={0.889} />
     </g>
     <defs>
       <clipPath id="a">
-        <path fill="currentColor" d="M0 0h16v16H0z" />
+        <path fill="#fff" d="M0 0h16v16H0z" />
       </clipPath>
     </defs>
   </svg>

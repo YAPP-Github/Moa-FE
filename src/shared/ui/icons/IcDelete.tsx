@@ -10,9 +10,9 @@ const SvgIcDelete = (props: SVGProps<SVGSVGElement>) => (
     aria-hidden="true"
     {...props}
   >
-    <circle cx={9} cy={9} r={7.875} fill="currentColor" />
+    <circle cx={9} cy={9} r={7.875} fill="#D1D5DD" />
     <path
-      stroke="currentColor"
+      stroke="#fff"
       strokeLinecap="round"
       strokeWidth={1.125}
       d="m6.188 6.188 5.625 5.625M6.188 11.813l5.625-5.626"

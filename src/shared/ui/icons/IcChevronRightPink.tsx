@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-const SvgIcCaretDown = (props: SVGProps<SVGSVGElement>) => (
+const SvgIcChevronRightPink = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={24}
@@ -11,12 +11,12 @@ const SvgIcCaretDown = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      stroke="#6B7684"
+      stroke="#D949E6"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.4}
-      d="m16 10-4 4-4-4"
+      d="m10 8 4 4-4 4"
     />
   </svg>
 );
-export default SvgIcCaretDown;
+export default SvgIcChevronRightPink;

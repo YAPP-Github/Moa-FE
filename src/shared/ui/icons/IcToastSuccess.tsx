@@ -10,9 +10,9 @@ const SvgIcToastSuccess = (props: SVGProps<SVGSVGElement>) => (
     aria-hidden="true"
     {...props}
   >
-    <circle cx={8} cy={8} r={8} fill="currentColor" />
+    <circle cx={8} cy={8} r={8} fill="#16C07E" />
     <path
-      stroke="#FFFFFF"
+      stroke="#fff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.391}
