@@ -17,12 +17,11 @@ export default {
           },
         },
       },
-      {
-        name: 'convertColors',
-        params: {
-          currentColor: true,
-        },
-      },
+      // NOTE: convertColors with currentColor: true was removed
+      // because it converts ALL colors to currentColor, breaking
+      // icons that have different background/foreground colors.
+      // For single-color icons that need to respond to text color,
+      // manually set colors to "currentColor" in the source SVG.
     ],
   },
   outDir: 'src/shared/ui/icons',
