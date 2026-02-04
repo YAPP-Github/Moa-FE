@@ -22,7 +22,8 @@ export function LoginStep() {
       const response = await emailLoginMutation.mutateAsync(email);
 
       if (response.isSuccess && response.result) {
-        login(response.result.accessToken, response.result.refreshToken);
+        // 쿠키 기반 인증: 토큰은 쿠키로 전달됨
+        login();
         navigate('/');
       }
     } catch {

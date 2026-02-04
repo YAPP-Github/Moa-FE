@@ -6,7 +6,7 @@ interface OnboardingRouteProps {
 }
 
 export function OnboardingRoute({ children }: OnboardingRouteProps) {
-  const { signupToken, isLoading, isAuthenticated } = useAuthStore();
+  const { isOnboarding, isLoading, isAuthenticated } = useAuthStore();
 
   if (isLoading) {
     return (
@@ -21,8 +21,8 @@ export function OnboardingRoute({ children }: OnboardingRouteProps) {
     return <Navigate to="/" replace />;
   }
 
-  // signupToken이 없으면 로그인 페이지로
-  if (!signupToken) {
+  // 온보딩 진행 중이 아니면 로그인 페이지로
+  if (!isOnboarding) {
     return <Navigate to="/signin" replace />;
   }
 

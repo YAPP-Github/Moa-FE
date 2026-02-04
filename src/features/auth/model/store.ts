@@ -1,37 +1,27 @@
-import Axios from 'axios';
 import { create } from 'zustand';
-import { clearTokens, getRefreshToken, hasValidTokens, setTokens } from '@/features/auth/lib/token';
+import { axiosInstance } from '@/shared/api/instance';
 
 interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
-  signupToken: string | null;
+  isOnboarding: boolean;
   signupEmail: string | null;
 }
 
 interface AuthActions {
   initialize: () => void;
-  login: (accessToken: string, refreshToken: string) => void;
+  login: () => void;
   logout: () => void;
   logoutWithServer: () => Promise<void>;
-  setSignupData: (token: string, email: string) => void;
-  clearSignupData: () => void;
+  setOnboarding: (email: string) => void;
+  clearOnboarding: () => void;
 }
 
 type AuthStore = AuthState & AuthActions;
 
-// @todo: api 폴더로 이동
-async function callLogoutApi(refreshToken: string): Promise<void> {
+async function callLogoutApi(): Promise<void> {
   try {
-    await Axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/logout`,
-      { refreshToken },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    await axiosInstance.post('/api/v1/auth/logout');
   } catch {
     // 서버 로그아웃 실패해도 클라이언트는 로그아웃 진행
   }
@@ -39,40 +29,33 @@ async function callLogoutApi(refreshToken: string): Promise<void> {
 
 export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
-  isLoading: true,
-  signupToken: null,
+  isLoading: false,
+  isOnboarding: false,
   signupEmail: null,
 
   initialize: () => {
-    const isAuthenticated = hasValidTokens();
-    set({ isAuthenticated, isLoading: false });
+    // 쿠키 기반 인증: 별도 API 호출 없이 로그인 시 상태만 업데이트
   },
 
-  login: (accessToken: string, refreshToken: string) => {
-    setTokens(accessToken, refreshToken);
-    set({ isAuthenticated: true, signupToken: null, signupEmail: null });
+  login: () => {
+    set({ isAuthenticated: true, isOnboarding: false, signupEmail: null });
   },
 
   logout: () => {
-    clearTokens();
-    set({ isAuthenticated: false, signupToken: null, signupEmail: null });
+    set({ isAuthenticated: false, isOnboarding: false, signupEmail: null });
   },
 
   logoutWithServer: async () => {
-    const refreshToken = getRefreshToken();
-    if (refreshToken) {
-      await callLogoutApi(refreshToken);
-    }
-    clearTokens();
-    set({ isAuthenticated: false, signupToken: null, signupEmail: null });
+    await callLogoutApi();
+    set({ isAuthenticated: false, isOnboarding: false, signupEmail: null });
   },
 
-  setSignupData: (token: string, email: string) => {
-    set({ signupToken: token, signupEmail: email });
+  setOnboarding: (email: string) => {
+    set({ isOnboarding: true, signupEmail: email });
   },
 
-  clearSignupData: () => {
-    set({ signupToken: null, signupEmail: null });
+  clearOnboarding: () => {
+    set({ isOnboarding: false, signupEmail: null });
   },
 }));
 
@@ -80,12 +63,6 @@ export function useIsAuthenticated(): boolean {
   return useAuthStore((state) => state.isAuthenticated);
 }
 
-export function useSignupData(): {
-  token: string | null;
-  email: string | null;
-} {
-  return useAuthStore((state) => ({
-    token: state.signupToken,
-    email: state.signupEmail,
-  }));
+export function useSignupEmail(): string | null {
+  return useAuthStore((state) => state.signupEmail);
 }

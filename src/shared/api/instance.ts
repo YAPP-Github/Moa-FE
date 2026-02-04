@@ -3,7 +3,6 @@ import Axios, {
   type AxiosRequestConfig,
   type InternalAxiosRequestConfig,
 } from 'axios';
-import { getAccessToken, getRefreshToken, setTokens } from '@/features/auth/lib/token';
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean;
@@ -15,43 +14,26 @@ interface AuthInterceptorCallbacks {
 
 interface RefreshTokenResponse {
   isSuccess: boolean;
-  result: {
-    accessToken: string;
-    refreshToken: string;
-  };
+  result: Record<string, never>;
 }
 
 export const axiosInstance = Axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-axiosInstance.interceptors.request.use((config) => {
-  const token = getAccessToken();
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
-});
-
-async function refreshAccessToken(): Promise<string> {
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) throw new Error('No refresh token');
-
+async function refreshAccessToken(): Promise<void> {
   const { data } = await Axios.post<RefreshTokenResponse>(
     `${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/token/refresh`,
-    { refreshToken }
+    {},
+    { withCredentials: true }
   );
 
   if (!data.isSuccess) throw new Error('Refresh failed');
-
-  setTokens(data.result.accessToken, data.result.refreshToken);
-  return data.result.accessToken;
 }
 
 export function setupAuthInterceptor(callbacks: AuthInterceptorCallbacks): number {
@@ -72,8 +54,7 @@ export function setupAuthInterceptor(callbacks: AuthInterceptorCallbacks): numbe
         originalRequest._retry = true;
 
         try {
-          const newAccessToken = await refreshAccessToken();
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          await refreshAccessToken();
           return axiosInstance(originalRequest);
         } catch {
           callbacks.onSessionExpired();

@@ -10,12 +10,12 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
-  const { logout } = useAuthStore();
+  const { logoutWithServer } = useAuthStore();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
-  // 로그아웃 핸들러
-  const handleLogout = () => {
-    logout();
+  // 로그아웃 핸들러 (서버에 로그아웃 요청하여 쿠키 삭제)
+  const handleLogout = async () => {
+    await logoutWithServer();
     navigate('/signin');
   };
 
@@ -25,7 +25,7 @@ export function Header({ className }: HeaderProps) {
 
     try {
       await getApi().withdraw();
-      logout();
+      await logoutWithServer();
       navigate('/signin');
     } catch (error) {
       console.error('탈퇴 실패:', error);

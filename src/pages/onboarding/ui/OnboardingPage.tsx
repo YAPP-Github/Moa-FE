@@ -11,23 +11,22 @@ import { MultiStepForm } from '@/shared/ui/multi-step-form/MultiStepForm';
 
 export function OnboardingPage() {
   const navigate = useNavigate();
-  const { signupToken, signupEmail, login, clearSignupData } = useAuthStore();
+  const { signupEmail, login, clearOnboarding } = useAuthStore();
   const signupMutation = useSignup();
   const createRetroRoomMutation = useCreateRetroRoom();
   const joinRetroRoomMutation = useJoinRetroRoom();
 
   const handleSubmit = async (data: SigninFormData) => {
     try {
-      const signupResponse = await signupMutation.mutateAsync({
-        signupToken: signupToken || '',
-        data: {
-          email: signupEmail || '',
-          nickname: data.nickname,
-        },
+      // signupToken은 쿠키로 자동 전송됨
+      await signupMutation.mutateAsync({
+        email: signupEmail || '',
+        nickname: data.nickname,
       });
 
-      login(signupResponse.result.accessToken, signupResponse.result.refreshToken);
-      clearSignupData();
+      // 쿠키 기반 인증: 토큰은 쿠키로 전달됨
+      login();
+      clearOnboarding();
 
       if (data.teamOption === 'create' && data.teamName) {
         await createRetroRoomMutation.mutateAsync({
