@@ -7,9 +7,7 @@ export function MainPage() {
   const navigate = useNavigate();
   const { data, isLoading } = useRetroRooms();
 
-  const teams = data?.result ?? [
-    { retroRoomId: 1, retroRoomName: 'YAPP WEB 3팀 - 모아', orderIndex: 0 },
-  ];
+  const teams = data?.result ?? [];
   const hasTeam = teams.length > 0;
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import type { RetrospectListItem } from '@/shared/api/generated/index';
 interface RetrospectSectionProps {
   title: string;
   count: number;
-  items: (RetrospectListItem & { participantCount?: number })[];
+  items: RetrospectListItem[];
 }
 
 export function RetrospectSection({ title, count, items }: RetrospectSectionProps) {
@@ -29,7 +29,6 @@ export function RetrospectSection({ title, count, items }: RetrospectSectionProp
             <RetrospectRow
               key={item.retrospectId}
               retrospect={item}
-              participantCount={item.participantCount}
               index={index}
               isParticipantOpen={openDropdownId === item.retrospectId}
               onToggleParticipant={() =>
