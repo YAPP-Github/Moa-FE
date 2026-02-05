@@ -39,7 +39,11 @@ const MOCK_ANSWERS = [
     likeCount: 12,
     commentCount: 2,
     comments: [
-      { id: 1, author: '김민수', content: '기한 맞춰서 작업하는 것을 잘했고요...' },
+      {
+        id: 1,
+        author: '김민수',
+        content: '기한 맞춰서 작업하는 것을 잘했고요...',
+      },
       { id: 2, author: '이영희', content: '저도 동의합니다!' },
     ],
   },

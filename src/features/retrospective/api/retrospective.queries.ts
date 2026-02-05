@@ -18,3 +18,12 @@ export function useRetrospectDetail(retrospectId: number) {
     enabled: !!retrospectId && retrospectId > 0,
   });
 }
+
+export function useReferences(retrospectId: number) {
+  return useQuery({
+    queryKey: ['references', retrospectId],
+    queryFn: () => getApi().listReferences(retrospectId),
+    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
+    enabled: !!retrospectId && retrospectId > 0,
+  });
+}

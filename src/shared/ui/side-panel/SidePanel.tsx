@@ -10,7 +10,7 @@
  * </SidePanel>
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/shared/lib/cn';
 
@@ -40,27 +40,6 @@ function SidePanel({
   children,
   className,
 }: SidePanelProps) {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [shouldRender, setShouldRender] = useState(false);
-
-  // Handle open/close animation
-  useEffect(() => {
-    if (open) {
-      setShouldRender(true);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsAnimating(true);
-        });
-      });
-    } else {
-      setIsAnimating(false);
-      const timer = setTimeout(() => {
-        setShouldRender(false);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [open]);
-
   // Handle ESC key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -73,7 +52,7 @@ function SidePanel({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [open, onOpenChange]);
 
-  if (!shouldRender) {
+  if (!open) {
     return null;
   }
 
@@ -82,10 +61,7 @@ function SidePanel({
       {/* Backdrop (optional) */}
       {showBackdrop && (
         <div
-          className={cn(
-            'absolute inset-0 bg-black/30 transition-opacity duration-300 pointer-events-auto',
-            isAnimating ? 'opacity-100' : 'opacity-0'
-          )}
+          className="absolute inset-0 bg-black/30 pointer-events-auto"
           onClick={() => onOpenChange(false)}
           aria-hidden="true"
         />
@@ -96,8 +72,7 @@ function SidePanel({
         role="dialog"
         aria-modal="true"
         className={cn(
-          'absolute top-0 right-0 h-full bg-white shadow-xl transition-transform duration-300 ease-out pointer-events-auto',
-          isAnimating ? 'translate-x-0' : 'translate-x-full',
+          'absolute top-0 right-0 h-full bg-white border-l border-grey-100 pointer-events-auto',
           className
         )}
         style={{ width }}
