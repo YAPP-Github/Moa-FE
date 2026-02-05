@@ -39,7 +39,9 @@ function CompletedRetrospectiveView({
             type="button"
             role="tab"
             onClick={() => setActiveTab('content')}
-            className={`flex-1 cursor-pointer rounded-md px-4 py-2 text-sub-title-3 transition-colors ${activeTab === 'content' ? 'bg-grey-0 text-grey-1000' : 'text-grey-800'}`}
+            className={`flex-1 cursor-pointer rounded-md px-4 py-2 text-sub-title-3 transition-colors ${
+              activeTab === 'content' ? 'bg-grey-0 text-grey-1000' : 'text-grey-800'
+            }`}
             aria-selected={activeTab === 'content'}
           >
             회고 내용
@@ -48,7 +50,9 @@ function CompletedRetrospectiveView({
             type="button"
             role="tab"
             onClick={() => setActiveTab('analysis')}
-            className={`flex-1 cursor-pointer rounded-md px-4 py-2 text-sub-title-3 transition-colors ${activeTab === 'analysis' ? 'bg-grey-0 text-grey-1000' : 'text-grey-800'}`}
+            className={`flex-1 cursor-pointer rounded-md px-4 py-2 text-sub-title-3 transition-colors ${
+              activeTab === 'analysis' ? 'bg-grey-0 text-grey-1000' : 'text-grey-800'
+            }`}
             aria-selected={activeTab === 'analysis'}
           >
             회고 분석

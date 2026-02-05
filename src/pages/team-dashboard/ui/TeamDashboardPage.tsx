@@ -7,6 +7,7 @@ import { CreateRetrospectDialog } from '@/features/retrospective/ui/CreateRetros
 import { RetrospectSection } from '@/features/retrospective/ui/RetrospectSection';
 import { useRetroRoomMembers, useRetroRooms } from '@/features/team/api/team.queries';
 import { InviteMemberDialog } from '@/features/team/ui/InviteMemberDialog';
+import type { RetrospectListItem } from '@/shared/api/generated/index';
 import { Button } from '@/shared/ui/button/Button';
 import {
   DropdownMenuContent,
@@ -22,27 +23,8 @@ import IcPlusBlue from '@/shared/ui/icons/IcPlusBlue';
 import IcUserProfile from '@/shared/ui/icons/IcUserProfile';
 import { SidePanel } from '@/shared/ui/side-panel/SidePanel';
 import { SwiperContent, SwiperItem, SwiperRoot } from '@/shared/ui/swiper/Swiper';
+import { RetrospectiveCompletedPanel } from '@/widgets/retrospective-detail-panel/ui/RetrospectiveCompletedPanel';
 import { RetrospectiveDetailPanel } from '@/widgets/retrospective-detail-panel/ui/RetrospectiveDetailPanel';
-
-interface TodayRetrospect {
-  retrospectId: number;
-  projectName: string;
-  retrospectDate: string;
-  retrospectMethod: string;
-  retrospectTime: string;
-  participantCount?: number;
-}
-
-// 테스트용 오늘 회고 더미 데이터
-const TODAY_DATE = new Date().toISOString().split('T')[0];
-const MOCK_TODAY_RETROSPECT: TodayRetrospect = {
-  retrospectId: 9999,
-  projectName: '모아 스프린트 1주차',
-  retrospectDate: TODAY_DATE,
-  retrospectMethod: 'KPT',
-  retrospectTime: '14:00',
-  participantCount: 5,
-};
 
 // 시간을 오전/오후 형식으로 변환 (예: "14:00" → "오후 2시")
 function formatTimeToKorean(time: string): string {
@@ -56,12 +38,20 @@ export function TeamDashboardPage() {
   const retroRoomId = Number(teamId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
-  const [selectedRetrospect, setSelectedRetrospect] = useState<TodayRetrospect | null>(null);
+  const [selectedRetrospect, setSelectedRetrospect] = useState<RetrospectListItem | null>(null);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
+  const [isSelectedCompleted, setIsSelectedCompleted] = useState(false);
 
-  const handleTodayRetrospectClick = (retrospect: TodayRetrospect) => {
+  const handleTodayRetrospectClick = (retrospect: RetrospectListItem) => {
     setSelectedRetrospect(retrospect);
+    setIsSelectedCompleted(false);
+    setIsSidePanelOpen(true);
+  };
+
+  const handleCompletedRetrospectClick = (item: RetrospectListItem) => {
+    setSelectedRetrospect(item);
+    setIsSelectedCompleted(true);
     setIsSidePanelOpen(true);
   };
 
@@ -97,14 +87,11 @@ export function TeamDashboardPage() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const todayRetrospects = [
-    MOCK_TODAY_RETROSPECT, // 테스트용 더미 데이터
-    ...retrospects.filter((r) => {
-      const retroDate = new Date(r.retrospectDate);
-      retroDate.setHours(0, 0, 0, 0);
-      return retroDate.getTime() === today.getTime();
-    }),
-  ];
+  const todayRetrospects = retrospects.filter((r) => {
+    const retroDate = new Date(r.retrospectDate);
+    retroDate.setHours(0, 0, 0, 0);
+    return retroDate.getTime() === today.getTime();
+  });
 
   const pendingRetrospects = retrospects.filter((r) => {
     const retroDate = new Date(r.retrospectDate);
@@ -248,6 +235,7 @@ export function TeamDashboardPage() {
               title="완료된 회고"
               count={completedRetrospects.length}
               items={completedRetrospects}
+              onItemClick={handleCompletedRetrospectClick}
             />
           </div>
         </div>
@@ -267,22 +255,30 @@ export function TeamDashboardPage() {
         retroRoomId={retroRoomId}
       />
 
-      {/* 회고 진행 사이드 패널 */}
+      {/* 회고 사이드 패널 */}
       <SidePanel
         open={isSidePanelOpen}
         onOpenChange={setIsSidePanelOpen}
         showBackdrop={false}
         topOffset="54px"
-        width={isPanelExpanded ? 'calc(100% - 240px)' : 'calc(50% - 120px)'}
+        width={isPanelExpanded ? 'calc(100% - 260px)' : 'calc(50% - 120px)'}
       >
-        {selectedRetrospect && (
-          <RetrospectiveDetailPanel
-            retrospect={selectedRetrospect}
-            onClose={handleSidePanelClose}
-            isExpanded={isPanelExpanded}
-            onScaleToggle={handleScaleToggle}
-          />
-        )}
+        {selectedRetrospect &&
+          (isSelectedCompleted ? (
+            <RetrospectiveCompletedPanel
+              retrospect={selectedRetrospect}
+              onClose={handleSidePanelClose}
+              isExpanded={isPanelExpanded}
+              onScaleToggle={handleScaleToggle}
+            />
+          ) : (
+            <RetrospectiveDetailPanel
+              retrospect={selectedRetrospect}
+              onClose={handleSidePanelClose}
+              isExpanded={isPanelExpanded}
+              onScaleToggle={handleScaleToggle}
+            />
+          ))}
       </SidePanel>
     </div>
   );

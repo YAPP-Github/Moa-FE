@@ -45,6 +45,7 @@
 **디자인 분석 (첨부 이미지 기반)**:
 
 1. **회고 내용 탭 (이미지 3)**:
+
    - 상단: "회고 내용" | "회고 분석" 탭 버튼
    - 질문 필터 버튼: 전체, 질문1, 질문2, 질문3
    - 답변 카드 리스트:
@@ -54,6 +55,7 @@
      - 좋아요 수, 댓글 수
 
 2. **회고 분석 탭 (이미지 2)**:
+
    - AI 인사이트 요약 배너 (파란색 배경)
      - "YAPP WEB 7팀을 위한 AI 인사이트"
      - 요약 텍스트 2줄
@@ -562,11 +564,13 @@ npm run lint        # 린트 통과
 ### Deviations from Plan
 
 **Changed**:
+
 - ToggleButton 대신 커스텀 탭 버튼 직접 구현 (더 유연한 스타일링)
 - 별도 컴포넌트 분리 (QuestionFilter, AnswerCard 등) 대신 RetrospectiveContentTab에 통합 (프로토타입 단계)
 - RetrospectiveAnalysisTab → RetrospectiveAnalysisResult로 네이밍 변경
 
 **Added**:
+
 - 댓글 입력 및 표시 기능 (기본 Out of Scope였으나 프로토타입으로 구현)
 - scrollbar-hide 유틸리티 클래스
 - 우측 사이드바 (참여자, 참고자료) 완료 상태에서도 유지
@@ -574,6 +578,7 @@ npm run lint        # 린트 통과
 - IcRefresh 아이콘 컴포넌트
 
 **Skipped**:
+
 - TabGroup 공통 컴포넌트 (필요 시 별도 이슈)
 - API 연동 (목 데이터로 구현)
 

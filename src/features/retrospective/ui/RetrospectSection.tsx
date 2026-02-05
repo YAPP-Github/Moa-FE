@@ -7,9 +7,10 @@ interface RetrospectSectionProps {
   title: string;
   count: number;
   items: RetrospectListItem[];
+  onItemClick?: (item: RetrospectListItem) => void;
 }
 
-export function RetrospectSection({ title, count, items }: RetrospectSectionProps) {
+export function RetrospectSection({ title, count, items, onItemClick }: RetrospectSectionProps) {
   const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
 
   return (
@@ -34,6 +35,7 @@ export function RetrospectSection({ title, count, items }: RetrospectSectionProp
               onToggleParticipant={() =>
                 setOpenDropdownId(openDropdownId === item.retrospectId ? null : item.retrospectId)
               }
+              onClick={() => onItemClick?.(item)}
             />
           ))}
         </div>

@@ -20,27 +20,6 @@ interface SocialLoginResponse {
   };
 }
 
-// TODO: 테스트용 이메일 로그인 - 추후 삭제 필요
-interface EmailLoginResponse {
-  isSuccess: boolean;
-  code: string;
-  message: string;
-  result: {
-    isNewMember: boolean;
-  } | null;
-}
-
-export function useEmailLogin() {
-  return useMutation({
-    mutationFn: async (email: string): Promise<EmailLoginResponse> => {
-      const response = await axiosInstance.post<EmailLoginResponse>('/api/auth/login/email', {
-        email,
-      });
-      return response.data;
-    },
-  });
-}
-
 // 소셜 로그인 (인가 코드를 백엔드로 전송, 토큰 교환은 백엔드에서 처리)
 export function useSocialLogin() {
   return useMutation({
