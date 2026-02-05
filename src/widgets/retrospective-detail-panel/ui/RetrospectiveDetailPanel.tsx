@@ -5,7 +5,10 @@
  * 질문별 회고 내용을 입력하고 제출할 수 있습니다.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { CloseConfirmModal } from '@/features/retrospective/ui/CloseConfirmModal';
+import { PreviewModal } from '@/features/retrospective/ui/PreviewModal';
+import { SubmitConfirmModal } from '@/features/retrospective/ui/SubmitConfirmModal';
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -66,6 +69,47 @@ const MOCK_PARTICIPANTS = [
 ];
 
 // ============================================================================
+// LocalStorage Helpers
+// ============================================================================
+
+const DRAFT_STORAGE_KEY_PREFIX = 'retrospect_draft_';
+
+function getDraftStorageKey(retrospectId: number): string {
+  return `${DRAFT_STORAGE_KEY_PREFIX}${retrospectId}`;
+}
+
+function loadDraftFromStorage(retrospectId: number): string[] | null {
+  try {
+    const key = getDraftStorageKey(retrospectId);
+    const saved = localStorage.getItem(key);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch {
+    // 파싱 실패 시 null 반환
+  }
+  return null;
+}
+
+function saveDraftToStorage(retrospectId: number, answers: string[]): void {
+  try {
+    const key = getDraftStorageKey(retrospectId);
+    localStorage.setItem(key, JSON.stringify(answers));
+  } catch {
+    // 저장 실패 시 무시
+  }
+}
+
+function removeDraftFromStorage(retrospectId: number): void {
+  try {
+    const key = getDraftStorageKey(retrospectId);
+    localStorage.removeItem(key);
+  } catch {
+    // 삭제 실패 시 무시
+  }
+}
+
+// ============================================================================
 // Component
 // ============================================================================
 
@@ -77,10 +121,23 @@ function RetrospectiveDetailPanel({
 }: RetrospectiveDetailPanelProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>(KPT_QUESTIONS.map(() => ''));
+  const [savedDraft, setSavedDraft] = useState<string[]>(KPT_QUESTIONS.map(() => ''));
   const [isMemberActive, setIsMemberActive] = useState(false);
   const [isLinkActive, setIsLinkActive] = useState(false);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
   const { showToast } = useToast();
+
+  // 로컬스토리지에서 임시저장 데이터 로드
+  useEffect(() => {
+    const draft = loadDraftFromStorage(retrospect.retrospectId);
+    if (draft) {
+      setAnswers(draft);
+      setSavedDraft(draft);
+    }
+  }, [retrospect.retrospectId]);
 
   // 회고 방법에 따른 질문 선택 (현재는 KPT만 지원)
   const questions = retrospect.retrospectMethod === 'KPT' ? KPT_QUESTIONS : KPT_QUESTIONS;
@@ -128,7 +185,7 @@ function RetrospectiveDetailPanel({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmitClick = () => {
     const hasEmptyAnswer = answers.some((answer) => answer.trim() === '');
     if (hasEmptyAnswer) {
       showToast({
@@ -137,8 +194,47 @@ function RetrospectiveDetailPanel({
       });
       return;
     }
+    setIsSubmitModalOpen(true);
+  };
+
+  const handleSubmitConfirm = () => {
     // TODO: API 호출 로직 추가
+    removeDraftFromStorage(retrospect.retrospectId);
     showToast({ variant: 'success', message: '회고 제출이 완료되었어요!' });
+  };
+
+  // 현재 답변이 임시저장된 버전과 다른지 확인
+  const hasUnsavedChanges = (): boolean => {
+    return answers.some((answer, index) => answer !== savedDraft[index]);
+  };
+
+  // 닫기 버튼 클릭 핸들러
+  const handleCloseClick = () => {
+    if (hasUnsavedChanges()) {
+      setIsCloseModalOpen(true);
+    } else {
+      onClose();
+    }
+  };
+
+  // 임시저장 핸들러
+  const handleSaveDraft = () => {
+    saveDraftToStorage(retrospect.retrospectId, answers);
+    setSavedDraft([...answers]);
+    showToast({ variant: 'success', message: '임시저장 되었어요!' });
+  };
+
+  // 닫기 확인 모달에서 임시저장 클릭
+  const handleSaveAndClose = () => {
+    saveDraftToStorage(retrospect.retrospectId, answers);
+    setSavedDraft([...answers]);
+    showToast({ variant: 'success', message: '임시저장 되었어요!' });
+    onClose();
+  };
+
+  // 닫기 확인 모달에서 나가기 클릭
+  const handleLeaveWithoutSave = () => {
+    onClose();
   };
 
   return (
@@ -150,7 +246,7 @@ function RetrospectiveDetailPanel({
           <div className="flex items-center gap-0.5">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleCloseClick}
               className="cursor-pointer rounded-md p-1.5 text-grey-500 hover:bg-grey-100 transition-colors"
               aria-label="닫기"
             >
@@ -169,19 +265,21 @@ function RetrospectiveDetailPanel({
           <div className="flex items-center gap-3">
             <button
               type="button"
+              onClick={handleSaveDraft}
               className="cursor-pointer rounded-md px-3 py-[6px] text-sub-title-3 text-grey-700 hover:bg-grey-100 transition-colors"
             >
               임시저장
             </button>
             <button
               type="button"
+              onClick={() => setIsPreviewModalOpen(true)}
               className="cursor-pointer rounded-md px-3 py-[6px] text-sub-title-3 bg-blue-200 text-blue-500 hover:bg-blue-300 transition-colors"
             >
               미리보기
             </button>
             <button
               type="button"
-              onClick={handleSubmit}
+              onClick={handleSubmitClick}
               className="cursor-pointer rounded-md px-3 py-[6px] text-sub-title-3 bg-blue-500 text-grey-0 hover:bg-blue-600 transition-colors"
             >
               제출하기
@@ -397,6 +495,29 @@ function RetrospectiveDetailPanel({
           </button>
         </div>
       </aside>
+
+      {/* 제출 확인 모달 */}
+      <SubmitConfirmModal
+        open={isSubmitModalOpen}
+        onOpenChange={setIsSubmitModalOpen}
+        onConfirm={handleSubmitConfirm}
+      />
+
+      {/* 닫기 확인 모달 */}
+      <CloseConfirmModal
+        open={isCloseModalOpen}
+        onOpenChange={setIsCloseModalOpen}
+        onSave={handleSaveAndClose}
+        onLeave={handleLeaveWithoutSave}
+      />
+
+      {/* 미리보기 모달 */}
+      <PreviewModal
+        open={isPreviewModalOpen}
+        onOpenChange={setIsPreviewModalOpen}
+        questions={questions}
+        answers={answers}
+      />
     </div>
   );
 }
