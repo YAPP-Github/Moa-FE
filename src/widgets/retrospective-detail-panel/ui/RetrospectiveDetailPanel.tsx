@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { CloseConfirmModal } from '@/features/retrospective/ui/CloseConfirmModal';
+import { CompletedRetrospectiveView } from '@/features/retrospective/ui/CompletedRetrospectiveView';
 import { PreviewModal } from '@/features/retrospective/ui/PreviewModal';
 import { SubmitConfirmModal } from '@/features/retrospective/ui/SubmitConfirmModal';
 import {
@@ -26,9 +27,33 @@ import IcMeatball from '@/shared/ui/icons/IcMeatball';
 import IcMemberActive from '@/shared/ui/icons/IcMemberActive';
 import IcMemberInactive from '@/shared/ui/icons/IcMemberInactive';
 import IcOpen from '@/shared/ui/icons/IcOpen';
-import IcSclaeDown from '@/shared/ui/icons/IcSclaeDown';
+import IcRefresh from '@/shared/ui/icons/IcRefresh';
+import IcScaleDown from '@/shared/ui/icons/IcScaleDown';
+import IcScaleUp from '@/shared/ui/icons/IcScaleUp';
 import IcSparklePink from '@/shared/ui/icons/IcSparklePink';
 import { useToast } from '@/shared/ui/toast/Toast';
+
+// ============================================================================
+// Mock Data for AI Assistant
+// ============================================================================
+
+const MOCK_ASSISTANT_SUGGESTIONS = [
+  {
+    title: '시작 배경 구체화하기',
+    description:
+      '마감 기한을 맞추기 위해 언제부터 어떤 방식으로 준비했고 중간에 무엇을 조정했는지 덧붙이면 좋아요',
+  },
+  {
+    title: '과정에서의 변화 담기',
+    description:
+      '오래전부터 시작했지만 끝까지 참여하는 과정에서 힘들었던 순간과 그때 선택한 대응을 함께 적으면 좋아요',
+  },
+  {
+    title: '결과의 의미 연결하기',
+    description:
+      '끝까지 잘 참여했다는 결과가 스스로에게 어떤 의미였는지 한 문장으로 정리해 보면 좋아요',
+  },
+];
 
 // ============================================================================
 // Types
@@ -41,6 +66,7 @@ interface Retrospect {
   retrospectMethod: string;
   retrospectTime: string;
   participantCount?: number;
+  totalParticipants?: number;
 }
 
 interface RetrospectiveDetailPanelProps {
@@ -48,6 +74,7 @@ interface RetrospectiveDetailPanelProps {
   onClose: () => void;
   isExpanded?: boolean;
   onScaleToggle?: () => void;
+  isCompleted?: boolean;
 }
 
 // ============================================================================
@@ -118,6 +145,7 @@ function RetrospectiveDetailPanel({
   onClose,
   isExpanded = false,
   onScaleToggle,
+  isCompleted = false,
 }: RetrospectiveDetailPanelProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>(KPT_QUESTIONS.map(() => ''));
@@ -127,6 +155,9 @@ function RetrospectiveDetailPanel({
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isAssistantGenerated, setIsAssistantGenerated] = useState(false);
+  const [isAssistantLoading, setIsAssistantLoading] = useState(false);
 
   const { showToast } = useToast();
 
@@ -201,6 +232,7 @@ function RetrospectiveDetailPanel({
     // TODO: API 호출 로직 추가
     removeDraftFromStorage(retrospect.retrospectId);
     showToast({ variant: 'success', message: '회고 제출이 완료되었어요!' });
+    setIsSubmitted(true);
   };
 
   // 현재 답변이 임시저장된 버전과 다른지 확인
@@ -232,11 +264,193 @@ function RetrospectiveDetailPanel({
     onClose();
   };
 
+  // AI 어시스턴트 생성 핸들러
+  const handleAssistantGenerate = () => {
+    if (isAssistantLoading) return;
+    setIsAssistantLoading(true);
+    // 3초 후 생성 완료
+    setTimeout(() => {
+      setIsAssistantLoading(false);
+      setIsAssistantGenerated(true);
+    }, 3000);
+  };
+
   // 닫기 확인 모달에서 나가기 클릭
   const handleLeaveWithoutSave = () => {
     onClose();
   };
 
+  // ============================================================================
+  // 완료 상태 렌더링 (외부 prop 또는 제출 성공 시)
+  // ============================================================================
+  if (isCompleted || isSubmitted) {
+    return (
+      <div className="flex h-full">
+        {/* Main Content */}
+        <div className="flex flex-1 flex-col px-5 pt-3">
+          {/* Header - 완료 상태 */}
+          <header className="flex items-center justify-between">
+            <div className="flex items-center gap-0.5">
+              <button
+                type="button"
+                onClick={onClose}
+                className="cursor-pointer rounded-md p-1.5 text-grey-500 hover:bg-grey-100 transition-colors"
+                aria-label="닫기"
+              >
+                <IcClose className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={onScaleToggle}
+                className="cursor-pointer rounded-md p-1.5 text-grey-500 hover:bg-grey-100 transition-colors"
+                aria-label={isExpanded ? '축소' : '확대'}
+              >
+                {isExpanded ? (
+                  <IcScaleDown className="h-5 w-5" />
+                ) : (
+                  <IcScaleUp className="h-5 w-5" />
+                )}
+              </button>
+            </div>
+
+            <DropdownMenuRoot>
+              <DropdownMenuTrigger>
+                <button
+                  type="button"
+                  className="cursor-pointer rounded-md p-1.5 text-grey-500 hover:bg-grey-100 data-[state=open]:bg-grey-100 transition-colors"
+                  aria-label="더보기"
+                >
+                  <IcMeatball className="h-5 w-5" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuContent
+                  className="flex flex-col gap-1 p-3 rounded-[8px] border border-grey-200 bg-white shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)]"
+                  align="end"
+                  sideOffset={10}
+                >
+                  <div className="px-3 py-1.5 text-caption-4 text-grey-700 font-medium">
+                    {retrospect.projectName}
+                  </div>
+                  <DropdownMenuItem className="px-3 py-1.5 text-sub-title-3 text-grey-900 rounded-md cursor-pointer hover:bg-grey-50">
+                    링크복사
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="px-3 py-1.5 text-sub-title-3 text-grey-900 rounded-md cursor-pointer hover:bg-grey-50">
+                    내보내기
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="px-3 py-1.5 text-sub-title-3 text-red-300 rounded-md cursor-pointer hover:bg-red-200">
+                    삭제하기
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenuPortal>
+            </DropdownMenuRoot>
+          </header>
+
+          {/* Content - 완료 뷰 */}
+          <div className="mt-3 flex-1 overflow-hidden bg-white">
+            <CompletedRetrospectiveView
+              retrospectId={retrospect.retrospectId}
+              projectName={retrospect.projectName}
+              retrospectMethod={retrospect.retrospectMethod}
+              participantCount={retrospect.participantCount ?? 0}
+              totalParticipants={retrospect.totalParticipants ?? 12}
+            />
+          </div>
+        </div>
+
+        {/* Expanded Panel (참여자/참고자료) */}
+        <div
+          className={`border-l border-grey-200 bg-grey-50 overflow-y-auto overflow-x-hidden transition-all duration-300 ease-in-out ${
+            isMemberActive ? 'w-[280px] px-5 pt-6' : 'w-0 px-0 pt-0'
+          }`}
+        >
+          <div
+            className={`${
+              isMemberActive ? 'opacity-100' : 'opacity-0'
+            } transition-opacity duration-200 min-w-[240px]`}
+          >
+            {/* 참여자 섹션 */}
+            <div>
+              <div className="flex items-center gap-1">
+                <h3 className="text-sub-title-1 text-grey-1000">참여자</h3>
+                <span className="text-sub-title-1 text-[#6B7684]">
+                  {MOCK_PARTICIPANTS.length}명
+                </span>
+              </div>
+              <div className="mt-3 flex flex-col gap-[10px]">
+                {MOCK_PARTICIPANTS.map((participant) => (
+                  <div key={participant.id} className="flex items-center gap-[10px]">
+                    <div className="h-6 w-6 rounded-full bg-grey-200" />
+                    <span className="text-caption-2 text-grey-900">{participant.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar */}
+        <aside className="flex w-[62px] flex-col items-center border-l border-grey-200 bg-grey-50 pt-5">
+          <div className="flex flex-col items-center gap-5">
+            {/* Open/Collapse Button */}
+            <button
+              type="button"
+              className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-md text-grey-500 hover:bg-[#DEE0E4]/40"
+              aria-label="펼치기"
+            >
+              <IcOpen className="h-[30px] w-[30px]" />
+            </button>
+
+            {/* Member Button */}
+            <button
+              type="button"
+              onClick={handleMemberToggle}
+              className="flex cursor-pointer flex-col items-center gap-1 rounded-md p-1 transition-colors hover:bg-[#DEE0E4]/40"
+              aria-label="참여자"
+            >
+              <div
+                className={`flex h-[30px] w-[30px] items-center justify-center rounded-md transition-colors ${
+                  isMemberActive ? 'bg-[#DEE0E4]' : ''
+                }`}
+              >
+                {isMemberActive ? (
+                  <IcMemberActive className="h-[30px] w-[30px] text-grey-600" />
+                ) : (
+                  <IcMemberInactive className="h-[30px] w-[30px] text-grey-500" />
+                )}
+              </div>
+              <span className="text-sub-title-5 text-[#677281]">참여자</span>
+            </button>
+
+            {/* Link Button */}
+            <button
+              type="button"
+              onClick={handleLinkToggle}
+              className="flex cursor-pointer flex-col items-center gap-1 rounded-md p-1 transition-colors hover:bg-[#DEE0E4]/40"
+              aria-label="참고자료"
+            >
+              <div
+                className={`flex h-[30px] w-[30px] items-center justify-center rounded-md transition-colors ${
+                  isLinkActive ? 'bg-[#DEE0E4]' : ''
+                }`}
+              >
+                {isLinkActive ? (
+                  <IcLinkActive className="h-[30px] w-[30px] text-grey-600" />
+                ) : (
+                  <IcLinkInactive className="h-[30px] w-[30px] text-grey-500" />
+                )}
+              </div>
+              <span className="text-sub-title-5 text-[#677281]">참고자료</span>
+            </button>
+          </div>
+        </aside>
+      </div>
+    );
+  }
+
+  // ============================================================================
+  // 진행 중 상태 렌더링
+  // ============================================================================
   return (
     <div className="flex h-full">
       {/* Main Content */}
@@ -258,7 +472,7 @@ function RetrospectiveDetailPanel({
               className="cursor-pointer rounded-md p-1.5 text-grey-500 hover:bg-grey-100 transition-colors"
               aria-label={isExpanded ? '축소' : '확대'}
             >
-              <IcSclaeDown className={`h-5 w-5 ${isExpanded ? 'rotate-180' : ''}`} />
+              {isExpanded ? <IcScaleDown className="h-5 w-5" /> : <IcScaleUp className="h-5 w-5" />}
             </button>
           </div>
 
@@ -374,15 +588,63 @@ function RetrospectiveDetailPanel({
               </div>
             </div>
 
-            {/* AI Assistant Button */}
-            <button
-              type="button"
-              className="mt-[10px] flex cursor-pointer items-center rounded-[8px] border border-pink-300 bg-pink-100 px-[10px] py-[6px]"
-            >
-              <IcSparklePink className="h-[18px] w-[18px]" />
-              <span className="ml-1 text-title-7 text-pink-400">회고 어시스턴트</span>
-              <IcChevronRightPink className="h-6 w-6" />
-            </button>
+            {/* AI Assistant Section */}
+            <div className="mt-[10px]">
+              {!isAssistantGenerated && !isAssistantLoading ? (
+                // 최초 생성 버튼
+                <button
+                  type="button"
+                  onClick={handleAssistantGenerate}
+                  className="flex cursor-pointer items-center rounded-[8px] border border-pink-300 bg-pink-100 px-[10px] py-[6px]"
+                >
+                  <IcSparklePink className="h-[18px] w-[18px]" />
+                  <span className="ml-1 text-title-7 text-pink-400">회고 어시스턴트</span>
+                  <IcChevronRightPink className="h-6 w-6" />
+                </button>
+              ) : isAssistantLoading ? (
+                // 로딩 상태 - "생성중"
+                <div className="inline-flex h-[38px] items-center rounded-[8px] border border-pink-300 bg-pink-100 px-[10px]">
+                  <IcSparklePink className="h-[18px] w-[18px]" />
+                  <span className="ml-1 text-title-7 text-pink-400">생성중</span>
+                </div>
+              ) : (
+                // 생성 완료 결과
+                <div className="rounded-[8px] border border-pink-300 bg-pink-100 p-4">
+                  {/* 헤더 */}
+                  <div className="flex items-center">
+                    <IcSparklePink className="h-[18px] w-[18px]" />
+                    <span className="ml-1 text-title-7 text-pink-400">회고 어시스턴트</span>
+                  </div>
+
+                  {/* 생성된 결과 */}
+                  <ul className="mt-3 flex flex-col gap-4">
+                    {MOCK_ASSISTANT_SUGGESTIONS.map((suggestion) => (
+                      <li key={suggestion.title} className="flex gap-2">
+                        <div className="mt-[6px] h-[6px] w-[6px] shrink-0 rounded-full bg-grey-900" />
+                        <div className="flex-1">
+                          <p className="text-[14px] font-bold text-grey-900">{suggestion.title}</p>
+                          <p className="text-[14px] font-medium text-grey-900">
+                            {suggestion.description}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* 다시 생성 버튼 (생성 완료 후에만 표시) */}
+              {isAssistantGenerated && !isAssistantLoading && (
+                <button
+                  type="button"
+                  onClick={handleAssistantGenerate}
+                  className="mt-3 flex cursor-pointer items-center gap-2 text-grey-500"
+                >
+                  <IcRefresh className="h-4 w-4" />
+                  <span className="text-sub-title-4">다시 생성</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
