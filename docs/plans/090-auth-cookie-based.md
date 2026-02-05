@@ -223,7 +223,7 @@ Retry original request (cookies auto-sent)
 ```typescript
 // 변경된 소셜 로그인 요청
 interface SocialLoginRequest {
-  provider: 'Google' | 'Kakao';
+  provider: "Google" | "Kakao";
   code: string; // 인가 코드 (accessToken 대신)
 }
 

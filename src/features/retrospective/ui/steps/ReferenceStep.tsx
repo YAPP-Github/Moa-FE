@@ -1,31 +1,89 @@
+import { useEffect, useRef } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import type { CreateRetrospectFormData } from '@/features/retrospective/model/schema';
+import {
+  type CreateRetrospectFormData,
+  ERROR_MESSAGES,
+} from '@/features/retrospective/model/schema';
 import { FormHeader } from '@/features/retrospective/ui/steps/FormHeader';
 import { StepIndicator } from '@/features/retrospective/ui/steps/StepIndicator';
 import { Button } from '@/shared/ui/button/Button';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
 import SvgIcClose from '@/shared/ui/icons/IcClose';
-import SvgIcPlus from '@/shared/ui/icons/IcPlus';
+import SvgIcPlusBlue from '@/shared/ui/icons/IcPlusBlue';
 import { Input } from '@/shared/ui/input/Input';
+import { useToast } from '@/shared/ui/toast/Toast';
 
 interface ReferenceStepProps {
   onClose: () => void;
 }
 
+const isValidUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export function ReferenceStep({ onClose }: ReferenceStepProps) {
   const {
     control,
     register,
-    formState: { isSubmitting },
+    setValue,
+    watch,
+    trigger,
+    formState: { isSubmitting, errors },
   } = useFormContext<CreateRetrospectFormData>();
+  const { showToast } = useToast();
+  const submitButtonRef = useRef<HTMLButtonElement>(null);
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'referenceUrls' as never,
   });
 
+  const referenceUrls = watch('referenceUrls') || [];
+
+  // 스텝 마운트 시 참고자료 초기화 (최초 1회만 실행)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 마운트 시 1회만 실행
+  useEffect(() => {
+    setValue('referenceUrls', ['']);
+  }, []);
+
   const handleAddLink = () => {
     append('');
+  };
+
+  const handleConfirmClick = async () => {
+    // 빈 문자열이 아닌 URL만 검증 대상
+    const nonEmptyUrls = referenceUrls.map((url) => url.trim());
+    const hasInvalidUrls = nonEmptyUrls.some((url) => !isValidUrl(url));
+
+    if (hasInvalidUrls) {
+      // trigger로 zod validation 실행하여 에러 메시지 가져오기
+      await trigger('referenceUrls');
+
+      // formState.errors에서 에러 메시지 추출
+      const urlErrors = errors.referenceUrls;
+      let errorMessage = ERROR_MESSAGES.INVALID_URL; // 기본값 (schema와 동일)
+
+      if (Array.isArray(urlErrors)) {
+        const firstError = urlErrors.find((err) => err?.message);
+        if (firstError?.message) {
+          errorMessage = firstError.message;
+        }
+      }
+
+      showToast({
+        variant: 'warning',
+        message: errorMessage,
+      });
+      return;
+    }
+
+    // 검증 통과 시 숨겨진 submit 버튼 클릭
+    submitButtonRef.current?.click();
   };
 
   return (
@@ -54,7 +112,7 @@ export function ReferenceStep({ onClose }: ReferenceStepProps) {
                 />
               </div>
               <IconButton variant="ghost" size="sm" onClick={() => remove(index)}>
-                <SvgIcClose />
+                <SvgIcClose className="size-5" />
               </IconButton>
             </div>
           ))}
@@ -64,10 +122,10 @@ export function ReferenceStep({ onClose }: ReferenceStepProps) {
             variant="ghost"
             size="xs"
             onClick={handleAddLink}
-            className="w-fit gap-2 bg-transparent text-blue-500 hover:bg-transparent"
+            className="w-fit gap-2 text-blue-500 hover:bg-blue-50"
           >
             <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-200">
-              <SvgIcPlus className="h-3 w-3 text-blue-500" />
+              <SvgIcPlusBlue className="h-2 w-2" />
             </div>
             <span>추가하기</span>
           </Button>
@@ -75,12 +133,26 @@ export function ReferenceStep({ onClose }: ReferenceStepProps) {
       </div>
 
       <div className="shrink-0 flex justify-end gap-2 pt-4">
-        <Button type="submit" variant="tertiary" size="lg" disabled={isSubmitting}>
+        <Button type="submit" variant="secondary" size="lg" disabled={isSubmitting}>
           건너뛰기
         </Button>
-        <Button type="submit" variant="primary" size="lg" disabled={isSubmitting}>
+        <Button
+          type="button"
+          variant="primary"
+          size="lg"
+          disabled={isSubmitting}
+          onClick={handleConfirmClick}
+        >
           확인
         </Button>
+        {/* 검증 통과 후 제출을 위한 숨겨진 버튼 */}
+        <button
+          ref={submitButtonRef}
+          type="submit"
+          className="hidden"
+          tabIndex={-1}
+          aria-hidden="true"
+        />
       </div>
     </div>
   );

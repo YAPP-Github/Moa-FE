@@ -35,8 +35,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           value={value}
           disabled={disabled}
           maxLength={maxLength}
+          autoComplete="off"
           className={cn(
-            'h-12 w-full rounded-md border-[1.5px] px-5 transition-colors',
+            'h-12 w-full rounded-md border-[1.5px] px-5 transition-colors text-caption-2 placeholder:text-caption-2',
             'focus:outline-none focus-visible:ring-[3px]',
             error
               ? 'border-red-300 focus-visible:border-red-300 focus-visible:ring-red-300/30'

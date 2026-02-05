@@ -3,25 +3,25 @@ import type { SVGProps } from 'react';
 const SvgIcLink = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={30}
-    height={30}
+    width={22}
+    height={22}
     fill="none"
-    viewBox="0 0 30 30"
+    viewBox="0 0 22 22"
     aria-hidden="true"
     {...props}
   >
     <path
-      stroke="currentColor"
+      stroke="#4E5968"
       strokeLinecap="round"
-      strokeWidth={1.6}
-      d="M19.446 16.905 21.352 15A4.491 4.491 0 0 0 15 8.649l-1.905 1.905m3.81 8.892L15 21.35A4.491 4.491 0 0 1 8.65 15l1.905-1.905"
+      strokeWidth={1.5}
+      d="m15.556 12.728 2.122-2.121a5 5 0 0 0-7.071-7.071l-2.122 2.12m4.243 9.9-2.121 2.122a5 5 0 0 1-7.071-7.071l2.12-2.122"
     />
     <path
-      stroke="currentColor"
+      stroke="#4E5968"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={1.6}
-      d="m16.905 13.095-3.81 3.81"
+      strokeWidth={1.5}
+      d="m12.728 8.485-4.243 4.243"
     />
   </svg>
 );

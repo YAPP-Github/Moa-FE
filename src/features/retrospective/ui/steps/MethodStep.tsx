@@ -8,9 +8,10 @@ import { useStepContext } from '@/shared/ui/multi-step-form/MultiStepForm';
 
 interface MethodStepProps {
   onClose: () => void;
+  onMethodChange?: (method: string) => void;
 }
 
-export function MethodStep({ onClose }: MethodStepProps) {
+export function MethodStep({ onClose, onMethodChange }: MethodStepProps) {
   const { control, watch } = useFormContext<CreateRetrospectFormData>();
   const { goToNextStep } = useStepContext();
 
@@ -35,7 +36,15 @@ export function MethodStep({ onClose }: MethodStepProps) {
         <Controller
           name="retrospectMethod"
           control={control}
-          render={({ field }) => <MethodSelector value={field.value} onChange={field.onChange} />}
+          render={({ field }) => (
+            <MethodSelector
+              value={field.value}
+              onChange={(value) => {
+                field.onChange(value);
+                onMethodChange?.(value);
+              }}
+            />
+          )}
         />
       </div>
 
