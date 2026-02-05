@@ -1,4 +1,4 @@
-import { format, parse, subDays } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -26,37 +26,6 @@ import { SwiperContent, SwiperItem, SwiperRoot } from '@/shared/ui/swiper/Swiper
 import { RetrospectiveCompletedPanel } from '@/widgets/retrospective-detail-panel/ui/RetrospectiveCompletedPanel';
 import { RetrospectiveDetailPanel } from '@/widgets/retrospective-detail-panel/ui/RetrospectiveDetailPanel';
 
-interface TodayRetrospect {
-  retrospectId: number;
-  projectName: string;
-  retrospectDate: string;
-  retrospectMethod: string;
-  retrospectTime: string;
-  participantCount?: number;
-}
-
-// 테스트용 오늘 회고 더미 데이터
-const TODAY_DATE = new Date().toISOString().split('T')[0];
-const MOCK_TODAY_RETROSPECT: TodayRetrospect = {
-  retrospectId: 9999,
-  projectName: '모아 스프린트 1주차',
-  retrospectDate: TODAY_DATE,
-  retrospectMethod: 'KPT',
-  retrospectTime: '14:00',
-  participantCount: 5,
-};
-
-// 테스트용 완료된 회고 더미 데이터 (어제 날짜)
-const YESTERDAY_DATE = subDays(new Date(), 1).toISOString().split('T')[0];
-const MOCK_COMPLETED_RETROSPECT: RetrospectListItem = {
-  retrospectId: 9998,
-  projectName: '모아 킥오프 회고',
-  retrospectDate: YESTERDAY_DATE,
-  retrospectMethod: 'KPT',
-  retrospectTime: '15:00',
-  participantCount: 4,
-};
-
 // 시간을 오전/오후 형식으로 변환 (예: "14:00" → "오후 2시")
 function formatTimeToKorean(time: string): string {
   const date = parse(time, 'HH:mm', new Date());
@@ -69,26 +38,19 @@ export function TeamDashboardPage() {
   const retroRoomId = Number(teamId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
-  const [selectedRetrospect, setSelectedRetrospect] = useState<TodayRetrospect | null>(null);
+  const [selectedRetrospect, setSelectedRetrospect] = useState<RetrospectListItem | null>(null);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [isSelectedCompleted, setIsSelectedCompleted] = useState(false);
 
-  const handleTodayRetrospectClick = (retrospect: TodayRetrospect) => {
+  const handleTodayRetrospectClick = (retrospect: RetrospectListItem) => {
     setSelectedRetrospect(retrospect);
     setIsSelectedCompleted(false);
     setIsSidePanelOpen(true);
   };
 
   const handleCompletedRetrospectClick = (item: RetrospectListItem) => {
-    setSelectedRetrospect({
-      retrospectId: item.retrospectId,
-      projectName: item.projectName,
-      retrospectDate: item.retrospectDate,
-      retrospectMethod: item.retrospectMethod,
-      retrospectTime: item.retrospectTime,
-      participantCount: item.participantCount,
-    });
+    setSelectedRetrospect(item);
     setIsSelectedCompleted(true);
     setIsSidePanelOpen(true);
   };
@@ -125,14 +87,11 @@ export function TeamDashboardPage() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const todayRetrospects = [
-    MOCK_TODAY_RETROSPECT, // 테스트용 더미 데이터
-    ...retrospects.filter((r) => {
-      const retroDate = new Date(r.retrospectDate);
-      retroDate.setHours(0, 0, 0, 0);
-      return retroDate.getTime() === today.getTime();
-    }),
-  ];
+  const todayRetrospects = retrospects.filter((r) => {
+    const retroDate = new Date(r.retrospectDate);
+    retroDate.setHours(0, 0, 0, 0);
+    return retroDate.getTime() === today.getTime();
+  });
 
   const pendingRetrospects = retrospects.filter((r) => {
     const retroDate = new Date(r.retrospectDate);
@@ -140,14 +99,11 @@ export function TeamDashboardPage() {
     return retroDate.getTime() > today.getTime();
   });
 
-  const completedRetrospects = [
-    MOCK_COMPLETED_RETROSPECT, // 테스트용 더미 데이터
-    ...retrospects.filter((r) => {
-      const retroDate = new Date(r.retrospectDate);
-      retroDate.setHours(0, 0, 0, 0);
-      return retroDate.getTime() < today.getTime();
-    }),
-  ];
+  const completedRetrospects = retrospects.filter((r) => {
+    const retroDate = new Date(r.retrospectDate);
+    retroDate.setHours(0, 0, 0, 0);
+    return retroDate.getTime() < today.getTime();
+  });
 
   const members = membersData?.result ?? [];
   const memberCount = members.length;
