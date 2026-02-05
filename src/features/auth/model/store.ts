@@ -9,7 +9,7 @@ interface AuthState {
 }
 
 interface AuthActions {
-  initialize: () => void;
+  setLoading: (isLoading: boolean) => void;
   login: () => void;
   logout: () => void;
   logoutWithServer: () => Promise<void>;
@@ -29,25 +29,40 @@ async function callLogoutApi(): Promise<void> {
 
 export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true, // 초기값을 true로 설정하여 초기화 완료 전까지 로딩 상태 유지
   isOnboarding: false,
   signupEmail: null,
 
-  initialize: () => {
-    // 쿠키 기반 인증: 별도 API 호출 없이 로그인 시 상태만 업데이트
+  setLoading: (isLoading: boolean) => {
+    set({ isLoading });
   },
 
   login: () => {
-    set({ isAuthenticated: true, isOnboarding: false, signupEmail: null });
+    set({
+      isAuthenticated: true,
+      isLoading: false,
+      isOnboarding: false,
+      signupEmail: null,
+    });
   },
 
   logout: () => {
-    set({ isAuthenticated: false, isOnboarding: false, signupEmail: null });
+    set({
+      isAuthenticated: false,
+      isLoading: false,
+      isOnboarding: false,
+      signupEmail: null,
+    });
   },
 
   logoutWithServer: async () => {
     await callLogoutApi();
-    set({ isAuthenticated: false, isOnboarding: false, signupEmail: null });
+    set({
+      isAuthenticated: false,
+      isLoading: false,
+      isOnboarding: false,
+      signupEmail: null,
+    });
   },
 
   setOnboarding: (email: string) => {
