@@ -40,6 +40,7 @@
 ### User Context
 
 > 디자인 스크린샷에 따라 목록 더보기 모달에 다음 변경사항 추가:
+>
 > - "새로운 팀 만들기" (+ 아이콘, 파란색)
 > - "기존 팀 입장하기" (입장 아이콘, 회색)
 
@@ -139,7 +140,7 @@ src/
 interface SidebarListHeaderProps {
   title: string;
   onAddTeam?: () => void;
-  onJoinTeam?: () => void;  // 추가
+  onJoinTeam?: () => void; // 추가
 }
 ```
 
