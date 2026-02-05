@@ -26,6 +26,17 @@ interface TodayRetrospect {
   participantCount?: number;
 }
 
+// 테스트용 오늘 회고 더미 데이터
+const TODAY_DATE = new Date().toISOString().split('T')[0];
+const MOCK_TODAY_RETROSPECT: TodayRetrospect = {
+  retrospectId: 9999,
+  projectName: '모아 스프린트 1주차',
+  retrospectDate: TODAY_DATE,
+  retrospectMethod: 'KPT',
+  retrospectTime: '14:00',
+  participantCount: 5,
+};
+
 export function TeamDashboardPage() {
   const { teamId } = useParams<{ teamId: string }>();
   const navigate = useNavigate();
@@ -71,11 +82,14 @@ export function TeamDashboardPage() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const todayRetrospects = retrospects.filter((r) => {
-    const retroDate = new Date(r.retrospectDate);
-    retroDate.setHours(0, 0, 0, 0);
-    return retroDate.getTime() === today.getTime();
-  });
+  const todayRetrospects = [
+    MOCK_TODAY_RETROSPECT, // 테스트용 더미 데이터
+    ...retrospects.filter((r) => {
+      const retroDate = new Date(r.retrospectDate);
+      retroDate.setHours(0, 0, 0, 0);
+      return retroDate.getTime() === today.getTime();
+    }),
+  ];
 
   const pendingRetrospects = retrospects.filter((r) => {
     const retroDate = new Date(r.retrospectDate);
