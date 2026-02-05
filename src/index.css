@@ -150,3 +150,16 @@
   --text-long-2--line-height: 1.5;
   --text-long-2--font-weight: 500;
 }
+
+/* ========================================
+ * Utility Classes
+ * ======================================== */
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
