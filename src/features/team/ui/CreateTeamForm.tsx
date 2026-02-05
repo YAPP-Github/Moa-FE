@@ -5,6 +5,7 @@ import { FormActions } from '@/features/team/ui/FormActions';
 import { TeamNameStep } from '@/features/team/ui/TeamNameStep';
 import type { RetroRoomCreateResponse } from '@/shared/api/generated/index';
 import { MultiStepForm } from '@/shared/ui/multi-step-form/MultiStepForm';
+import { useToast } from '@/shared/ui/toast/Toast';
 
 interface CreateTeamFormProps {
   onSuccess?: (result: RetroRoomCreateResponse) => void;
@@ -13,14 +14,16 @@ interface CreateTeamFormProps {
 
 export function CreateTeamForm({ onSuccess, onClose }: CreateTeamFormProps) {
   const mutation = useCreateRetroRoom();
+  const { showToast } = useToast();
 
   const handleSubmit = async (data: CreateTeamFormData) => {
     try {
       const response = await mutation.mutateAsync({ title: data.teamName });
+      showToast({ variant: 'success', message: '새로운 팀이 생성되었습니다.' });
       onClose();
       onSuccess?.(response.result);
     } catch {
-      // 에러는 mutation.error에서 처리
+      showToast({ variant: 'warning', message: '팀 생성에 실패했습니다.' });
     }
   };
 

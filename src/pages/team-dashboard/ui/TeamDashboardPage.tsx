@@ -1,20 +1,27 @@
+import { format, parse } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useRetrospects } from '@/features/retrospective/api/retrospective.queries';
 import { CreateRetrospectDialog } from '@/features/retrospective/ui/CreateRetrospectDialog';
 import { RetrospectSection } from '@/features/retrospective/ui/RetrospectSection';
-import { useRetroRooms } from '@/features/team/api/team.queries';
+import { useRetroRoomMembers, useRetroRooms } from '@/features/team/api/team.queries';
+import { InviteMemberDialog } from '@/features/team/ui/InviteMemberDialog';
 import { Button } from '@/shared/ui/button/Button';
 import {
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuPortal,
   DropdownMenuRoot,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu/DropdownMenu';
 import IcChevronDown from '@/shared/ui/icons/IcChevronDown';
 import IcPlus from '@/shared/ui/icons/IcPlus';
+import IcPlusBlue from '@/shared/ui/icons/IcPlusBlue';
 import IcUserProfile from '@/shared/ui/icons/IcUserProfile';
 import { SidePanel } from '@/shared/ui/side-panel/SidePanel';
+import { SwiperContent, SwiperItem, SwiperRoot } from '@/shared/ui/swiper/Swiper';
 import { RetrospectiveDetailPanel } from '@/widgets/retrospective-detail-panel/ui/RetrospectiveDetailPanel';
 
 interface TodayRetrospect {
@@ -37,11 +44,18 @@ const MOCK_TODAY_RETROSPECT: TodayRetrospect = {
   participantCount: 5,
 };
 
+// 시간을 오전/오후 형식으로 변환 (예: "14:00" → "오후 2시")
+function formatTimeToKorean(time: string): string {
+  const date = parse(time, 'HH:mm', new Date());
+  return format(date, 'a h시', { locale: ko });
+}
+
 export function TeamDashboardPage() {
   const { teamId } = useParams<{ teamId: string }>();
   const navigate = useNavigate();
   const retroRoomId = Number(teamId);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
   const [selectedRetrospect, setSelectedRetrospect] = useState<TodayRetrospect | null>(null);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -62,6 +76,7 @@ export function TeamDashboardPage() {
 
   const { data: roomData } = useRetroRooms();
   const { data: retrospectsData, isLoading, isError } = useRetrospects(retroRoomId);
+  const { data: membersData } = useRetroRoomMembers(retroRoomId);
 
   // 존재하지 않는 팀이거나 접근 권한이 없는 경우 리다이렉트
   useEffect(() => {
@@ -103,8 +118,8 @@ export function TeamDashboardPage() {
     return retroDate.getTime() < today.getTime();
   });
 
-  // TODO: API에서 멤버 수 제공 시 대체
-  const memberCount = 0;
+  const members = membersData?.result ?? [];
+  const memberCount = members.length;
 
   if (isLoading) {
     return (
@@ -152,50 +167,71 @@ export function TeamDashboardPage() {
                 <DropdownMenuContent
                   align="end"
                   sideOffset={4}
-                  className="bg-white p-3 rounded-lg shadow-lg min-w-[160px]"
+                  className="flex flex-col gap-3 p-3 rounded-[8px] border border-grey-200 bg-white shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)] min-w-[120px]"
                 >
-                  <p className="text-caption-4 text-grey-700">멤버 {memberCount}명</p>
+                  {/* 멤버 목록 */}
                   {memberCount > 0 ? (
-                    <div className="flex flex-col gap-3 mt-3">
-                      {/* TODO: API 연동 시 멤버 목록 표시 */}
+                    <div className="flex flex-col gap-2">
+                      {members.map((member) => (
+                        <div key={member.memberId} className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full border border-grey-300" />
+                          <span className="text-sub-title-3 text-grey-900">{member.nickname}</span>
+                        </div>
+                      ))}
                     </div>
                   ) : (
-                    <div className="mt-3 text-caption-4 text-grey-500">멤버 없음</div>
+                    <div className="text-caption-4 text-grey-500">멤버 없음</div>
                   )}
+
+                  <DropdownMenuSeparator className="border-t border-grey-200 -mx-3" />
+
+                  {/* 추가하기 버튼 */}
+                  <DropdownMenuItem
+                    className="flex items-center gap-2 cursor-pointer"
+                    onSelect={() => setIsInviteDialogOpen(true)}
+                  >
+                    <div className="w-5 h-5 rounded-full bg-blue-200 flex items-center justify-center">
+                      <IcPlusBlue className="w-2 h-2 text-blue-500" />
+                    </div>
+                    <span className="text-sub-title-3 text-blue-500">추가하기</span>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenuPortal>
             </DropdownMenuRoot>
           </div>
 
           {/* Today's Retrospects */}
-          <div className="flex gap-2 min-h-16">
-            {todayRetrospects.map((retro) => (
-              <button
-                type="button"
-                key={retro.retrospectId}
-                onClick={() => handleTodayRetrospectClick(retro)}
-                className="flex items-center gap-[10px] bg-white px-[10px] py-3 rounded-[20px] w-48 h-16 hover:bg-grey-50 transition-colors cursor-pointer text-left"
-              >
-                <div className="w-[38px] h-[38px] bg-grey-100 rounded-[10px] flex items-center justify-center shrink-0">
-                  <span className="text-sub-title-5 text-grey-900">오늘</span>
-                </div>
-                <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-sub-title-2 text-grey-1000 truncate">
-                    {retro.projectName}
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <span className="text-caption-3 font-medium text-grey-700">
-                      {retro.retrospectMethod}
-                    </span>
-                    <span className="text-caption-3 font-medium text-grey-700">·</span>
-                    <span className="text-caption-3 font-medium text-grey-700">
-                      {retro.retrospectTime}
-                    </span>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
+          <SwiperRoot className="min-h-16">
+            <SwiperContent className="gap-2">
+              {todayRetrospects.map((retro) => (
+                <SwiperItem key={retro.retrospectId}>
+                  <button
+                    type="button"
+                    onClick={() => handleTodayRetrospectClick(retro)}
+                    className="flex items-center gap-[10px] bg-white px-[10px] py-3 rounded-[20px] min-w-[186px] h-16 hover:bg-grey-50 transition-colors cursor-pointer text-left"
+                  >
+                    <div className="w-[38px] h-[38px] bg-grey-100 rounded-[10px] flex items-center justify-center shrink-0">
+                      <span className="text-sub-title-5 text-grey-900">오늘</span>
+                    </div>
+                    <div className="flex flex-col min-w-0 flex-1">
+                      <span className="text-sub-title-2 text-grey-1000 truncate">
+                        {retro.projectName}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-caption-3 font-medium text-grey-700">
+                          {retro.retrospectMethod}
+                        </span>
+                        <span className="text-caption-3 font-medium text-grey-700">·</span>
+                        <span className="text-caption-3 font-medium text-grey-700">
+                          {formatTimeToKorean(retro.retrospectTime)}
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                </SwiperItem>
+              ))}
+            </SwiperContent>
+          </SwiperRoot>
         </div>
 
         {/* Content */}
@@ -221,6 +257,13 @@ export function TeamDashboardPage() {
       <CreateRetrospectDialog
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
+        retroRoomId={retroRoomId}
+      />
+
+      {/* 멤버 초대 Dialog */}
+      <InviteMemberDialog
+        open={isInviteDialogOpen}
+        onOpenChange={setIsInviteDialogOpen}
         retroRoomId={retroRoomId}
       />
 

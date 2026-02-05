@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router';
+import { useProfile } from '@/features/auth/api/auth.queries';
 import { useAuthStore } from '@/features/auth/model/store';
 import { getApi } from '@/shared/api/generated';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
@@ -19,8 +20,8 @@ interface HeaderProps {
 export function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
   const { logoutWithServer } = useAuthStore();
-  // TODO: API에서 사용자 이름 가져오기
-  const userName = '사용자';
+  const { data: profileData } = useProfile();
+  const userName = profileData?.result?.nickname ?? '사용자';
 
   // 로그아웃 핸들러 (서버에 로그아웃 요청하여 쿠키 삭제)
   const handleLogout = async () => {
@@ -57,32 +58,32 @@ export function Header({ className }: HeaderProps) {
         <DropdownMenuPortal>
           <DropdownMenuContent
             align="end"
-            sideOffset={8}
-            className="bg-white p-3 rounded-lg shadow-lg w-[160px]"
+            sideOffset={4}
+            className="flex flex-col gap-3 p-3 rounded-[8px] border border-grey-200 bg-white shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)] min-w-[160px]"
           >
             {/* 프로필 영역 */}
-            <div className="flex items-center min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
               <Avatar size="md" alt={userName} className="rounded-md" />
-              <span className="ml-2 text-title-4 text-grey-1000 truncate flex-1 min-w-0">
+              <span className="text-sub-title-3 text-grey-1000 truncate flex-1 min-w-0">
                 {userName}
               </span>
             </div>
 
-            <DropdownMenuSeparator className="border-t border-grey-100 my-3" />
+            <DropdownMenuSeparator className="border-t border-grey-200 -mx-3" />
 
             {/* 메뉴 항목 */}
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-3">
               <DropdownMenuItem
                 onSelect={handleLogout}
-                className="text-caption-2 text-grey-900 px-2 py-1.5 rounded-md hover:bg-grey-100 transition-colors cursor-pointer"
+                className="flex items-center cursor-pointer"
               >
-                로그아웃
+                <span className="text-sub-title-3 text-grey-900">로그아웃</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={handleWithdraw}
-                className="text-caption-2 text-grey-900 px-2 py-1.5 rounded-md hover:bg-grey-100 transition-colors cursor-pointer"
+                className="flex items-center cursor-pointer"
               >
-                서비스 탈퇴
+                <span className="text-sub-title-3 text-grey-900">서비스 탈퇴</span>
               </DropdownMenuItem>
             </div>
           </DropdownMenuContent>

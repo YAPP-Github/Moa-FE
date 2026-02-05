@@ -5,6 +5,7 @@ import { type JoinTeamFormData, joinTeamSchema } from '@/features/team/model/sch
 import { Button } from '@/shared/ui/button/Button';
 import { Field, FieldLabel } from '@/shared/ui/field/Field';
 import { Input } from '@/shared/ui/input/Input';
+import { useToast } from '@/shared/ui/toast/Toast';
 
 interface JoinTeamFormProps {
   onSuccess?: () => void;
@@ -13,14 +14,9 @@ interface JoinTeamFormProps {
 
 export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
   const mutation = useJoinRetroRoom();
+  const { showToast } = useToast();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<JoinTeamFormData>({
+  const { register, handleSubmit, setValue, watch } = useForm<JoinTeamFormData>({
     resolver: zodResolver(joinTeamSchema),
     defaultValues: { inviteUrl: '' },
   });
@@ -30,10 +26,11 @@ export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
   const onSubmit = async (data: JoinTeamFormData) => {
     try {
       await mutation.mutateAsync({ inviteUrl: data.inviteUrl });
+      showToast({ variant: 'success', message: '팀에 입장했습니다.' });
       onClose();
       onSuccess?.();
     } catch {
-      // 에러는 mutation.error에서 처리
+      showToast({ variant: 'warning', message: '팀 입장에 실패했습니다.' });
     }
   };
 
@@ -48,19 +45,12 @@ export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
           {...register('inviteUrl')}
           clearable
           onClear={() => setValue('inviteUrl', '')}
-          error={!!errors.inviteUrl}
         />
-        {errors.inviteUrl && (
-          <p className="text-sm text-red-500 mt-1">{errors.inviteUrl.message}</p>
-        )}
       </Field>
 
       <div className="flex justify-end gap-2">
-        <Button type="button" variant="secondary" onClick={onClose}>
-          취소
-        </Button>
-        <Button type="submit" disabled={!inviteUrl?.trim() || mutation.isPending}>
-          {mutation.isPending ? '입장 중...' : '입장하기'}
+        <Button type="submit" disabled={!inviteUrl?.trim()}>
+          확인
         </Button>
       </div>
     </form>

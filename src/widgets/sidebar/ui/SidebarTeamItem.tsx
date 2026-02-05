@@ -129,30 +129,30 @@ export function SidebarTeamItem({
           <DropdownMenuPortal>
             {!isEditing && (
               <DropdownMenuContent
-                className="min-w-28 flex flex-col gap-1 p-3 rounded-[8px] border border-grey-200 bg-white shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)] -ml-4"
-                align="start"
-                sideOffset={10}
+                className="flex flex-col gap-3 p-3 rounded-[8px] border border-grey-200 bg-white shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)] min-w-[140px]"
+                align="end"
+                sideOffset={4}
               >
-                <div className="px-3 py-1.5 text-caption-4 text-grey-700 font-medium truncate max-w-[180px]">
+                <div className="text-caption-4 text-grey-700 font-medium truncate max-w-[180px]">
                   {team.retroRoomName}
                 </div>
                 <DropdownMenuItem
-                  className="px-3 py-1.5 text-sub-title-3 text-grey-900 rounded-md cursor-pointer hover:bg-[#F9FAFB]"
+                  className="flex items-center cursor-pointer"
                   onSelect={() => {
                     isTransitioningToEditRef.current = true;
                     setIsEditing(true);
                   }}
                 >
-                  팀 이름 편집하기
+                  <span className="text-sub-title-3 text-grey-900">팀 이름 편집하기</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className="px-3 py-1.5 text-sub-title-3 text-red-300 rounded-md cursor-pointer hover:bg-red-50"
+                  className="flex items-center cursor-pointer"
                   onSelect={() => {
                     setIsMenuOpen(false);
                     setIsLeaveModalOpen(true);
                   }}
                 >
-                  팀 나가기
+                  <span className="text-sub-title-3 text-red-300">팀 나가기</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             )}

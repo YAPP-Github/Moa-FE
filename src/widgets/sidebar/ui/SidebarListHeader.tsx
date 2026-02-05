@@ -54,7 +54,7 @@ export function SidebarListHeader({ title, onAddTeam, onJoinTeam }: SidebarListH
               <div className="w-5 h-5 rounded-full bg-grey-200 flex items-center justify-center">
                 <IcEnter className="w-3.5 h-3.5" />
               </div>
-              <span className="text-sub-title-2 text-grey-900">기존 팀 입장하기</span>
+              <span className="text-sub-title-3 text-grey-900">기존 팀 입장하기</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenuPortal>
