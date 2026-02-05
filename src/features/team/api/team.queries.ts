@@ -9,6 +9,15 @@ export function useRetroRooms() {
   });
 }
 
+export function useRetroRoomMembers(retroRoomId: number) {
+  return useQuery({
+    queryKey: ['retroRoomMembers', retroRoomId],
+    queryFn: () => getApi().listRetroRoomMembers(retroRoomId),
+    staleTime: 1000 * 60 * 5,
+    enabled: retroRoomId > 0,
+  });
+}
+
 export function useUpdateRetroRoomName() {
   const queryClient = useQueryClient();
 
