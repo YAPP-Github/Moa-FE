@@ -442,11 +442,13 @@ PR 머지 후 자동 배포 (Vercel Preview)
 #### Files Created
 
 - [`src/features/retrospective/ui/SubmitConfirmModal.tsx`](../../src/features/retrospective/ui/SubmitConfirmModal.tsx) - 제출 확인 모달 컴포넌트
+
   - "최종 제출할까요?" / "제출 후에는 내용을 수정할 수 없어요." 텍스트
   - 취소/확인 버튼 (우측 정렬)
   - 기존 Dialog 컴포넌트 활용
 
 - [`src/features/retrospective/ui/CloseConfirmModal.tsx`](../../src/features/retrospective/ui/CloseConfirmModal.tsx) - 닫기 확인 모달 컴포넌트
+
   - "정말 나가시겠어요?" / "저장하지 않은 내용은 모두 사라져요." 텍스트
   - 임시저장/나가기 버튼
 
@@ -459,8 +461,9 @@ PR 머지 후 자동 배포 (Vercel Preview)
 #### Files Modified
 
 - [`src/widgets/retrospective-detail-panel/ui/RetrospectiveDetailPanel.tsx`](../../src/widgets/retrospective-detail-panel/ui/RetrospectiveDetailPanel.tsx) - 모달 연동 및 임시저장 기능
+
   - 3개 모달 상태 관리 추가 (isSubmitModalOpen, isCloseModalOpen, isPreviewModalOpen)
-  - 로컬스토리지 임시저장 기능 (retrospect_draft_{id} 키)
+  - 로컬스토리지 임시저장 기능 (retrospect*draft*{id} 키)
   - 패널 열 때 임시저장 데이터 자동 로드
   - 닫기 버튼 클릭 시 변경 사항 비교 후 모달 표시
   - 임시저장 버튼 핸들러 연결

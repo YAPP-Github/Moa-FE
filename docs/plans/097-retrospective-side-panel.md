@@ -418,12 +418,14 @@ npm run lint        # 린트 통과
 ### Key Implementation Details
 
 1. **SidePanel 공통 컴포넌트**:
+
    - React Portal 기반 렌더링 (document.body에 마운트)
    - 슬라이드 인/아웃 애니메이션
    - ESC 키 닫기, backdrop 클릭 닫기 지원
    - 동적 width 지원
 
 2. **RetrospectiveDetailPanel 위젯**:
+
    - 질문 네비게이션 (이전/다음 버튼, 질문 인덱스 표시)
    - 회고 내용 입력 textarea (1000자 제한)
    - 회고 어시스턴트 버튼 (핑크 테마)
@@ -432,6 +434,7 @@ npm run lint        # 린트 통과
    - 제출 검증 토스트 (미완료 시 경고, 완료 시 성공)
 
 3. **SVGR 설정 수정**:
+
    - convertColors 플러그인 제거로 SVG 원본 색상 보존
    - 다색상 아이콘 정상 렌더링
 
@@ -449,6 +452,7 @@ npm run lint        # 린트 통과
 ### Deviations from Plan
 
 **Added**:
+
 - 참여자 확장 패널 (280px, 애니메이션 포함)
 - 전체 질문 목록 사이드 네비게이션
 - 드롭다운 메뉴 (더보기 버튼)
@@ -456,9 +460,11 @@ npm run lint        # 린트 통과
 - 패널 확장/축소 기능
 
 **Changed**:
+
 - SVGR 설정 수정 (원본 색상 보존)
 
 **Skipped**:
+
 - Storybook 스토리 작성 (후속 작업으로 이관)
 
 ### Performance Impact
