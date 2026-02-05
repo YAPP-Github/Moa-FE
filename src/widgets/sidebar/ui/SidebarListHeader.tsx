@@ -6,15 +6,17 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu/DropdownMenu';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
+import IcEnter from '@/shared/ui/icons/IcEnter';
 import IcMeatball from '@/shared/ui/icons/IcMeatball';
 import IcPlusBlue from '@/shared/ui/icons/IcPlusBlue';
 
 interface SidebarListHeaderProps {
   title: string;
   onAddTeam?: () => void;
+  onJoinTeam?: () => void;
 }
 
-export function SidebarListHeader({ title, onAddTeam }: SidebarListHeaderProps) {
+export function SidebarListHeader({ title, onAddTeam, onJoinTeam }: SidebarListHeaderProps) {
   return (
     <div className="h-9 px-4 py-2 flex items-center justify-between">
       <span className="text-sub-title-1 text-grey-900 truncate">{title}</span>
@@ -40,10 +42,19 @@ export function SidebarListHeader({ title, onAddTeam }: SidebarListHeaderProps) 
               className="flex items-center gap-2 cursor-pointer"
               onSelect={onAddTeam}
             >
-              <div className="w-5 h-5 rounded-[10px] bg-blue-200 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-blue-200 flex items-center justify-center">
                 <IcPlusBlue className="w-2 h-2 text-blue-500" />
               </div>
-              <span className="text-sub-title-3 text-blue-500">새 팀 추가하기</span>
+              <span className="text-sub-title-3 text-blue-500">새로운 팀 만들기</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex items-center gap-2 cursor-pointer"
+              onSelect={onJoinTeam}
+            >
+              <div className="w-5 h-5 rounded-full bg-grey-200 flex items-center justify-center">
+                <IcEnter className="w-3.5 h-3.5" />
+              </div>
+              <span className="text-sub-title-2 text-grey-900">기존 팀 입장하기</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenuPortal>

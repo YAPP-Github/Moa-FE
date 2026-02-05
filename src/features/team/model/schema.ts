@@ -9,3 +9,9 @@ export const createTeamSchema = z.object({
 });
 
 export type CreateTeamFormData = z.infer<typeof createTeamSchema>;
+
+export const joinTeamSchema = z.object({
+  inviteUrl: z.string().min(1, '초대 링크를 입력해주세요.'),
+});
+
+export type JoinTeamFormData = z.infer<typeof joinTeamSchema>;
