@@ -152,10 +152,76 @@ CompletedRetrospectiveView 렌더링
 
 ## 9. Implementation Summary
 
-> **Note**: 이 섹션은 작업 완료 후 `/task-done` 커맨드가 자동으로 채웁니다.
+**Completion Date**: 2026-02-06
+**Implemented By**: Claude Opus 4.6
+
+### Changes Made
+
+#### Phase 1 (Previous Commits): CompletedPanel View 전환
+
+- `src/widgets/retrospective-detail-panel/ui/RetrospectiveDetailPanel.tsx` — 제출 후 `CompletedRetrospectiveView`로 전환 렌더링
+- `src/pages/team-dashboard/ui/TeamDashboardPage.tsx` — 이미 제출된 회고 클릭 시 CompletedPanel 표시
+
+#### Phase 2 (Current Changes): 회고 완료 View API 연동
+
+**React Query Hooks 추가:**
+
+- `src/features/retrospective/api/retrospective.queries.ts` — `useResponses(retrospectId, category)`, `useComments(responseId)` 훅 추가
+- `src/features/retrospective/api/retrospective.mutations.ts` — `useCreateComment(responseId)`, `useToggleLike()`, `useAnalyzeRetrospective(retrospectId)` 훅 추가
+
+**컴포넌트 API 연동:**
+
+- `src/features/retrospective/ui/CompletedRetrospectiveView.tsx` — `useRetrospectDetail`로 질문 목록 조회, `useAnalyzeRetrospective`로 AI 분석 호출, `retrospectId`/`questions`를 ContentTab에 전달, `analysisData`를 AnalysisResult에 전달
+- `src/features/retrospective/ui/RetrospectiveContentTab.tsx` — 모든 mock 데이터 제거, `useResponses`로 답변 데이터 조회 (카테고리 필터링), `useComments`/`useCreateComment`로 댓글 기능, `useToggleLike`로 좋아요 기능, `CommentSection` 서브컴포넌트 분리
+- `src/features/retrospective/ui/RetrospectiveAnalysisResult.tsx` — 모든 mock 데이터 제거, `AnalysisResponse` props로 `insight`/`emotionRank`/`personalMissions` 렌더링
+- `src/features/retrospective/ui/AnalysisEmptyState.tsx` — `isLoading` prop 추가, 분석 중 버튼 비활성화 및 "분석 중..." 텍스트 표시
+
+**타입 정리:**
+
+- `src/features/retrospective/model/types.ts` — 불필요한 mock용 타입 4개 제거 (`RetrospectiveAnswer`, `KeywordRanking`, `Mission`, `RetrospectiveAnalysis`), `RetrospectiveTabType`과 `CompletedRetrospectiveViewProps` 유지
+
+### Quality Validation
+
+- [x] Build: Success
+- [x] Type Check: Passed (0 errors)
+- [x] Lint: Passed (0 errors in modified files)
+
+### Deviations from Plan
+
+**Added**:
+
+- 회고 완료 View API 연동 전체 구현 (원래 계획은 CompletedPanel View 전환만 포함)
+- `CommentSection`을 별도 서브컴포넌트로 분리 (각 댓글 섹션이 독립적 상태 관리)
+- Enter 키로 댓글 작성 지원
+
+**Changed**:
+
+- 없음
+
+**Skipped**:
+
+- 없음
+
+### Performance Impact
+
+- Bundle size: 변동 없음 (604.38KB, mock 데이터 제거로 상쇄)
+- API 호출 추가: responses, comments 쿼리 (staleTime 2분 캐시)
+
+### Commits
+
+```
+822e7cf - docs(plans): add plan document for issue #117
+92ca3b0 - fix(retrospective): show CompletedPanel view after submission and for already-submitted retrospectives
+(unstaged) - feat(retrospective): integrate API for completed retrospective view
+```
+
+### Follow-up Tasks
+
+- [ ] 좋아요 상태 반영 (현재 항상 IcHeartInactive 표시, 좋아요 활성 상태 아이콘 필요)
+- [ ] 답변 목록 무한 스크롤 (현재 size=100으로 조회)
+- [ ] 댓글 목록 무한 스크롤 (현재 size=100으로 조회)
 
 ---
 
-**Plan Status**: Planning
+**Plan Status**: Completed
 **Last Updated**: 2026-02-06
-**Next Action**: 사용자 승인 후 구현 시작
