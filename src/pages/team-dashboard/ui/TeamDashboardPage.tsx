@@ -3,6 +3,7 @@ import { ko } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useRetrospects } from '@/features/retrospective/api/retrospective.queries';
+import { RETROSPECT_METHOD_LABELS } from '@/features/retrospective/model/constants';
 import { CompletedRetrospectiveModal } from '@/features/retrospective/ui/CompletedRetrospectiveModal';
 import { CreateRetrospectDialog } from '@/features/retrospective/ui/CreateRetrospectDialog';
 import { RetrospectSection } from '@/features/retrospective/ui/RetrospectSection';
@@ -212,7 +213,8 @@ export function TeamDashboardPage() {
                       </span>
                       <div className="flex items-center gap-1">
                         <span className="text-caption-3 font-medium text-grey-700">
-                          {retro.retrospectMethod}
+                          {RETROSPECT_METHOD_LABELS[retro.retrospectMethod] ??
+                            retro.retrospectMethod}
                         </span>
                         <span className="text-caption-3 font-medium text-grey-700">·</span>
                         <span className="text-caption-3 font-medium text-grey-700">
