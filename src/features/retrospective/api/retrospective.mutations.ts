@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type {
   AssistantRequest,
+  CreateCommentRequest,
   CreateRetrospectRequest,
   DraftSaveRequest,
   SubmitRetrospectRequest,
@@ -93,5 +94,46 @@ export function useDeleteRetrospect() {
 export function useExportRetrospect() {
   return useMutation({
     mutationFn: (retrospectId: number) => getApi().exportRetrospect(retrospectId),
+  });
+}
+
+/**
+ * 댓글 작성
+ * API-027: POST /api/v1/responses/{responseId}/comments
+ */
+export function useCreateComment(responseId: number) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: CreateCommentRequest) => getApi().createComment(responseId, request),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments', responseId] });
+      queryClient.invalidateQueries({ queryKey: ['responses'] });
+    },
+  });
+}
+
+/**
+ * 좋아요 토글
+ * API-025: POST /api/v1/responses/{responseId}/likes
+ */
+export function useToggleLike() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (responseId: number) => getApi().toggleLike(responseId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['responses'] });
+    },
+  });
+}
+
+/**
+ * 회고 분석
+ * API-022: POST /api/v1/retrospects/{retrospectId}/analysis
+ */
+export function useAnalyzeRetrospective(retrospectId: number) {
+  return useMutation({
+    mutationFn: () => getApi().analyzeRetrospectiveHandler(retrospectId, null),
   });
 }

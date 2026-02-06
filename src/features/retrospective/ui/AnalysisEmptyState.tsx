@@ -12,12 +12,14 @@ interface AnalysisEmptyStateProps {
   participantCount: number;
   totalParticipants: number;
   onAnalyzeClick?: () => void;
+  isLoading?: boolean;
 }
 
 function AnalysisEmptyState({
   participantCount,
   totalParticipants,
   onAnalyzeClick,
+  isLoading = false,
 }: AnalysisEmptyStateProps) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center">
@@ -43,7 +45,8 @@ function AnalysisEmptyState({
       <button
         type="button"
         onClick={onAnalyzeClick}
-        className="mt-5 flex cursor-pointer items-center gap-1 rounded-md border border-blue-100 px-3 py-[10px]"
+        disabled={isLoading}
+        className="mt-5 flex cursor-pointer items-center gap-1 rounded-md border border-blue-100 px-3 py-[10px] disabled:cursor-not-allowed disabled:opacity-50"
         style={{
           background: 'linear-gradient(90deg, #EEF5FF 0%, #FFF6FF 100%)',
         }}
@@ -58,7 +61,7 @@ function AnalysisEmptyState({
             backgroundClip: 'text',
           }}
         >
-          AI 회고 분석 하기
+          {isLoading ? '분석 중...' : 'AI 회고 분석 하기'}
         </span>
       </button>
     </div>

@@ -63,6 +63,7 @@ interface RetrospectiveDetailPanelProps {
   onClose: () => void;
   isExpanded?: boolean;
   onScaleToggle?: () => void;
+  onSubmitted?: () => void;
 }
 
 // ============================================================================
@@ -120,7 +121,7 @@ function getSubmittedStorageKey(retrospectId: number): string {
  * 해당 회고가 오늘 제출되었는지 확인
  * 오늘 날짜와 제출 날짜가 같으면 true
  */
-function isSubmittedToday(retrospectId: number): boolean {
+export function isSubmittedToday(retrospectId: number): boolean {
   try {
     const key = getSubmittedStorageKey(retrospectId);
     const submittedDate = localStorage.getItem(key);
@@ -156,6 +157,7 @@ function RetrospectiveDetailPanel({
   onClose,
   isExpanded = false,
   onScaleToggle,
+  onSubmitted,
 }: RetrospectiveDetailPanelProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -166,8 +168,6 @@ function RetrospectiveDetailPanel({
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  // 제출 상태: localStorage에서 오늘 제출 여부 확인하여 초기화
-  const [isSubmitted, setIsSubmitted] = useState(() => isSubmittedToday(retrospect.retrospectId));
   // 질문별 AI 어시스턴트 상태 (질문 인덱스 → 가이드 배열)
   const [assistantGuidesMap, setAssistantGuidesMap] = useState<Record<number, GuideItem[]>>({});
   const [assistantLoadingIndex, setAssistantLoadingIndex] = useState<number | null>(null);
@@ -192,8 +192,6 @@ function RetrospectiveDetailPanel({
       setIsSubmitModalOpen(false);
       setIsCloseModalOpen(false);
       setIsPreviewModalOpen(false);
-      // 새 회고의 제출 상태를 localStorage에서 확인
-      setIsSubmitted(isSubmittedToday(retrospect.retrospectId));
       setAssistantGuidesMap({});
       setAssistantLoadingIndex(null);
       hasRegisteredParticipant.current = false;
@@ -378,8 +376,8 @@ function RetrospectiveDetailPanel({
       removeDraftFromStorage(retrospect.retrospectId);
       saveSubmittedStatus(retrospect.retrospectId);
       showToast({ variant: 'success', message: '회고 제출이 완료되었어요!' });
-      setIsSubmitted(true);
       setIsSubmitModalOpen(false);
+      onSubmitted?.();
     } catch {
       showToast({
         variant: 'warning',
@@ -512,47 +510,6 @@ function RetrospectiveDetailPanel({
   const handleLeaveWithoutSave = () => {
     onClose();
   };
-
-  // ============================================================================
-  // 제출 완료 상태 렌더링
-  // ============================================================================
-  if (isSubmitted) {
-    return (
-      <div className="flex h-full flex-col">
-        {/* Header */}
-        <header className="flex items-center justify-between px-5 pt-3">
-          <div className="flex items-center gap-0.5">
-            <button
-              type="button"
-              onClick={onClose}
-              className="cursor-pointer rounded-md p-1.5 text-grey-500 hover:bg-grey-100 transition-colors"
-              aria-label="닫기"
-            >
-              <IcClose className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={onScaleToggle}
-              className="cursor-pointer rounded-md p-1.5 text-grey-500 hover:bg-grey-100 transition-colors"
-              aria-label={isExpanded ? '축소' : '확대'}
-            >
-              {isExpanded ? <IcScaleDown className="h-5 w-5" /> : <IcScaleUp className="h-5 w-5" />}
-            </button>
-          </div>
-        </header>
-
-        {/* Content - 제출 완료 안내 */}
-        <div className="flex-1 flex flex-col items-center justify-center px-5">
-          <div className="text-center">
-            <h2 className="text-title-1 text-grey-1000 mb-2">회고가 제출되었습니다</h2>
-            <p className="text-caption-2 text-grey-600">
-              회고가 완료되면 팀원들의 회고 내용과 분석 결과를 확인할 수 있어요.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // ============================================================================
   // 로딩 상태 렌더링
