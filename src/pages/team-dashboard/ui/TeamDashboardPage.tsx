@@ -24,7 +24,10 @@ import IcUserProfile from '@/shared/ui/icons/IcUserProfile';
 import { SidePanel } from '@/shared/ui/side-panel/SidePanel';
 import { SwiperContent, SwiperItem, SwiperRoot } from '@/shared/ui/swiper/Swiper';
 import { RetrospectiveCompletedPanel } from '@/widgets/retrospective-detail-panel/ui/RetrospectiveCompletedPanel';
-import { RetrospectiveDetailPanel } from '@/widgets/retrospective-detail-panel/ui/RetrospectiveDetailPanel';
+import {
+  isSubmittedToday,
+  RetrospectiveDetailPanel,
+} from '@/widgets/retrospective-detail-panel/ui/RetrospectiveDetailPanel';
 
 // 시간을 오전/오후 형식으로 변환 (예: "14:00" → "오후 2시")
 function formatTimeToKorean(time: string): string {
@@ -45,7 +48,7 @@ export function TeamDashboardPage() {
 
   const handleTodayRetrospectClick = (retrospect: RetrospectListItem) => {
     setSelectedRetrospect(retrospect);
-    setIsSelectedCompleted(false);
+    setIsSelectedCompleted(isSubmittedToday(retrospect.retrospectId));
     setIsSidePanelOpen(true);
   };
 
@@ -277,6 +280,7 @@ export function TeamDashboardPage() {
               onClose={handleSidePanelClose}
               isExpanded={isPanelExpanded}
               onScaleToggle={handleScaleToggle}
+              onSubmitted={() => setIsSelectedCompleted(true)}
             />
           ))}
       </SidePanel>
