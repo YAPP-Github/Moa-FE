@@ -10,7 +10,7 @@ import {
   useToggleLike,
 } from '@/features/retrospective/api/retrospective.mutations';
 import { useComments, useResponses } from '@/features/retrospective/api/retrospective.queries';
-import type { ResponseCategory, ResponseListItem } from '@/shared/api/generated/index';
+import type { ResponseCategory } from '@/shared/api/generated/index';
 import IcComment from '@/shared/ui/icons/IcComment';
 import IcHeartInactive from '@/shared/ui/icons/IcHeartInactive';
 
@@ -22,6 +22,18 @@ interface RetrospectiveContentTabProps {
   retrospectId: number;
   questions: string[];
 }
+
+// ============================================================================
+// Constants
+// ============================================================================
+
+const CATEGORY_MAP: Record<string, ResponseCategory> = {
+  '0': 'QUESTION_1',
+  '1': 'QUESTION_2',
+  '2': 'QUESTION_3',
+  '3': 'QUESTION_4',
+  '4': 'QUESTION_5',
+};
 
 // ============================================================================
 // Sub-components
@@ -97,35 +109,86 @@ function CommentSection({ responseId }: { responseId: number }) {
   );
 }
 
+function QuestionResponseGroup({
+  retrospectId,
+  questionIndex,
+  questionTitle,
+  openCommentId,
+  onCommentToggle,
+  onLikeToggle,
+}: {
+  retrospectId: number;
+  questionIndex: number;
+  questionTitle: string;
+  openCommentId: number | null;
+  onCommentToggle: (responseId: number) => void;
+  onLikeToggle: (responseId: number) => void;
+}) {
+  const category = CATEGORY_MAP[String(questionIndex)] ?? 'QUESTION_1';
+  const { data: responsesData } = useResponses(retrospectId, category);
+
+  const responses = responsesData?.result?.responses ?? [];
+
+  return (
+    <div className="flex flex-col">
+      <h3 className="text-title-4 text-grey-1000">{questionTitle}</h3>
+
+      <div className="mt-4 flex flex-col">
+        {responses.map((response, answerIndex) => (
+          <div key={response.responseId}>
+            {answerIndex > 0 && <div className="my-4 h-px bg-grey-100" />}
+
+            <div className="flex gap-2">
+              <div className="h-7 w-7 shrink-0 rounded-full bg-grey-200" />
+
+              <div className="flex flex-1 flex-col gap-1">
+                <span className="text-sub-title-4 text-grey-700">{response.userName}</span>
+
+                <p className="mt-1.5 text-long-2 text-grey-900">{response.content}</p>
+
+                <div className="mt-3 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => onLikeToggle(response.responseId)}
+                    className="flex cursor-pointer items-center gap-0.5 text-grey-600"
+                  >
+                    <IcHeartInactive className="h-4 w-4" />
+                    <span className="text-[13px] font-medium">{response.likeCount}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onCommentToggle(response.responseId)}
+                    className={`flex cursor-pointer items-center gap-0.5 rounded-md px-1 py-0.5 text-grey-600 transition-colors ${
+                      openCommentId === response.responseId
+                        ? 'bg-grey-300'
+                        : 'hover:bg-grey-200 active:bg-grey-300'
+                    }`}
+                  >
+                    <IcComment className="h-4 w-4" />
+                    <span className="text-[13px] font-medium">{response.commentCount}</span>
+                  </button>
+                </div>
+
+                {openCommentId === response.responseId && (
+                  <CommentSection responseId={response.responseId} />
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ============================================================================
 // Component
 // ============================================================================
 
-const CATEGORY_MAP: Record<string, ResponseCategory> = {
-  all: 'ALL',
-  '0': 'QUESTION_1',
-  '1': 'QUESTION_2',
-  '2': 'QUESTION_3',
-  '3': 'QUESTION_4',
-  '4': 'QUESTION_5',
-};
-
 function RetrospectiveContentTab({ retrospectId, questions }: RetrospectiveContentTabProps) {
   const [activeFilter, setActiveFilter] = useState<'all' | number>('all');
   const [openCommentId, setOpenCommentId] = useState<number | null>(null);
-
-  const category = CATEGORY_MAP[String(activeFilter)] ?? 'ALL';
-  const { data: responsesData } = useResponses(retrospectId, category);
   const toggleLikeMutation = useToggleLike();
-
-  const responses = responsesData?.result?.responses ?? [];
-
-  // 질문별로 그룹화 (ALL일 때만 그룹화, 개별 질문 필터일 때는 하나의 그룹)
-  const groupedByQuestion: Record<number, ResponseListItem[]> =
-    activeFilter === 'all'
-      ? // ALL일 때는 각 질문별로 API를 호출하지 않으므로 전체를 하나의 그룹으로 표시
-        { 0: responses }
-      : { [activeFilter as number]: responses };
 
   const handleCommentToggle = (responseId: number) => {
     setOpenCommentId(openCommentId === responseId ? null : responseId);
@@ -167,60 +230,28 @@ function RetrospectiveContentTab({ retrospectId, questions }: RetrospectiveConte
 
       {/* 답변 목록 */}
       <div className="mt-4 flex flex-col gap-5">
-        {Object.entries(groupedByQuestion).map(([questionIndex, questionResponses]) => (
-          <div key={questionIndex} className="flex flex-col">
-            {/* 질문 제목 */}
-            {activeFilter !== 'all' && questions[Number(questionIndex)] && (
-              <h3 className="text-title-4 text-grey-1000">{questions[Number(questionIndex)]}</h3>
+        {activeFilter === 'all'
+          ? questions.map((question, index) => (
+              <QuestionResponseGroup
+                key={question}
+                retrospectId={retrospectId}
+                questionIndex={index}
+                questionTitle={question}
+                openCommentId={openCommentId}
+                onCommentToggle={handleCommentToggle}
+                onLikeToggle={handleLikeToggle}
+              />
+            ))
+          : questions[activeFilter] && (
+              <QuestionResponseGroup
+                retrospectId={retrospectId}
+                questionIndex={activeFilter}
+                questionTitle={questions[activeFilter]}
+                openCommentId={openCommentId}
+                onCommentToggle={handleCommentToggle}
+                onLikeToggle={handleLikeToggle}
+              />
             )}
-
-            {/* 답변 목록 */}
-            <div className={activeFilter !== 'all' ? 'mt-4 flex flex-col' : 'flex flex-col'}>
-              {questionResponses.map((response, answerIndex) => (
-                <div key={response.responseId}>
-                  {answerIndex > 0 && <div className="my-4 h-px bg-grey-100" />}
-
-                  <div className="flex gap-2">
-                    <div className="h-7 w-7 shrink-0 rounded-full bg-grey-200" />
-
-                    <div className="flex flex-1 flex-col gap-1">
-                      <span className="text-sub-title-4 text-grey-700">{response.userName}</span>
-
-                      <p className="mt-1.5 text-long-2 text-grey-900">{response.content}</p>
-
-                      <div className="mt-3 flex items-center gap-3">
-                        <button
-                          type="button"
-                          onClick={() => handleLikeToggle(response.responseId)}
-                          className="flex cursor-pointer items-center gap-0.5 text-grey-600"
-                        >
-                          <IcHeartInactive className="h-4 w-4" />
-                          <span className="text-[13px] font-medium">{response.likeCount}</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleCommentToggle(response.responseId)}
-                          className={`flex cursor-pointer items-center gap-0.5 rounded-md px-1 py-0.5 text-grey-600 transition-colors ${
-                            openCommentId === response.responseId
-                              ? 'bg-grey-300'
-                              : 'hover:bg-grey-200 active:bg-grey-300'
-                          }`}
-                        >
-                          <IcComment className="h-4 w-4" />
-                          <span className="text-[13px] font-medium">{response.commentCount}</span>
-                        </button>
-                      </div>
-
-                      {openCommentId === response.responseId && (
-                        <CommentSection responseId={response.responseId} />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
