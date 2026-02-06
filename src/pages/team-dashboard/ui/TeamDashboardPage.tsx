@@ -3,6 +3,7 @@ import { ko } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useRetrospects } from '@/features/retrospective/api/retrospective.queries';
+import { CompletedRetrospectiveModal } from '@/features/retrospective/ui/CompletedRetrospectiveModal';
 import { CreateRetrospectDialog } from '@/features/retrospective/ui/CreateRetrospectDialog';
 import { RetrospectSection } from '@/features/retrospective/ui/RetrospectSection';
 import { useRetroRoomMembers, useRetroRooms } from '@/features/team/api/team.queries';
@@ -45,6 +46,8 @@ export function TeamDashboardPage() {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
   const [isSelectedCompleted, setIsSelectedCompleted] = useState(false);
+  const [isCompletedModalOpen, setIsCompletedModalOpen] = useState(false);
+  const [completedModalIndex, setCompletedModalIndex] = useState(0);
 
   const handleTodayRetrospectClick = (retrospect: RetrospectListItem) => {
     setSelectedRetrospect(retrospect);
@@ -53,9 +56,9 @@ export function TeamDashboardPage() {
   };
 
   const handleCompletedRetrospectClick = (item: RetrospectListItem) => {
-    setSelectedRetrospect(item);
-    setIsSelectedCompleted(true);
-    setIsSidePanelOpen(true);
+    const index = completedRetrospects.findIndex((r) => r.retrospectId === item.retrospectId);
+    setCompletedModalIndex(index >= 0 ? index : 0);
+    setIsCompletedModalOpen(true);
   };
 
   const handleSidePanelClose = () => {
@@ -256,6 +259,14 @@ export function TeamDashboardPage() {
         open={isInviteDialogOpen}
         onOpenChange={setIsInviteDialogOpen}
         retroRoomId={retroRoomId}
+      />
+
+      {/* 완료된 회고 모달 */}
+      <CompletedRetrospectiveModal
+        open={isCompletedModalOpen}
+        onOpenChange={setIsCompletedModalOpen}
+        retrospects={completedRetrospects}
+        initialIndex={completedModalIndex}
       />
 
       {/* 회고 사이드 패널 */}

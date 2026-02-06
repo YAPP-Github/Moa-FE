@@ -12,4 +12,6 @@ export interface CompletedRetrospectiveViewProps {
   retrospectMethod: string;
   participantCount: number;
   totalParticipants: number;
+  /** 타이틀 숨김 (모달에서 외부 헤더로 표시 시) */
+  hideTitle?: boolean;
 }

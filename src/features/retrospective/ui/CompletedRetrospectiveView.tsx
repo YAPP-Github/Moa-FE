@@ -19,6 +19,7 @@ import type { AnalysisResponse } from '@/shared/api/generated/index';
 function CompletedRetrospectiveView({
   retrospectId,
   projectName,
+  hideTitle = false,
   participantCount,
   totalParticipants,
 }: CompletedRetrospectiveViewProps) {
@@ -44,10 +45,13 @@ function CompletedRetrospectiveView({
       {/* 타이틀 + 탭 영역 */}
       <div className="mb-5 pl-5">
         {/* 회고 타이틀 */}
-        <h1 className="text-title-2 text-grey-1000">{projectName}</h1>
+        {!hideTitle && <h1 className="text-title-2 text-grey-1000">{projectName}</h1>}
 
         {/* 탭 버튼 */}
-        <div className="mt-5 flex rounded-lg bg-grey-100 p-1" role="tablist">
+        <div
+          className={`${hideTitle ? 'mt-0' : 'mt-5'} flex rounded-lg bg-grey-100 p-1`}
+          role="tablist"
+        >
           <button
             type="button"
             role="tab"

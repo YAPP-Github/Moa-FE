@@ -52,7 +52,7 @@ function RetrospectiveAnalysisResult({ analysisData }: RetrospectiveAnalysisResu
   const { insight, emotionRank, personalMissions } = analysisData;
 
   return (
-    <div className="flex flex-col gap-8 overflow-y-auto px-5 pt-4">
+    <div className="flex flex-col gap-8 overflow-y-auto px-5">
       {/* AI 인사이트 배너 */}
       <div
         className="rounded-xl border border-blue-100 p-5"
