@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { RETROSPECT_METHOD_LABELS } from '@/features/retrospective/model/constants';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
 import IcClose from '@/shared/ui/icons/IcClose';
 import IcLink from '@/shared/ui/icons/IcLink';
@@ -70,7 +71,9 @@ export function CompleteStep({
             </div>
             <div className="flex items-center gap-2">
               <span className="text-caption-3-medium text-grey-800">회고 유형</span>
-              <span className="text-caption-4 text-grey-700">{retrospectMethod}</span>
+              <span className="text-caption-4 text-grey-700">
+                {RETROSPECT_METHOD_LABELS[retrospectMethod] ?? retrospectMethod}
+              </span>
             </div>
           </div>
         </div>
