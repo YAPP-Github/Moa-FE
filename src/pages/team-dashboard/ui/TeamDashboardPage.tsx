@@ -202,7 +202,11 @@ export function TeamDashboardPage() {
                   <button
                     type="button"
                     onClick={() => handleTodayRetrospectClick(retro)}
-                    className="flex items-center gap-[10px] bg-white px-[10px] py-3 rounded-[20px] min-w-[186px] h-16 hover:bg-grey-50 transition-colors cursor-pointer text-left"
+                    className={`flex items-center gap-[10px] px-[10px] py-3 rounded-[20px] min-w-[186px] h-16 hover:bg-grey-50 transition-colors cursor-pointer text-left ${
+                      selectedRetrospect?.retrospectId === retro.retrospectId && isSidePanelOpen
+                        ? 'bg-grey-50'
+                        : 'bg-white'
+                    }`}
                   >
                     <div className="w-[38px] h-[38px] bg-grey-100 rounded-[10px] flex items-center justify-center shrink-0">
                       <span className="text-sub-title-5 text-grey-900">오늘</span>
