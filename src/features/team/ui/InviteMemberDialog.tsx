@@ -7,7 +7,6 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog/Dialog';
 import IcLink from '@/shared/ui/icons/IcLink';
-import IcKakao from '@/shared/ui/logos/IcKakao';
 import { useToast } from '@/shared/ui/toast/Toast';
 
 interface InviteMemberDialogProps {
@@ -21,14 +20,6 @@ export function InviteMemberDialog({ open, onOpenChange, retroRoomId }: InviteMe
 
   // TODO: 실제 초대 링크를 가져오는 API 연동 필요
   const inviteLink = `${window.location.origin}/join/${retroRoomId}`;
-
-  const handleKakaoShare = () => {
-    // TODO: 카카오톡 공유 API 연동
-    showToast({
-      variant: 'warning',
-      message: '카카오톡 공유 기능은 준비 중입니다.',
-    });
-  };
 
   const handleCopyLink = async () => {
     try {
@@ -56,31 +47,16 @@ export function InviteMemberDialog({ open, onOpenChange, retroRoomId }: InviteMe
 
           <p className="text-body-2 text-grey-700 mb-5">링크를 복사하여 멤버를 초대할 수 있어요.</p>
 
-          <div className="flex flex-col gap-3">
-            {/* 카카오톡 전달 버튼 */}
-            <button
-              type="button"
-              onClick={handleKakaoShare}
-              className="w-full h-12 bg-[#FFEB00] hover:bg-[#FFE500] rounded-lg cursor-pointer transition-colors"
-            >
-              <span className="flex items-center justify-center gap-2">
-                <IcKakao className="w-5 h-5" />
-                <span className="text-[15px] font-semibold text-[#333D4B]">카카오톡 전달</span>
-              </span>
-            </button>
-
-            {/* 초대링크 복사 버튼 */}
-            <button
-              type="button"
-              onClick={handleCopyLink}
-              className="w-full h-12 bg-[#F3F4F5] rounded-lg cursor-pointer transition-colors"
-            >
-              <span className="flex items-center justify-center gap-2">
-                <IcLink className="w-5 h-5 text-grey-700" />
-                <span className="text-[15px] font-semibold text-grey-700">초대링크 복사</span>
-              </span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleCopyLink}
+            className="w-full h-12 bg-[#F3F4F5] rounded-lg cursor-pointer transition-colors"
+          >
+            <span className="flex items-center justify-center gap-2">
+              <IcLink className="w-5 h-5 text-grey-700" />
+              <span className="text-[15px] font-semibold text-grey-700">초대링크 복사</span>
+            </span>
+          </button>
         </DialogContent>
       </DialogPortal>
     </DialogRoot>
