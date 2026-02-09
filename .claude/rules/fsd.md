@@ -349,7 +349,7 @@ import { RetrospectiveForm } from "@/features/retrospective/ui/RetrospectiveForm
 - [ ] 슬라이스 이름 결정 (도메인/기능 단위)
 - [ ] 세그먼트별로 파일 분류 (ui, api, model, lib, config)
 - [ ] 모든 import 경로를 직접 import로 변경
-- [ ] 빌드 검증 (`npm run build`)
+- [ ] 빌드 검증 (`pnpm run build`)
 
 ---
 
@@ -493,8 +493,7 @@ src/
 
 ### 프로젝트 문서
 
-- [CLAUDE.md](../../CLAUDE.md) - 프로젝트 핵심 규칙
-- [docs/guides/FSD.md](../../docs/guides/FSD.md) - FSD 아키텍처 가이드
+- [CLAUDE.md](../CLAUDE.md) - 프로젝트 핵심 규칙
 - [.claude/rules/assets.md](assets.md) - Asset 네이밍 컨벤션
 
 ### 외부 자료

@@ -73,9 +73,9 @@
 1. 계획 문서 찾기 (`docs/plans/{issue_number}-*.md`)
 2. 품질 게이트 검증:
    ```bash
-   npm run build        # 필수
-   npx tsc --noEmit    # 필수
-   npm run lint        # 필수
+   pnpm run build        # 필수
+   pnpm tsc --noEmit    # 필수
+   pnpm run lint        # 필수
    ```
 3. 변경 사항 수집:
    - 변경된 파일 (`git diff --name-only`)
@@ -135,7 +135,7 @@ Closes #25
 
 ```bash
 # 구현 중 자주 실행
-npm run build && npx tsc --noEmit && npm run lint
+pnpm run build && pnpm tsc --noEmit && pnpm run lint
 ```
 
 ### 계획 문서 업데이트
@@ -160,4 +160,4 @@ npm run build && npx tsc --noEmit && npm run lint
 
 ---
 
-**마지막 업데이트**: 2026-01-22
+**마지막 업데이트**: 2026-02-09
