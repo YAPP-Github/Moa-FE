@@ -1,405 +1,238 @@
 # Assets 관리 규칙
 
 > 프로젝트의 모든 정적 리소스(이미지, SVG) 관리 규칙
-> 중앙집중형 관리 + 직접 import 방식 (Tree-shaking 최적화)
+> 중앙집중형 관리 + SVGR React 컴포넌트 변환 + 직접 import 방식
 
 ---
 
 ## 폴더 구조
 
 ```
-src/shared/assets/
-├── images/
-│   ├── img_logo.jpeg
-│   └── img_signin_banner.jpg
-└── svg/
-    ├── ic_check_lg.svg
-    ├── ic_delete_md.svg
-    └── ic_google_lg.svg
+src/shared/
+├── assets/                    # 원본 정적 리소스
+│   ├── icons/                 # UI 아이콘 SVG 원본
+│   │   ├── ic_check.svg
+│   │   ├── ic_delete.svg
+│   │   └── ic_close.svg
+│   ├── logos/                 # 브랜드 로고 SVG 원본
+│   │   ├── ic_google.svg
+│   │   ├── ic_kakao.svg
+│   │   └── ic_note.svg
+│   └── images/                # 이미지 파일
+│       ├── img_logo.jpeg
+│       └── img_signin_banner.jpg
+└── ui/                        # SVGR 자동 생성 React 컴포넌트
+    ├── icons/                 # icons/ SVG → React 컴포넌트
+    │   ├── IcCheck.tsx
+    │   ├── IcDelete.tsx
+    │   └── IcClose.tsx
+    └── logos/                 # logos/ SVG → React 컴포넌트
+        ├── IcGoogle.tsx
+        ├── IcKakao.tsx
+        └── IcNote.tsx
 ```
 
-**중요**:
+**핵심 구조**:
 
-- 모든 assets은 반드시 `src/shared/assets/images/` 또는 `src/shared/assets/svg/` 폴더 내에 위치
-- FSD 아키텍처의 `shared` 레이어에서 중앙집중형 관리
-- **직접 import 방식 사용** (barrel export 제거로 tree-shaking 최적화)
+- `src/shared/assets/icons/` — UI 아이콘 SVG 원본 파일
+- `src/shared/assets/logos/` — 브랜드 로고 SVG 원본 파일
+- `src/shared/assets/images/` — 이미지 파일 (jpeg, jpg, png, webp 등)
+- `src/shared/ui/icons/` — SVGR 자동 생성된 아이콘 React 컴포넌트
+- `src/shared/ui/logos/` — SVGR 자동 생성된 로고 React 컴포넌트
+
+---
+
+## SVG 워크플로우 (SVGR)
+
+### 파이프라인
+
+```
+SVG 원본 파일 → SVGR CLI → React 컴포넌트 (자동 생성)
+
+src/shared/assets/icons/ic_check.svg  →  src/shared/ui/icons/IcCheck.tsx
+src/shared/assets/logos/ic_google.svg →  src/shared/ui/logos/IcGoogle.tsx
+```
+
+### SVGR 실행
+
+```bash
+pnpm run generate:icons   # assets/icons/ → ui/icons/
+pnpm run generate:logos   # assets/logos/ → ui/logos/
+```
+
+### SVGR 설정
+
+- `svgr.icons.config.js` — 아이콘용 설정
+- `svgr.logos.config.js` — 로고용 설정 (`shape-rendering: geometricPrecision` 추가)
+- 공통: TypeScript, PascalCase 파일명, default export, `aria-hidden: true`
+
+### 생성 규칙
+
+| SVG 원본 파일명          | 생성되는 컴포넌트 파일 | export 이름          |
+| ------------------------ | ---------------------- | -------------------- |
+| `ic_check.svg`           | `IcCheck.tsx`          | `SvgIcCheck`         |
+| `ic_user_profile_sm.svg` | `IcUserProfileSm.tsx`  | `SvgIcUserProfileSm` |
+| `ic_google.svg`          | `IcGoogle.tsx`         | `SvgIcGoogle`        |
 
 ---
 
 ## 네이밍 컨벤션
 
-### SVG 파일: `ic_{descriptor}_{size}`
+### SVG 파일: `ic_{descriptor}.svg`
 
-**Format**: `ic_{descriptor}_{size}.svg`
-
-**Components**:
+**Format**: `ic_{descriptor}.svg`
 
 - `ic`: Icon prefix (고정)
 - `{descriptor}`: 아이콘의 모양 또는 역할 (snake_case)
-- `{size}`: 크기 표기
-
-**Size Values**:
-
-- `sm`: 16px
-- `md`: 24px
-- `lg`: 32px
-- `xl`: 48px
-- 숫자: 정확한 픽셀 크기 (예: `16`, `24`, `32`)
+- 크기는 파일명에 포함하지 않음 (React 컴포넌트 props로 제어)
 
 **Examples**:
 
 ```
 ✅ Good
-ic_check_lg.svg          # Check icon, large (32px)
-ic_google_lg.svg         # Google logo icon, large
-ic_delete_md.svg         # Delete icon, medium (24px)
-ic_info_md.svg           # Info icon, medium
-ic_arrow_right_sm.svg    # Arrow right icon, small (16px)
-ic_menu_24.svg           # Menu icon, 24px
+ic_check.svg
+ic_delete.svg
+ic_chevron_down.svg
+ic_user_profile.svg
+ic_user_profile_sm.svg     # 크기 변형이 별도 SVG일 때만 suffix 사용
+ic_check_circle_active.svg
+ic_link_inactive.svg
 
 ❌ Bad
-check.svg                # Missing prefix and size
-big-check.svg            # kebab-case (old convention)
-google-icon.svg          # Wrong format
-DeleteIcon.svg           # PascalCase
-ic_check.svg             # Missing size
+check.svg                  # ic_ prefix 없음
+DeleteIcon.svg             # PascalCase
+ic-check.svg               # 하이픈 사용
 ```
 
-**Conversion from Old**:
+**icons vs logos 분류**:
 
-```
-big-check.svg       → ic_check_lg.svg
-delete.svg          → ic_delete_md.svg
-google.svg          → ic_google_lg.svg
-info-circle.svg     → ic_info_md.svg
-kakao.svg           → ic_kakao_lg.svg
-star.svg            → ic_star_md.svg
-```
+- `assets/icons/` — UI 아이콘 (check, close, chevron, plus 등)
+- `assets/logos/` — 브랜드/서비스 로고 (google, kakao, note 등)
 
-### Image 파일: `img_{context}_{descriptor}`
+### Image 파일: `img_{context}_{descriptor}.{ext}`
 
 **Format**: `img_{context}_{descriptor}.{ext}`
-
-**Components**:
 
 - `img`: Image prefix (고정)
 - `{context}`: 이미지 사용 컨텍스트 (snake_case)
 - `{descriptor}`: 구체적 설명 (snake_case, 선택사항)
-- `{ext}`: 확장자 (jpeg, jpg, png, webp, etc.)
-
-**Context Examples**:
-
-- `logo`: 로고 이미지
-- `signin`, `signup`: 인증 관련
-- `profile`, `avatar`: 사용자 프로필
-- `banner`, `hero`: 배너 이미지
-- `bg`: 배경 이미지
-- `product`, `thumbnail`: 상품/썸네일
 
 **Examples**:
 
 ```
 ✅ Good
-img_logo.jpeg                 # Logo image
-img_logo_primary.png          # Primary logo variant
-img_signin_banner.jpg         # Signin page banner
-img_profile_default.png       # Default profile image
-img_bg_hero.jpg               # Hero section background
-img_product_thumbnail.webp    # Product thumbnail
+img_logo.jpeg
+img_signin_banner.jpg
+img_profile_default.png
 
 ❌ Bad
-logo.jpeg                     # Missing prefix
-signin-image.jpg              # kebab-case (old convention)
-SigninBanner.jpg              # PascalCase
-img-logo.jpeg                 # Hyphen instead of underscore
-```
-
-**Conversion from Old**:
-
-```
-logo.jpeg          → img_logo.jpeg
-signin-image.jpg   → img_signin_banner.jpg
-banner.png         → img_banner.png (or img_banner_hero.png)
-```
-
-### Import 변수명: camelCase
-
-**Rule**: 파일명(snake_case) → import 변수명(camelCase)
-
-**Conversion**:
-
-```
-File Name                  → Import Variable
-ic_check_lg.svg           → icCheckLg
-ic_google_lg.svg          → icGoogleLg
-ic_arrow_right_sm.svg     → icArrowRightSm
-img_logo.jpeg             → imgLogo
-img_signin_banner.jpg     → imgSigninBanner
+logo.jpeg                  # img_ prefix 없음
+signin-image.jpg           # 하이픈 사용
 ```
 
 ---
 
-## 사용 방법 (직접 Import)
+## 사용 방법
 
-### Import
-
-```typescript
-// SVG 직접 import
-import icDeleteMd from "@/shared/assets/svg/ic_delete_md.svg";
-import icGoogleLg from "@/shared/assets/svg/ic_google_lg.svg";
-import icKakaoLg from "@/shared/assets/svg/ic_kakao_lg.svg";
-
-// 이미지 직접 import
-import imgLogo from "@/shared/assets/images/img_logo.jpeg";
-import imgSigninBanner from "@/shared/assets/images/img_signin_banner.jpg";
-```
-
-### 사용 예시
+### SVG — React 컴포넌트로 import
 
 ```tsx
-// 이미지 사용
+// icons
+import IcCheck from '@/shared/ui/icons/IcCheck';
+import IcDelete from '@/shared/ui/icons/IcDelete';
+import IcClose from '@/shared/ui/icons/IcClose';
+
+// logos
+import IcGoogle from '@/shared/ui/logos/IcGoogle';
+import IcKakao from '@/shared/ui/logos/IcKakao';
+
+// 사용 — React 컴포넌트, props로 크기/스타일 제어
+<IcCheck width={24} height={24} />
+<IcDelete className="text-gray-500" />
+<IcGoogle width={48} height={48} />
+```
+
+### Image — 직접 import
+
+```tsx
+import imgLogo from '@/shared/assets/images/img_logo.jpeg';
+import imgSigninBanner from '@/shared/assets/images/img_signin_banner.jpg';
+
 <img src={imgLogo} alt="Logo" />
 <img src={imgSigninBanner} alt="Signin" />
-
-// SVG 사용
-<img src={icGoogleLg} alt="Google" />
-<img src={icDeleteMd} alt="Delete" />
 ```
 
-**잘못된 사용** (절대 금지):
+**잘못된 사용** (금지):
 
-```typescript
-// ❌ barrel export 방식 (tree-shaking 불리)
-import { images, svg } from "@/shared/assets";
+```tsx
+// ❌ SVG를 img 태그로 사용 (SVGR 컴포넌트 사용 필수)
+import checkSvg from "@/shared/assets/icons/ic_check.svg";
+<img src={checkSvg} />;
 
-// ❌ 이전 경로 (FSD 이전)
-import { images, svg } from "@/assets";
+// ❌ barrel export
+import { IcCheck, IcDelete } from "@/shared/ui/icons";
 ```
 
 ---
 
-## 자동 수정 워크플로우
+## 새 SVG 추가 프로세스
 
-사용자가 잘못된 이름으로 asset을 추가하면 자동으로 수정합니다.
-
-### Step 1: 새 Asset 감지
+### 1. SVG 파일 배치
 
 ```bash
-# Git status에서 새로운 assets 찾기
-git status | grep 'src/shared/assets/'
+# UI 아이콘
+src/shared/assets/icons/ic_new_icon.svg
+
+# 브랜드 로고
+src/shared/assets/logos/ic_new_brand.svg
 ```
 
-### Step 2: 네이밍 분석
-
-각 파일명을 분석하여 컨벤션 준수 여부 확인:
-
-**SVG 검사**:
-
-- `ic_` prefix 있는가?
-- Size suffix 있는가? (`_sm`, `_md`, `_lg`, `_xl`, `_16`, etc.)
-- snake_case인가?
-
-**Image 검사**:
-
-- `img_` prefix 있는가?
-- Context가 명확한가?
-- snake_case인가?
-
-### Step 3: 수정 제안
-
-컨벤션 위반 시 수정 제안:
-
-```
-⚠️ Asset 네이밍 컨벤션 위반
-
-추가된 파일: src/shared/assets/svg/google.svg
-문제: 'ic_' prefix 없음, size 없음
-
-제안: src/shared/assets/svg/ic_google_lg.svg
-이유: SVG 아이콘은 'ic_{descriptor}_{size}' 형식, 로고이므로 lg
-
-자동 수정하시겠습니까? (Y/n)
-```
-
-### Step 4: 자동 수정
-
-승인 후:
-
-1. 파일명 변경
-2. 해당 asset을 사용하는 모든 파일 찾기
-3. Import 경로 업데이트 (직접 import 방식)
-4. 빌드 검증
+### 2. SVGR로 React 컴포넌트 생성
 
 ```bash
-# 1. 파일명 변경
-git mv src/shared/assets/svg/google.svg src/shared/assets/svg/ic_google_lg.svg
+pnpm run generate:icons   # 또는 generate:logos
+```
 
-# 2. Import 경로 찾기
-grep -r "google" src/ --include="*.tsx" --include="*.ts"
+### 3. 생성된 컴포넌트 사용
 
-# 3. 경로 수정 (자동)
-# import icGoogleLg from '@/shared/assets/svg/ic_google_lg.svg';
+```tsx
+import IcNewIcon from "@/shared/ui/icons/IcNewIcon";
 
-# 4. 빌드 검증
-npm run build
+<IcNewIcon width={24} height={24} />;
 ```
 
 ---
 
-## 새 파일 추가 프로세스
+## 새 Image 추가 프로세스
 
-### 1. 파일 추가 및 네이밍
-
-파일 타입에 따라 적절한 폴더에 올바른 이름으로 배치:
+### 1. 파일 배치 및 네이밍
 
 ```bash
-# SVG 파일
-src/shared/assets/svg/ic_new_icon_md.svg
-
-# 이미지 파일
 src/shared/assets/images/img_new_banner.png
 ```
 
-### 2. 사용
+### 2. 직접 import 후 사용
 
-직접 import 후 사용:
+```tsx
+import imgNewBanner from "@/shared/assets/images/img_new_banner.png";
 
-```typescript
-// SVG import
-import icNewIconMd from '@/shared/assets/svg/ic_new_icon_md.svg';
-
-// 이미지 import
-import imgNewBanner from '@/shared/assets/images/img_new_banner.png';
-
-// 사용
-<img src={imgNewBanner} alt="Banner" />
-<img src={icNewIconMd} alt="Icon" />
+<img src={imgNewBanner} alt="Banner" />;
 ```
 
 ---
 
-## 파일 이동/정리 가이드
+## 체크리스트
 
-### 기존 파일을 정리할 때
+새 asset을 추가할 때:
 
-**1. 파일 이동 (위치 수정)**:
-
-```bash
-# 잘못된 위치 (FSD 이전)
-src/assets/some-image.png
-
-# 올바른 위치로 이동
-git mv src/assets/some-image.png src/shared/assets/images/img_some_image.png
-```
-
-**2. 네이밍 수정 (컨벤션 적용)**:
-
-```bash
-# kebab-case → snake_case + prefix
-git mv src/shared/assets/svg/big-check.svg src/shared/assets/svg/ic_check_lg.svg
-git mv src/shared/assets/images/signin-image.jpg src/shared/assets/images/img_signin_banner.jpg
-```
-
-**3. Import 업데이트**:
-
-- 기존 파일에서 해당 asset을 사용하는 모든 곳 찾기
-- 직접 import 방식으로 변경
-
-**4. 빌드 검증**:
-
-```bash
-npm run build
-npx tsc --noEmit
-npm run lint
-```
-
----
-
-## SVG 크기 결정 가이드
-
-파일에서 크기를 자동으로 판단하기 어려운 경우:
-
-### Default Sizes
-
-- **로고 아이콘** (Google, Kakao, etc.): `lg` (32px)
-- **일반 UI 아이콘** (check, delete, info, etc.): `md` (24px)
-- **작은 인디케이터**: `sm` (16px)
-- **큰 일러스트레이션**: `xl` (48px)
-
-### viewBox 분석
-
-SVG 파일을 읽어 `viewBox` 또는 `width/height` 속성 확인:
-
-```xml
-<!-- ic_check_lg.svg -->
-<svg viewBox="0 0 32 32" ...>  <!-- 32x32 = lg -->
-
-<!-- ic_delete_md.svg -->
-<svg width="24" height="24" ...>  <!-- 24x24 = md -->
-```
-
-### 사용자 확인
-
-크기 판단이 어려운 경우 사용자에게 확인:
-
-```
-❓ SVG 크기 확인 필요
-
-파일: star.svg
-viewBox를 찾을 수 없습니다.
-
-이 아이콘의 사용 목적이 무엇인가요?
-1. 작은 UI 인디케이터 (16px) → sm
-2. 일반 UI 아이콘 (24px) → md
-3. 큰 아이콘/로고 (32px) → lg
-4. 일러스트레이션 (48px) → xl
-
-선택: [2]
-→ ic_star_md.svg로 변경
-```
-
----
-
-## 자동화 체크리스트
-
-새 파일을 추가하거나 assets을 정리할 때:
-
-- [ ] 파일이 `src/shared/assets/images/` 또는 `src/shared/assets/svg/`에 위치하는가?
-- [ ] SVG 파일명이 `ic_{descriptor}_{size}.svg` 형식인가?
-- [ ] Image 파일명이 `img_{context}_{descriptor}.ext` 형식인가?
-- [ ] 파일명이 snake_case인가? (하이픈 없음)
-- [ ] Import 변수명이 camelCase인가? (예: `imgLogo`, `icDeleteMd`)
-- [ ] 직접 import 방식을 사용하는가? (예: `import icDeleteMd from '@/shared/assets/svg/ic_delete_md.svg'`)
+- [ ] SVG는 `src/shared/assets/icons/` 또는 `src/shared/assets/logos/`에 위치하는가?
+- [ ] Image는 `src/shared/assets/images/`에 위치하는가?
+- [ ] SVG 파일명이 `ic_{descriptor}.svg` (snake_case) 형식인가?
+- [ ] Image 파일명이 `img_{context}_{descriptor}.{ext}` (snake_case) 형식인가?
+- [ ] SVG 추가 후 `ppnpm run generate:icons` 또는 `generate:logos`를 실행했는가?
+- [ ] 생성된 컴포넌트를 `@/shared/ui/icons/` 또는 `@/shared/ui/logos/`에서 import하는가?
 - [ ] Build와 lint가 통과하는가?
 
 ---
 
-## 통합: FSD & asset-manager
-
-### FSD 레이어
-
-Assets은 `shared` 레이어에서 관리:
-
-- 위치: `src/shared/assets/`
-- 역할: 전역 공통 리소스
-- 의존성: 다른 레이어 참조 불가
-
-### asset-manager 에이전트
-
-task-init 시 자동 활성화:
-
-- 네이밍 컨벤션 자동 검증
-- 잘못된 이름 자동 수정 제안
-- Import 경로 자동 업데이트
-
-자세한 내용: [.claude/agents/asset-manager.md](../agents/asset-manager.md)
-
----
-
-## 예외 사항
-
-없음. 모든 assets은 반드시 이 규칙을 따라야 합니다.
-
----
-
-**마지막 업데이트**: 2026-01-29
+**마지막 업데이트**: 2026-02-09

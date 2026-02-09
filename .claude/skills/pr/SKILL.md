@@ -1,8 +1,11 @@
+---
+name: pr
+description: Automatically create a Pull Request from the current branch, filling the PR template with issue context and changes.
+argument-hint: "[--draft]"
+disable-model-invocation: true
+---
+
 # PR Command
-
-## Description
-
-Automatically create a Pull Request from the current branch, filling the PR template with issue context and changes.
 
 ## Usage
 
@@ -45,30 +48,24 @@ Automatically create a Pull Request from the current branch, filling the PR temp
 
 ### Step 3: Generate PR Content
 
-Use the `pr-writer` skill with:
+Fill the PR template from `.github/PULL_REQUEST_TEMPLATE.md`:
 
 - Issue number, title, description
 - Changed files
 - Branch name
 - Commit messages
 
-Fill the PR template from `.github/PULL_REQUEST_TEMPLATE.md`:
-
-- 요약: Brief summary referencing issue
-- 변경 사항: List of key changes
-- 체크리스트: Pre-filled standard items
-
 ### Step 4: Generate PR Title
 
 - **PR title must be in Korean**
 - Format: `[#123] {Type}: {Korean title}`
 - Use branch type to map `{Type}`:
-  - `feat` → `Feature`
-  - `fix` → `Bug`
-  - `chore` → `Chore`
-  - `refactor` → `Refactor`
-  - `docs` → `Docs`
-  - `test` → `Test`
+  - `feat` -> `Feature`
+  - `fix` -> `Bug`
+  - `chore` -> `Chore`
+  - `refactor` -> `Refactor`
+  - `docs` -> `Docs`
+  - `test` -> `Test`
 - Use the issue title without the `[Type]` prefix for `{Korean title}`
 
 ### Step 5: Check if Branch is Pushed
@@ -112,11 +109,11 @@ Display:
 **Output:**
 
 ```
-✅ Pull Request 생성 완료: #45
-   https://github.com/Dawn-kim-official/business_plan_k/pull/45
+PR #45 created
+https://github.com/YAPP-Github/27th-Web-Team-3-FE/pull/45
 
-제목: [#123] Feature: 가격 페이지 요금제 비교 테이블 추가
-이슈 참조: Closes #123
+Title: [#123] Feature: pricing table
+Issue: Closes #123
 ```
 
 ## Error Handling

@@ -138,9 +138,9 @@ git diff --name-only dev...HEAD
 git log dev..HEAD --oneline
 
 # 품질 메트릭
-npm run build
-npx tsc --noEmit
-npm run lint
+pnpm run build
+pnpm tsc --noEmit
+pnpm run lint
 ```
 
 **3. Summary 구조**
@@ -287,4 +287,4 @@ grep -r "dark mode" docs/plans/
 
 ---
 
-**마지막 업데이트**: 2026-01-22
+**마지막 업데이트**: 2026-02-09

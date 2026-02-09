@@ -1,10 +1,7 @@
 ---
 name: task-done
 description: Finalize task completion workflow - appends implementation summary to plan document, validates quality gates, and cleans up sub-agents created during task execution
-license: MIT
-metadata:
-  author: business_plan_k
-  version: "1.0.0"
+disable-model-invocation: true
 ---
 
 # Task Done
@@ -45,9 +42,9 @@ Automatically gathers:
 - **Files Changed**: Uses `git diff --name-only` against base branch
 - **Commits Made**: Lists all commits in current branch
 - **Quality Metrics**:
-  - Build status (`npm run build`)
-  - Type check (`npx tsc --noEmit`)
-  - Lint status (`npm run lint`)
+  - Build status (`pnpm run build`)
+  - Type check (`pnpm tsc --noEmit`)
+  - Lint status (`pnpm run lint`)
   - Test results (if tests exist)
 - **Performance Impact**: Notes if bundle size or performance changed
 - **Deviations**: Documents any differences from original plan
@@ -122,9 +119,9 @@ Adds to plan document after `---` separator:
 Runs validation checks:
 
 ```bash
-npm run build        # Must succeed
-npx tsc --noEmit    # Must pass
-npm run lint        # Must pass
+pnpm run build        # Must succeed
+pnpm tsc --noEmit    # Must pass
+pnpm run lint        # Must pass
 ```
 
 If any fail, notifies user and does NOT mark task as done.
@@ -254,9 +251,9 @@ Would you like me to proceed with creating a PR?
 
 ### Must Pass Before Completion
 
-1. ✅ Build succeeds (`npm run build`)
-2. ✅ No TypeScript errors (`npx tsc --noEmit`)
-3. ✅ Lint passes (`npm run lint`)
+1. ✅ Build succeeds (`pnpm run build`)
+2. ✅ No TypeScript errors (`pnpm tsc --noEmit`)
+3. ✅ Lint passes (`pnpm run lint`)
 4. ✅ Plan document exists and is readable
 5. ✅ At least one file was modified
 
