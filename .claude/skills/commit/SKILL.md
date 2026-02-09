@@ -1,8 +1,10 @@
+---
+name: commit
+description: Automatically create Conventional Commits messages, split commits based on the actual files changed, and reference the current issue.
+disable-model-invocation: true
+---
+
 # Commit Command
-
-## Description
-
-Automatically create Conventional Commits messages, split commits based on the actual files changed, and reference the current issue.
 
 ## Usage
 
@@ -19,7 +21,7 @@ Automatically create Conventional Commits messages, split commits based on the a
 
 ### Step 0: Validate Build
 
-1. Run build script first: `npm run build`
+1. Run build script first: `pnpm run build`
 2. If build fails:
    - Stop the commit flow immediately
    - Analyze and report the build error cause
@@ -43,7 +45,7 @@ Automatically create Conventional Commits messages, split commits based on the a
 2. Get the full list of changed files:
    - Use `git diff --name-only --cached` and `git diff --name-only`
 3. Group files into commit batches based on their actual locations and intent:
-   - Prefer grouping by top-level area (e.g. `src/app`, `src/lib`, `.cursor`, `docs`, `scripts`)
+   - Prefer grouping by top-level area (e.g. `src/app`, `src/lib`, `.claude`, `docs`, `scripts`)
    - If a change clearly spans multiple areas but is a single intent, keep it in one batch
    - If a file set mixes unrelated intents, split into separate batches
 4. Determine scope and commit type per batch:
@@ -51,13 +53,6 @@ Automatically create Conventional Commits messages, split commits based on the a
    - Type from changes (override branch type if needed)
 
 ### Step 3: Generate Commit Messages
-
-Use the `commit-writer` skill with:
-
-- Issue number
-- Changed files (per batch)
-- Issue title/description
-- Commit type (from batch analysis)
 
 Generate message in format:
 
@@ -94,15 +89,12 @@ Display:
 ```
 
 **Current branch:** `feat/123-add-pricing-table`
-**Changed files:** `src/app/pricing/page.tsx`, `src/components/pricing/TierTable.tsx`, `.cursor/commands/pr.md`
+**Changed files:** `src/app/pricing/page.tsx`, `src/components/pricing/TierTable.tsx`, `.claude/skills/pr/SKILL.md`
 
 **Output:**
 
 ```
-✅ 커밋 생성 완료 (2개)
-
-커밋 해시: a1b2c3d
-커밋 메시지:
+Commit 1: a1b2c3d
 feat(pricing): add tier comparison table
 
 Add a comparison table component to the pricing page that displays
@@ -110,8 +102,7 @@ all available tiers side by side with their features.
 
 Closes #123
 
-커밋 해시: d4e5f6g
-커밋 메시지:
+Commit 2: d4e5f6g
 chore(github): update pr command rules
 
 Closes #123
@@ -119,7 +110,7 @@ Closes #123
 
 ## Error Handling
 
-- If `npm run build` fails, stop and analyze the build error
+- If `pnpm run build` fails, stop and analyze the build error
 - If not on a valid branch format, show error and suggest using `/issue-start` first
 - If no changes detected, ask user to make changes first
 - If issue fetch fails, still create commit but without issue reference

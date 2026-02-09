@@ -1,10 +1,8 @@
 ---
 name: task-init
 description: Initialize task planning workflow - analyzes GitHub issues, scans codebase, creates detailed plan documents in docs/plans, and sets up sub-agents for implementation with Vercel React best practices
-license: MIT
-metadata:
-  author: business_plan_k
-  version: "1.0.0"
+argument-hint: '["description"] [image]'
+disable-model-invocation: true
 ---
 
 # Task Init
