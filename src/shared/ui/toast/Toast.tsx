@@ -201,4 +201,7 @@ function ToastContainer() {
 // Exports
 // ============================================================================
 
-export { ToastContainer, useToast, toastVariants, type ToastData, type ToastVariant };
+// React 외부에서 토스트 호출 (MutationCache 글로벌 에러 핸들러 등)
+const toastStore = useToastStore;
+
+export { ToastContainer, useToast, toastStore, toastVariants, type ToastData, type ToastVariant };
