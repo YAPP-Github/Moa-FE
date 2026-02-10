@@ -1,4 +1,3 @@
-// Backend expects 'Google' | 'Kakao' (PascalCase)
 export type Provider = 'Google' | 'Kakao';
 
 const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';

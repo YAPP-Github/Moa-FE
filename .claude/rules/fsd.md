@@ -227,29 +227,40 @@ shared/
 
 > **Tree-shaking 최적화**를 위해 barrel export (index.ts) 대신 직접 import를 사용합니다.
 
-### Import 규칙
+### 경로 규칙
 
-**✅ Good (직접 Import)**:
+- **같은 슬라이스 내부**: 상대경로 사용 (`./`, `../`)
+- **다른 슬라이스/레이어 참조**: 절대경로 사용 (`@/`)
+
+### Import 예시
+
+**✅ Good — 같은 슬라이스 내부 (상대경로)**:
 
 ```typescript
-// Features - 세그먼트까지 직접 import
-import { LoginStep } from "@/features/auth/ui/LoginStep";
-import { NicknameStep } from "@/features/auth/ui/NicknameStep";
-import type { SigninStep } from "@/features/auth/model/types";
+// features/auth/api/auth.queries.ts → 같은 슬라이스의 api 세그먼트
+import { getProfile } from "./auth.api";
 
-// Widgets - 세그먼트까지 직접 import
-import { DashboardLayout } from "@/widgets/layout/ui/DashboardLayout";
-import { Header } from "@/widgets/header/ui/Header";
+// features/auth/api/auth.api.ts → 같은 슬라이스의 model 세그먼트
+import { profileResponseSchema } from "../model/schema";
+import type { SocialLoginRequest } from "../model/types";
 
-// Pages - 세그먼트까지 직접 import
+// features/auth/ui/routes/PrivateRoute.tsx → 같은 슬라이스의 api 세그먼트
+import { useAuth } from "../../api/auth.queries";
+```
+
+**✅ Good — 다른 슬라이스/레이어 참조 (절대경로)**:
+
+```typescript
+// pages/callback/ui/CallbackPage.tsx → features/auth 참조
+import { useSocialLoginMutation } from "@/features/auth/api/auth.mutations";
+import { getRedirectUri } from "@/features/auth/lib/oauth";
+
+// features/auth/api/auth.api.ts → shared 레이어 참조
+import { customInstance } from "@/shared/api/instance";
+
+// app/App.tsx → pages, features 참조
 import { MainPage } from "@/pages/main/ui/MainPage";
-import { SigninPage } from "@/pages/signin/ui/SigninPage";
-
-// Shared - 개별 파일까지 직접 import
-import { cn } from "@/shared/lib/cn";
-import { Button } from "@/shared/ui/button/Button";
-import icDeleteMd from "@/shared/assets/svg/ic_delete_md.svg";
-import imgLogo from "@/shared/assets/images/img_logo.jpeg";
+import { PrivateRoute } from "@/features/auth/ui/routes/PrivateRoute";
 ```
 
 **❌ Bad (barrel export)**:
@@ -259,6 +270,13 @@ import imgLogo from "@/shared/assets/images/img_logo.jpeg";
 import { LoginStep, NicknameStep } from "@/features/auth";
 import { images, svg } from "@/shared/assets";
 import { cn } from "@/shared/lib";
+```
+
+**❌ Bad (같은 슬라이스에 절대경로)**:
+
+```typescript
+// features/auth/api/auth.queries.ts
+import { getProfile } from "@/features/auth/api/auth.api"; // ❌ 같은 슬라이스인데 절대경로
 ```
 
 **❌ Bad (레이어 위반)**:
