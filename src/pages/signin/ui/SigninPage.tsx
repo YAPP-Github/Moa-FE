@@ -1,5 +1,5 @@
-import { LoginStep } from '@/features/auth/ui/steps/LoginStep';
+import { SigninForm } from '@/features/auth/ui/forms/SigninForm';
 
 export function SigninPage() {
-  return <LoginStep />;
+  return <SigninForm />;
 }

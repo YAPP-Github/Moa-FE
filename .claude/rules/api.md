@@ -152,17 +152,36 @@ export const queryClient = new QueryClient({
 
 ### Query Key 컨벤션
 
-단순 배열 패턴. 첫 번째 요소는 도메인, 이후 식별자:
+도메인별 `{domain}QueryKeys` 객체로 관리. 매직 스트링 금지:
 
 ```typescript
-['profile', 'me']                        // 프로필
-['retroRooms']                           // 팀 목록
-['retroRoomMembers', retroRoomId]        // 팀 멤버
-['retrospects', retroRoomId]             // 회고 목록
-['retrospect', retrospectId]             // 회고 상세
-['responses', retrospectId, category]    // 응답 (카테고리별)
-['comments', responseId]                 // 댓글
+// features/auth/api/auth.queries.ts
+export const authQueryKeys = {
+  profile: ['profile', 'me'] as const,
+};
+
+// features/team/api/team.queries.ts
+export const teamQueryKeys = {
+  rooms: ['retroRooms'] as const,
+  members: (roomId: number) => ['retroRoomMembers', roomId] as const,
+};
+
+// features/retrospective/api/retrospective.queries.ts
+export const retrospectiveQueryKeys = {
+  list: (roomId: number) => ['retrospects', roomId] as const,
+  detail: (retrospectId: number) => ['retrospect', retrospectId] as const,
+  responses: (retrospectId: number, category: string) =>
+    ['responses', retrospectId, category] as const,
+  comments: (responseId: number) => ['comments', responseId] as const,
+};
 ```
+
+**규칙**:
+
+- 각 도메인의 `{domain}.queries.ts` 파일 상단에 정의
+- 고정 키: `as const` 튜플
+- 동적 키: 함수로 정의하여 파라미터 타입 안전성 확보
+- 쿼리/뮤테이션에서 매직 스트링 대신 항상 `{domain}QueryKeys.xxx` 사용
 
 ### useQuery Hook 작성
 
@@ -173,7 +192,7 @@ import { listRetroRooms, getRetroRoomMembers } from './team.api';
 
 export function useRetroRoomsQuery() {
   return useQuery({
-    queryKey: ['retroRooms'],
+    queryKey: teamQueryKeys.rooms,
     queryFn: listRetroRooms,
     staleTime: 1000 * 60 * 5, // 5분
   });
@@ -181,7 +200,7 @@ export function useRetroRoomsQuery() {
 
 export function useRetroRoomMembersQuery(retroRoomId: number) {
   return useQuery({
-    queryKey: ['retroRoomMembers', retroRoomId],
+    queryKey: teamQueryKeys.members(retroRoomId),
     queryFn: () => getRetroRoomMembers(retroRoomId),
     staleTime: 1000 * 60 * 5,
     enabled: retroRoomId > 0, // ID가 유효할 때만 fetch
@@ -202,6 +221,7 @@ export function useRetroRoomMembersQuery(retroRoomId: number) {
 // features/team/api/team.mutations.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createRetroRoom } from './team.api';
+import { teamQueryKeys } from './team.queries';
 import type { RetroRoomCreateRequest } from '../model/types';
 
 export function useCreateRetroRoomMutation() {
@@ -210,7 +230,7 @@ export function useCreateRetroRoomMutation() {
   return useMutation({
     mutationFn: (request: RetroRoomCreateRequest) => createRetroRoom(request),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['retroRooms'] });
+      queryClient.invalidateQueries({ queryKey: teamQueryKeys.rooms });
     },
   });
 }
@@ -226,11 +246,11 @@ export function useCreateRetroRoomMutation() {
 
 ```typescript
 // 단일 쿼리 무효화
-queryClient.invalidateQueries({ queryKey: ['retrospect', retrospectId] });
+queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.detail(retrospectId) });
 
 // 목록 + 상세 모두 무효화 (상태 변경 시)
-queryClient.invalidateQueries({ queryKey: ['retrospect', retrospectId] });
-queryClient.invalidateQueries({ queryKey: ['retrospects'] }); // 목록도 갱신
+queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.detail(retrospectId) });
+queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.list(retroRoomId) });
 ```
 
 ### 네이밍 컨벤션
@@ -240,7 +260,8 @@ queryClient.invalidateQueries({ queryKey: ['retrospects'] }); // 목록도 갱�
 | Query hook | `use{Domain}Query` | `useRetroRoomsQuery` |
 | Mutation hook | `use{Action}{Domain}Mutation` | `useCreateRetroRoomMutation` |
 | API 함수 | `{action}{Domain}` | `listRetroRooms`, `createRetroRoom` |
-| Query key | `['{domain}', ...ids]` | `['retroRooms']`, `['retrospect', id]` |
+| Query key 객체 | `{domain}QueryKeys` | `teamQueryKeys`, `retrospectiveQueryKeys` |
+| Query key 사용 | `{domain}QueryKeys.{key}` | `teamQueryKeys.rooms`, `teamQueryKeys.members(id)` |
 
 ---
 

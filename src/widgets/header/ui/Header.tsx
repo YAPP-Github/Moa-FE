@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router';
+import { useLogoutMutation, useWithdrawMutation } from '@/features/auth/api/auth.mutations';
 import { useProfile } from '@/features/auth/api/auth.queries';
-import { useAuthStore } from '@/features/auth/model/store';
-import { getApi } from '@/shared/api/generated';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 import {
   DropdownMenuContent,
@@ -19,25 +18,19 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
   const navigate = useNavigate();
-  const { logoutWithServer } = useAuthStore();
   const { data: profileData } = useProfile();
-  const userName = profileData?.result?.nickname ?? '사용자';
+  const { mutateAsync: logout } = useLogoutMutation();
+  const { mutateAsync: withdraw } = useWithdrawMutation();
+  const userName = profileData?.result.nickname ?? '';
 
-  // 로그아웃 핸들러 (서버에 로그아웃 요청하여 쿠키 삭제)
   const handleLogout = async () => {
-    await logoutWithServer();
+    await logout();
     navigate('/signin');
   };
 
-  // 계정 탈퇴 핸들러
   const handleWithdraw = async () => {
-    try {
-      await getApi().withdraw();
-      await logoutWithServer();
-      navigate('/signin');
-    } catch (error) {
-      console.error('탈퇴 실패:', error);
-    }
+    await withdraw();
+    navigate('/signin');
   };
 
   return (
