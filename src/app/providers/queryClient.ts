@@ -3,6 +3,14 @@ import { ApiError } from '@/shared/api/error';
 import { toastStore } from '@/shared/ui/toast/Toast';
 
 export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+    mutations: {
+      retry: false,
+    },
+  },
   mutationCache: new MutationCache({
     onError: (error, _v, _c, mutation) => {
       if (mutation.meta?.skipGlobalError) return;
