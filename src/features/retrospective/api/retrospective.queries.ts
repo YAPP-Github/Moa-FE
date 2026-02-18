@@ -1,13 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
+import { listRetrospects } from './retrospective.api';
 import type { ResponseCategory } from '@/shared/api/generated/index';
 import { getApi } from '@/shared/api/generated/index';
 
+export const retrospectiveQueryKeys = {
+  list: (retroRoomId: number) => ['retrospects', retroRoomId] as const,
+  detail: (retrospectId: number) => ['retrospect', retrospectId] as const,
+  references: (retrospectId: number) => ['references', retrospectId] as const,
+  responses: (retrospectId: number, category: string) =>
+    ['responses', retrospectId, category] as const,
+  comments: (responseId: number) => ['comments', responseId] as const,
+};
+
 export function useRetrospects(retroRoomId: number) {
   return useQuery({
-    queryKey: ['retrospects', retroRoomId],
-    queryFn: () => getApi().listRetrospects(retroRoomId),
-    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
-    enabled: !!retroRoomId && retroRoomId > 0,
+    queryKey: retrospectiveQueryKeys.list(retroRoomId),
+    queryFn: () => listRetrospects(retroRoomId),
+    staleTime: 1000 * 60 * 5,
+    enabled: retroRoomId > 0,
   });
 }
 

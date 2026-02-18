@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { RetrospectEmptyState } from './RetrospectEmptyState';
 import { RetrospectRow } from './RetrospectRow';
 import type { RetrospectListItem } from '@/shared/api/generated/index';
+import IcNote from '@/shared/ui/logos/IcNote';
 
 interface RetrospectSectionProps {
   title: string;
@@ -22,7 +22,10 @@ export function RetrospectSection({ title, count, items, onItemClick }: Retrospe
       </div>
       {items.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
-          <RetrospectEmptyState />
+          <div className="flex flex-col items-center justify-center py-16">
+            <IcNote width={29} height={34} className="mb-[16px]" />
+            <p className="text-caption-3-medium text-grey-700">회고 내역이 없어요</p>
+          </div>
         </div>
       ) : (
         <div className="flex flex-col gap-0 mt-1">

@@ -13,13 +13,13 @@ import { FreeQuestionsStep } from '@/features/retrospective/ui/steps/FreeQuestio
 import { MethodStep } from '@/features/retrospective/ui/steps/MethodStep';
 import { ProjectNameStep } from '@/features/retrospective/ui/steps/ProjectNameStep';
 import { ReferenceStep } from '@/features/retrospective/ui/steps/ReferenceStep';
-import { useRetroRooms } from '@/features/team/api/team.queries';
 import { RetrospectMethod } from '@/shared/api/generated/index';
 import { MultiStepForm } from '@/shared/ui/multi-step-form/MultiStepForm';
 import { useToast } from '@/shared/ui/toast/Toast';
 
 interface CreateRetrospectFormProps {
   retroRoomId: number;
+  teamName: string;
   onSuccess?: () => void;
   onClose: () => void;
 }
@@ -33,6 +33,7 @@ interface CompletedData {
 
 export function CreateRetrospectForm({
   retroRoomId,
+  teamName,
   onSuccess,
   onClose,
 }: CreateRetrospectFormProps) {
@@ -40,10 +41,6 @@ export function CreateRetrospectForm({
   const [isFreeMethod, setIsFreeMethod] = useState(false);
   const { mutateAsync: createRetrospect } = useCreateRetrospect(retroRoomId);
   const { showToast } = useToast();
-  const { data: roomData } = useRetroRooms();
-
-  const currentRoom = roomData?.result?.find((r) => r.retroRoomId === retroRoomId);
-  const teamName = currentRoom?.retroRoomName ?? '팀';
 
   const handleMethodChange = (method: string) => {
     setIsFreeMethod(method === RetrospectMethod.FREE);

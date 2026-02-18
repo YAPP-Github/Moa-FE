@@ -5,6 +5,7 @@ interface CreateRetrospectDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   retroRoomId: number;
+  teamName: string;
   onSuccess?: () => void;
 }
 
@@ -12,6 +13,7 @@ export function CreateRetrospectDialog({
   open,
   onOpenChange,
   retroRoomId,
+  teamName,
   onSuccess,
 }: CreateRetrospectDialogProps) {
   return (
@@ -25,6 +27,7 @@ export function CreateRetrospectDialog({
         >
           <CreateRetrospectForm
             retroRoomId={retroRoomId}
+            teamName={teamName}
             onSuccess={onSuccess}
             onClose={() => onOpenChange(false)}
           />
