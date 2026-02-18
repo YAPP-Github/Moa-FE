@@ -7,9 +7,9 @@ const iconButtonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-[#3182F6] text-[#FFFFFF] hover:bg-[#0062BC]',
+        primary: 'bg-[#3182F6] text hover:bg-[#0062BC]',
         secondary: 'bg-[#E6F2FF] text-[#3182F6] hover:bg-[#C1D9FD]',
-        tertiary: 'bg-[#F3F4F5] text-[#333D4B] hover:bg-[#DEE0E4]',
+        tertiary: 'bg-[#F3F4F5] hover:bg-[#DEE0E4]',
         ghost: 'bg-transparent text-[#6B7583] hover:bg-[#F9FAFB]',
       },
       size: {
@@ -26,7 +26,7 @@ const iconButtonVariants = cva(
     },
     compoundVariants: [
       // Square shapes with appropriate border-radius per size
-      { shape: 'square', size: 'xs', class: 'rounded' },
+      { shape: 'square', size: 'xs', class: 'rounded-[4.8px]' },
       { shape: 'square', size: 'sm', class: 'rounded' },
       { shape: 'square', size: 'md', class: 'rounded-md' },
       { shape: 'square', size: 'lg', class: 'rounded-md' },

@@ -6,7 +6,7 @@ interface OnboardingHeaderProps {
 
 export function OnboardingHeader({ className }: OnboardingHeaderProps) {
   return (
-    <header className={`h-[54px] bg-transparent flex items-center px-9 ${className ?? ''}`}>
+    <header className={`h-[54px] bg-transparent flex items-center px-[36px] ${className ?? ''}`}>
       <IcMoa />
     </header>
   );

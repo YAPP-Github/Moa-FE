@@ -11,12 +11,9 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu/DropdownMenu';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
+import IcMoa from '@/shared/ui/logos/IcMoa';
 
-interface MainHeaderProps {
-  className?: string;
-}
-
-export function MainHeader({ className }: MainHeaderProps) {
+export function MainHeader() {
   const navigate = useNavigate();
   const { data: profileData } = useProfile();
   const { mutateAsync: logout } = useLogoutMutation();
@@ -34,13 +31,8 @@ export function MainHeader({ className }: MainHeaderProps) {
   };
 
   return (
-    <header
-      className={`h-[54px] bg-[#FFFFFF] border-b border-[#F3F4F5] flex items-center justify-between px-4 ${
-        className ?? ''
-      }`}
-    >
-      {/* TODO: 실제 로고로 교체 */}
-      <div className="w-8 h-8 rounded bg-gray-200" />
+    <header className="h-[54px] bg-[#FFFFFF] border-b border-[#F3F4F5] flex items-center justify-between px-[36px]">
+      <IcMoa />
 
       <DropdownMenuRoot>
         <DropdownMenuTrigger>
