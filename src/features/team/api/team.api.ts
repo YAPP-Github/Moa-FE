@@ -1,5 +1,6 @@
 import {
   deleteRetroRoomResponseSchema,
+  inviteCodeResponseSchema,
   joinRetroRoomResponseSchema,
   retroRoomCreateResponseSchema,
   retroRoomListResponseSchema,
@@ -65,4 +66,12 @@ export async function deleteRetroRoom(retroRoomId: number) {
     method: 'DELETE',
   });
   return deleteRetroRoomResponseSchema.parse(data);
+}
+
+export async function getInviteCode(retroRoomId: number) {
+  const data = await customInstance({
+    url: `/api/v1/retro-rooms/${retroRoomId}/invite-code`,
+    method: 'GET',
+  });
+  return inviteCodeResponseSchema.parse(data);
 }
