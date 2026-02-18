@@ -1,11 +1,18 @@
 import { useFormContext } from 'react-hook-form';
 import type { SigninFormData } from '@/features/auth/model/schema';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/button/Button';
 import { Field, FieldLabel } from '@/shared/ui/field/Field';
 import { Input } from '@/shared/ui/input/Input';
 
 export function TeamActionStep() {
-  const { register, watch, setValue } = useFormContext<SigninFormData>();
+  const {
+    register,
+    watch,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = useFormContext<SigninFormData>();
 
   const teamOption = watch('teamOption');
   const teamName = watch('teamName');
@@ -13,49 +20,80 @@ export function TeamActionStep() {
 
   if (teamOption === 'create') {
     return (
-      <div className="w-[368px] flex flex-col">
-        <h1 className="text-2xl font-bold text-center mb-16">팀 이름을 입력해주세요</h1>
+      <div className="w-[388px] h-[528px] flex flex-col">
+        <div className="flex flex-col items-center mb-[70px]">
+          <h1 className="text-title-1 text-center text-[#191F28]">
+            생성할 팀 이름을
+            <br />
+            입력해 주세요
+          </h1>
+        </div>
 
-        <Field className="mb-28">
+        <Field>
           <FieldLabel htmlFor="teamName">팀 이름</FieldLabel>
-          <Input
-            id="teamName"
-            type="text"
-            placeholder="팀 이름"
-            maxLength={10}
-            showCount
-            {...register('teamName')}
-            value={teamName ?? ''}
-          />
+          <div className="flex flex-col gap-[2px]">
+            <Input
+              id="teamName"
+              type="text"
+              placeholder="팀 이름을 입력해주세요"
+              maxLength={10}
+              {...register('teamName')}
+              value={teamName ?? ''}
+            />
+            <div className="flex">
+              <span className="ml-auto text-caption-3-medium text-[#C9C9C9]">
+                <span className={cn((teamName?.length ?? 0) > 0 && 'text-[#333D4B]')}>
+                  {teamName?.length ?? 0}
+                </span>
+                /10
+              </span>
+            </div>
+          </div>
         </Field>
 
-        <Button type="submit" disabled={!teamName?.trim()} size="xl" fullWidth>
-          시작하기
-        </Button>
+        <div className="mt-auto flex justify-end">
+          <Button type="submit" disabled={!teamName?.trim()} size="md">
+            다음
+          </Button>
+        </div>
       </div>
     );
   }
 
   if (teamOption === 'join') {
     return (
-      <div className="w-[368px] flex flex-col">
-        <h1 className="text-2xl font-bold text-center mb-16">초대 링크를 입력해주세요</h1>
+      <div className="w-[388px] h-[528px] flex flex-col">
+        <div className="flex flex-col items-center mb-[70px]">
+          <h1 className="text-title-1 text-center text-[#191F28]">
+            공유받은 링크를
+            <br />
+            입력해 주세요
+          </h1>
+        </div>
 
-        <Field className="mb-28">
-          <FieldLabel htmlFor="inviteLink">초대링크</FieldLabel>
+        <Field>
+          <FieldLabel htmlFor="inviteLink">링크</FieldLabel>
           <Input
             id="inviteLink"
             type="text"
-            placeholder="초대 링크"
-            {...register('inviteLink')}
+            placeholder="공유 링크를 입력해주세요"
+            {...register('inviteLink', {
+              onChange: () => trigger('inviteLink'),
+            })}
+            value={inviteLink ?? ''}
             clearable
-            onClear={() => setValue('inviteLink', '')}
+            onClear={() => {
+              setValue('inviteLink', '');
+              trigger('inviteLink');
+            }}
           />
         </Field>
 
-        <Button type="submit" disabled={!inviteLink?.trim()} size="xl" fullWidth>
-          시작하기
-        </Button>
+        <div className="mt-auto flex justify-end">
+          <Button type="submit" disabled={!inviteLink?.trim() || !!errors.inviteLink} size="md">
+            다음
+          </Button>
+        </div>
       </div>
     );
   }

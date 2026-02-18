@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Header } from '@/widgets/header/ui/Header';
+import { MainHeader } from '@/widgets/header/ui/MainHeader';
 
 interface BaseLayoutProps {
   children: ReactNode;
@@ -8,7 +8,7 @@ interface BaseLayoutProps {
 export function BaseLayout({ children }: BaseLayoutProps) {
   return (
     <div className="min-h-screen bg-[#FFFFFF]">
-      <Header />
+      <MainHeader />
       <div className="h-[calc(100vh-54px)]">{children}</div>
     </div>
   );
