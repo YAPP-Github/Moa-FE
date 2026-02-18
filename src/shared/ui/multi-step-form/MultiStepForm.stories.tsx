@@ -155,21 +155,21 @@ function PlanSelectionStep() {
             >
               <RadioCardItem
                 value="free"
-                className="flex flex-col gap-1 p-4 rounded-lg border-2 data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-50 data-[state=unchecked]:border-gray-200"
+                className="flex flex-col gap-1 p-4 rounded-lg border-2 data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-50 data-[state=unchecked]:border-grey-200"
               >
                 <span className="font-medium">무료</span>
                 <span className="text-sm text-grey-600">기본 기능 사용 가능</span>
               </RadioCardItem>
               <RadioCardItem
                 value="pro"
-                className="flex flex-col gap-1 p-4 rounded-lg border-2 data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-50 data-[state=unchecked]:border-gray-200"
+                className="flex flex-col gap-1 p-4 rounded-lg border-2 data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-50 data-[state=unchecked]:border-grey-200"
               >
                 <span className="font-medium">프로</span>
                 <span className="text-sm text-grey-600">모든 기능 사용 가능</span>
               </RadioCardItem>
               <RadioCardItem
                 value="enterprise"
-                className="flex flex-col gap-1 p-4 rounded-lg border-2 data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-50 data-[state=unchecked]:border-gray-200"
+                className="flex flex-col gap-1 p-4 rounded-lg border-2 data-[state=checked]:border-blue-500 data-[state=checked]:bg-blue-50 data-[state=unchecked]:border-grey-200"
               >
                 <span className="font-medium">엔터프라이즈</span>
                 <span className="text-sm text-grey-600">팀 기능 + 우선 지원</span>
@@ -284,7 +284,7 @@ function StepIndicator({ stepIndex, isActive }: { stepIndex: number; isActive: b
     <div
       key={STEP_KEYS[stepIndex]}
       className={`w-2 h-2 rounded-full transition-colors ${
-        isActive ? 'bg-blue-500' : 'bg-gray-300'
+        isActive ? 'bg-blue-500' : 'bg-grey-300'
       }`}
     />
   );

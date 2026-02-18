@@ -12,11 +12,11 @@
  *   </DropdownMenuTrigger>
  *   <DropdownMenuPortal>
  *     <DropdownMenuContent className="bg-white rounded-lg shadow-lg border p-1">
- *       <DropdownMenuItem className="px-3 py-2 hover:bg-gray-100 rounded cursor-pointer">
+ *       <DropdownMenuItem className="px-3 py-2 hover:bg-grey-100 rounded cursor-pointer">
  *         항목 1
  *       </DropdownMenuItem>
- *       <DropdownMenuSeparator className="h-px bg-gray-200 my-1" />
- *       <DropdownMenuItem className="px-3 py-2 hover:bg-gray-100 rounded cursor-pointer">
+ *       <DropdownMenuSeparator className="h-px bg-grey-200 my-1" />
+ *       <DropdownMenuItem className="px-3 py-2 hover:bg-grey-100 rounded cursor-pointer">
  *         항목 2
  *       </DropdownMenuItem>
  *     </DropdownMenuContent>

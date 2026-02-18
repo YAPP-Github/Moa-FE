@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { RetrospectMethod } from '@/shared/api/generated/index';
+import { baseResponseSchema } from '@/shared/api/schema';
 
 // 에러 메시지 상수
 export const ERROR_MESSAGES = {
@@ -51,3 +52,18 @@ export const createRetrospectSchema = z
   );
 
 export type CreateRetrospectFormData = z.infer<typeof createRetrospectSchema>;
+
+// --- API 응답 검증 ---
+
+const retrospectListItemSchema = z.object({
+  retrospectId: z.number(),
+  projectName: z.string(),
+  retrospectMethod: z.string(),
+  retrospectDate: z.string(),
+  retrospectTime: z.string(),
+  participantCount: z.number(),
+});
+
+export const retrospectListResponseSchema = baseResponseSchema(z.array(retrospectListItemSchema));
+
+export type RetrospectListItem = z.infer<typeof retrospectListItemSchema>;

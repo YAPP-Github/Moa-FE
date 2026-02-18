@@ -1,29 +1,31 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router';
-import { useSignupMutation } from '@/features/auth/api/auth.mutations';
-import { type SigninFormData, signinSchema } from '@/features/auth/model/schema';
-import { NicknameStep } from '@/features/auth/ui/steps/NicknameStep';
-import { TeamActionStep } from '@/features/auth/ui/steps/TeamActionStep';
-import { TeamStep } from '@/features/auth/ui/steps/TeamStep';
-import { useCreateRetroRoom, useJoinRetroRoom } from '@/features/team/api/team.mutations';
+import { useSignupMutation } from '../../api/auth.mutations';
+import { type SigninFormData, signinSchema } from '../../model/schema';
+import { NicknameStep } from '../steps/NicknameStep';
+import { TeamActionStep } from '../steps/TeamActionStep';
+import { TeamStep } from '../steps/TeamStep';
 import { MultiStepForm } from '@/shared/ui/multi-step-form/MultiStepForm';
 
-export function OnboardingForm() {
+interface OnboardingFormProps {
+  onCreateTeam: (title: string) => Promise<unknown>;
+  onJoinTeam: (inviteUrl: string) => Promise<unknown>;
+}
+
+export function OnboardingForm({ onCreateTeam, onJoinTeam }: OnboardingFormProps) {
   const navigate = useNavigate();
   const { mutateAsync: signup } = useSignupMutation();
-  const { mutateAsync: createRetroRoom } = useCreateRetroRoom();
-  const { mutateAsync: joinRetroRoom } = useJoinRetroRoom();
 
   const handleSubmit = async (data: SigninFormData) => {
     await signup({ nickname: data.nickname });
 
     try {
       if (data.teamOption === 'create' && data.teamName) {
-        await createRetroRoom({ title: data.teamName });
+        await onCreateTeam(data.teamName);
       }
 
       if (data.teamOption === 'join' && data.inviteLink) {
-        await joinRetroRoom({ inviteUrl: data.inviteLink });
+        await onJoinTeam(data.inviteLink);
       }
     } catch {
       // 팀 생성/참여 실패 시에도 메인으로 이동 (토스트는 글로벌에서 처리)

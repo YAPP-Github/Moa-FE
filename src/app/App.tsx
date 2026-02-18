@@ -10,7 +10,6 @@ import { SigninPage } from '@/pages/signin/ui/SigninPage';
 import { TeamDashboardPage } from '@/pages/team-dashboard/ui/TeamDashboardPage';
 import { ToastContainer } from '@/shared/ui/toast/Toast';
 import { DashboardLayout } from '@/widgets/layout/ui/DashboardLayout';
-import { PlainLayout } from '@/widgets/layout/ui/PlainLayout';
 
 function App() {
   return (
@@ -35,9 +34,9 @@ function App() {
             <Route
               path="/"
               element={
-                <PlainLayout>
+                <DashboardLayout>
                   <MainPage />
-                </PlainLayout>
+                </DashboardLayout>
               }
             />
             <Route

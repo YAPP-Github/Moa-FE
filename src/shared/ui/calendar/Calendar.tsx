@@ -166,7 +166,7 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       <div ref={ref} className="w-full">
         {/* Header: 월/년 + 네비게이션 */}
         <div className="flex items-center justify-between">
-          <span className="text-sub-title-0 text-gray-1000">
+          <span className="text-sub-title-0 text-grey-1000">
             {format(currentMonth, 'yyyy년 M월', { locale: ko })}
           </span>
           <div className="flex items-center gap-1">

@@ -93,23 +93,23 @@ export const AllSizes: Story = {
     <div className="flex items-end gap-4">
       <div className="flex flex-col items-center gap-1">
         <Avatar size="xs" src={sampleImageUrl} alt="XS" />
-        <span className="text-xs text-gray-500">xs</span>
+        <span className="text-xs text-grey-500">xs</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="sm" src={sampleImageUrl} alt="SM" />
-        <span className="text-xs text-gray-500">sm</span>
+        <span className="text-xs text-grey-500">sm</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="md" src={sampleImageUrl} alt="MD" />
-        <span className="text-xs text-gray-500">md</span>
+        <span className="text-xs text-grey-500">md</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="lg" src={sampleImageUrl} alt="LG" />
-        <span className="text-xs text-gray-500">lg</span>
+        <span className="text-xs text-grey-500">lg</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="xl" src={sampleImageUrl} alt="XL" />
-        <span className="text-xs text-gray-500">xl</span>
+        <span className="text-xs text-grey-500">xl</span>
       </div>
     </div>
   ),
@@ -121,23 +121,23 @@ export const AllSizesWithInitials: Story = {
     <div className="flex items-end gap-4">
       <div className="flex flex-col items-center gap-1">
         <Avatar size="xs" alt="John Doe" />
-        <span className="text-xs text-gray-500">xs</span>
+        <span className="text-xs text-grey-500">xs</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="sm" alt="John Doe" />
-        <span className="text-xs text-gray-500">sm</span>
+        <span className="text-xs text-grey-500">sm</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="md" alt="John Doe" />
-        <span className="text-xs text-gray-500">md</span>
+        <span className="text-xs text-grey-500">md</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="lg" alt="John Doe" />
-        <span className="text-xs text-gray-500">lg</span>
+        <span className="text-xs text-grey-500">lg</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="xl" alt="John Doe" />
-        <span className="text-xs text-gray-500">xl</span>
+        <span className="text-xs text-grey-500">xl</span>
       </div>
     </div>
   ),
@@ -149,23 +149,23 @@ export const FallbackVariants: Story = {
     <div className="flex items-center gap-4">
       <div className="flex flex-col items-center gap-1">
         <Avatar size="lg" src={sampleImageUrl} alt="이미지" />
-        <span className="text-xs text-gray-500">이미지</span>
+        <span className="text-xs text-grey-500">이미지</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="lg" alt="John Doe" />
-        <span className="text-xs text-gray-500">영문 이니셜</span>
+        <span className="text-xs text-grey-500">영문 이니셜</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="lg" alt="홍길동" />
-        <span className="text-xs text-gray-500">한글 이니셜</span>
+        <span className="text-xs text-grey-500">한글 이니셜</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="lg" fallback="🚀" />
-        <span className="text-xs text-gray-500">이모지</span>
+        <span className="text-xs text-grey-500">이모지</span>
       </div>
       <div className="flex flex-col items-center gap-1">
         <Avatar size="lg" />
-        <span className="text-xs text-gray-500">빈 배경</span>
+        <span className="text-xs text-grey-500">빈 배경</span>
       </div>
     </div>
   ),

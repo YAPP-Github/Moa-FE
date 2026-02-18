@@ -14,7 +14,7 @@
  *     <DialogContent className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-6 sm:max-w-[400px]">
  *       <DialogHeader>
  *         <DialogTitle className="text-lg font-semibold">제목</DialogTitle>
- *         <DialogDescription className="text-sm text-gray-500">설명</DialogDescription>
+ *         <DialogDescription className="text-sm text-grey-500">설명</DialogDescription>
  *       </DialogHeader>
  *       <div>내용</div>
  *       <DialogFooter className="flex justify-end gap-2">

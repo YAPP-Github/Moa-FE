@@ -80,7 +80,7 @@ export const Controlled: Story = {
         <button
           type="button"
           onClick={() => setChecked(!checked)}
-          className="px-4 py-2 text-sm bg-gray-100 rounded hover:bg-gray-200"
+          className="px-4 py-2 text-sm bg-grey-100 rounded hover:bg-grey-200"
         >
           외부에서 토글
         </button>

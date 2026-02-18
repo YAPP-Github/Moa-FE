@@ -11,7 +11,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <BaseLayout>
       <div className="flex h-full">
         <DashboardSidebar />
-        <main className="flex-1 overflow-auto">{children}</main>
+        <main className="flex-1 h-full overflow-auto">{children}</main>
       </div>
     </BaseLayout>
   );

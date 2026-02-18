@@ -59,6 +59,25 @@ const joinRetroRoomResultSchema = z.object({
 
 export const joinRetroRoomResponseSchema = baseResponseSchema(joinRetroRoomResultSchema);
 
-export const updateRetroRoomNameResponseSchema = baseResponseSchema(z.null());
+const updateRetroRoomNameResultSchema = z.object({
+  retroRoomId: z.number(),
+  retroRoomName: z.string(),
+  updatedAt: z.string(),
+});
+
+export const updateRetroRoomNameResponseSchema = baseResponseSchema(
+  updateRetroRoomNameResultSchema
+);
 
 export const deleteRetroRoomResponseSchema = baseResponseSchema(z.null());
+
+const inviteCodeResultSchema = z.object({
+  expiresAt: z.string(),
+  inviteCode: z.string(),
+  isExpired: z.boolean(),
+  retroRoomId: z.number(),
+});
+
+export type InviteCodeResult = z.infer<typeof inviteCodeResultSchema>;
+
+export const inviteCodeResponseSchema = baseResponseSchema(inviteCodeResultSchema);
