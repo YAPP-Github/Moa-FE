@@ -20,7 +20,7 @@ export function SidebarListHeader({ title }: SidebarListHeaderProps) {
         aria-label="팀 만들기"
         onClick={() => setIsDialogOpen(true)}
       >
-        <IcPlus className="w-[10px] h-[10px] text-gray-700" />
+        <IcPlus className="w-[10px] h-[10px] text-grey-700" />
       </IconButton>
       <CreateTeamDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </div>

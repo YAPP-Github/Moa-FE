@@ -29,7 +29,7 @@ export function MainPage() {
     return (
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
-          <p className="text-body-1 text-gray-600 mb-4">팀 목록을 불러오는데 실패했습니다.</p>
+          <p className="text-body-1 text-grey-600 mb-4">팀 목록을 불러오는데 실패했습니다.</p>
           <button
             type="button"
             onClick={() => refetch()}

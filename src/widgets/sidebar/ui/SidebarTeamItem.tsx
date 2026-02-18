@@ -12,7 +12,7 @@ export function SidebarTeamItem({ team, isActive }: SidebarTeamItemProps) {
     <li
       className={cn(
         'flex items-center pl-[14px] pr-4 h-10 rounded-[8px] transition-colors',
-        isActive ? 'bg-gray-100' : 'hover:bg-gray-100'
+        isActive ? 'bg-grey-100' : 'hover:bg-grey-100'
       )}
     >
       <Link
