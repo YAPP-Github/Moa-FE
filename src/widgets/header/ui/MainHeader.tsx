@@ -12,11 +12,11 @@ import {
 } from '@/shared/ui/dropdown-menu/DropdownMenu';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
 
-interface HeaderProps {
+interface MainHeaderProps {
   className?: string;
 }
 
-export function Header({ className }: HeaderProps) {
+export function MainHeader({ className }: MainHeaderProps) {
   const navigate = useNavigate();
   const { data: profileData } = useProfile();
   const { mutateAsync: logout } = useLogoutMutation();

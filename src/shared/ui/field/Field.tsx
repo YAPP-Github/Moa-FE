@@ -7,7 +7,7 @@ interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Field = forwardRef<HTMLDivElement, FieldProps>(({ className, children, ...props }, ref) => {
   return (
-    <div ref={ref} className={cn('flex flex-col gap-[10px]', className)} {...props}>
+    <div ref={ref} className={cn('group flex flex-col gap-[8px]', className)} {...props}>
       {children}
     </div>
   );
@@ -25,7 +25,10 @@ const FieldLabel = forwardRef<HTMLLabelElement, FieldLabelProps>(
       // biome-ignore lint/a11y/noLabelWithoutControl: Compound Component pattern - htmlFor is passed via props
       <label
         ref={ref}
-        className={cn('text-sm font-medium leading-none text-[#6B7684]', className)}
+        className={cn(
+          'text-sm font-medium leading-none text-[#333D4B] group-focus-within:text-[#3182F6]',
+          className
+        )}
         {...props}
       >
         {children}

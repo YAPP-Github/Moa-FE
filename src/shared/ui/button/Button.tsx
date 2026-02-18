@@ -7,7 +7,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-[#3182F6] text-[#FFFFFF] hover:bg-[#0062BC]',
+        primary: 'bg-[#3182F6] text-[#FFFFFF] hover:bg-[#2373EB] active:bg-[#0062BC]',
         secondary: 'bg-[#E6F2FF] text-[#3182F6] hover:bg-[#C1D9FD]',
         tertiary: 'bg-[#F3F4F5] text-[#333D4B] hover:bg-[#DEE0E4]',
         ghost: 'bg-transparent text-[#6B7583] hover:bg-[#F9FAFB]',
@@ -15,7 +15,7 @@ const buttonVariants = cva(
       size: {
         xs: 'h-6 px-2 text-xs rounded',
         sm: 'h-7 px-2.5 text-xs rounded',
-        md: 'h-8 px-3 text-sm rounded-md',
+        md: 'h-8 px-[16.5px] text-sm rounded-md',
         lg: 'h-9 px-4 text-sm rounded-md',
         xl: 'h-12 px-6 text-base rounded-lg',
       },

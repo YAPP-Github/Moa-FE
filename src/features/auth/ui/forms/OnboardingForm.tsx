@@ -17,12 +17,16 @@ export function OnboardingForm() {
   const handleSubmit = async (data: SigninFormData) => {
     await signup({ nickname: data.nickname });
 
-    if (data.teamOption === 'create' && data.teamName) {
-      await createRetroRoom({ title: data.teamName });
-    }
+    try {
+      if (data.teamOption === 'create' && data.teamName) {
+        await createRetroRoom({ title: data.teamName });
+      }
 
-    if (data.teamOption === 'join' && data.inviteLink) {
-      await joinRetroRoom({ inviteUrl: data.inviteLink });
+      if (data.teamOption === 'join' && data.inviteLink) {
+        await joinRetroRoom({ inviteUrl: data.inviteLink });
+      }
+    } catch {
+      // 팀 생성/참여 실패 시에도 메인으로 이동 (토스트는 글로벌에서 처리)
     }
 
     navigate('/');

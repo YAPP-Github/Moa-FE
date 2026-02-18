@@ -1,11 +1,11 @@
-import { useEffect, useEffectEvent } from 'react';
+import { useEffect, useEffectEvent, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { useSocialLoginMutation } from '@/features/auth/api/auth.mutations';
 import { getRedirectUri, parseOAuthCallback } from '@/features/auth/lib/oauth';
-import { GlobalLoading } from '@/shared/ui/global-loading/GlobalLoading';
 
 export function CallbackPage() {
   const navigate = useNavigate();
+  const hasProcessed = useRef(false);
   const { mutateAsync: socialLogin } = useSocialLoginMutation();
 
   const onProcessOAuth = useEffectEvent(async () => {
@@ -35,8 +35,10 @@ export function CallbackPage() {
   });
 
   useEffect(() => {
+    if (hasProcessed.current) return;
+    hasProcessed.current = true;
     onProcessOAuth();
   }, []);
 
-  return <GlobalLoading />;
+  return null;
 }

@@ -21,12 +21,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       value,
       showCount,
       maxLength,
+      onChange,
       ...props
     },
     ref
   ) => {
     const hasValue = value !== undefined && value !== '';
     const currentLength = String(value ?? '').length;
+
+    // 한글 IME 조합 중 maxLength를 초과하는 문제 방지
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (maxLength && e.target.value.length > maxLength) {
+        e.target.value = e.target.value.slice(0, maxLength);
+      }
+      onChange?.(e);
+    };
 
     return (
       <div className="relative">
@@ -37,16 +46,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           maxLength={maxLength}
           autoComplete="off"
           className={cn(
-            'h-12 w-full rounded-md border-[1.5px] px-5 transition-colors text-caption-2 placeholder:text-caption-2',
-            'focus:outline-none focus-visible:ring-[3px]',
+            'h-[46px] w-full rounded-md border px-[16px] transition-colors text-caption-2 placeholder:text-caption-2 placeholder:text-[#BEBFC6]',
+            'focus:outline-none',
             error
-              ? 'border-red-300 focus-visible:border-red-300 focus-visible:ring-red-300/30'
-              : 'border-[#EBEBEB] focus-visible:border-[#3182F6] focus-visible:ring-[#3182F6]/30',
+              ? 'border-red-300 focus-visible:border-red-300'
+              : 'border-[#EBEBEB] focus-visible:border-[#3182F6]',
             disabled && 'cursor-not-allowed bg-grey-100 opacity-50',
             clearable && hasValue && 'pr-12',
             className
           )}
           aria-invalid={error ? 'true' : undefined}
+          onChange={handleChange}
           {...props}
         />
         {clearable && hasValue && !disabled && (
