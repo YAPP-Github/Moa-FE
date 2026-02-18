@@ -24,7 +24,7 @@ export const AllLogos: Story = {
       {Object.entries(logos).map(([name, Logo]) => (
         <div key={name} className="flex flex-col items-center gap-2">
           <Logo className="h-8 w-8" />
-          <span className="text-xs text-gray-500">{name}</span>
+          <span className="text-xs text-grey-500">{name}</span>
         </div>
       ))}
     </div>
@@ -36,7 +36,7 @@ export const Sizes: Story = {
     <div className="flex flex-col gap-6">
       {[16, 24, 32, 48].map((size) => (
         <div key={size} className="flex items-center gap-4">
-          <span className="w-12 text-sm text-gray-500">{size}px</span>
+          <span className="w-12 text-sm text-grey-500">{size}px</span>
           <div className="flex gap-4">
             {Object.entries(logos).map(([name, Logo]) => (
               <Logo key={name} style={{ width: size, height: size }} />
@@ -54,12 +54,12 @@ export const IndividualLogos: Story = {
       <div className="flex flex-col items-center gap-3 rounded-lg border p-6">
         <IcGoogle className="h-12 w-12" />
         <span className="text-sm font-medium">IcGoogle</span>
-        <span className="text-xs text-gray-400">Google 로그인</span>
+        <span className="text-xs text-grey-400">Google 로그인</span>
       </div>
       <div className="flex flex-col items-center gap-3 rounded-lg border p-6">
         <IcKakao className="h-12 w-12" />
         <span className="text-sm font-medium">IcKakao</span>
-        <span className="text-xs text-gray-400">Kakao 로그인</span>
+        <span className="text-xs text-grey-400">Kakao 로그인</span>
       </div>
     </div>
   ),
@@ -70,7 +70,7 @@ export const InButtonContext: Story = {
     <div className="flex flex-col gap-4">
       <button
         type="button"
-        className="flex h-12 w-80 items-center justify-center gap-2 rounded-md border bg-white font-medium text-gray-700 transition-colors hover:bg-gray-50"
+        className="flex h-12 w-80 items-center justify-center gap-2 rounded-md border bg-white font-medium text-grey-700 transition-colors hover:bg-grey-50"
       >
         <IcGoogle className="h-5 w-5" />
         Google로 계속하기

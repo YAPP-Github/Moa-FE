@@ -9,8 +9,8 @@ const iconButtonVariants = cva(
       variant: {
         primary: 'bg-[#3182F6] text hover:bg-[#0062BC]',
         secondary: 'bg-[#E6F2FF] text-[#3182F6] hover:bg-[#C1D9FD]',
-        tertiary: 'bg-[#F3F4F5] hover:bg-[#DEE0E4]',
-        ghost: 'bg-transparent text-[#6B7583] hover:bg-[#F9FAFB]',
+        tertiary: 'bg-[#E9EBF1] hover:bg-[#DEE0E4]',
+        ghost: 'bg-transparent text-[#333D4B] hover:bg-[#F3F4F5]',
       },
       size: {
         xs: 'size-6', // 24px

@@ -9,7 +9,7 @@
  * <RadioCardGroup value={value} onValueChange={setValue} className="flex flex-col gap-3">
  *   <RadioCardItem
  *     value="option1"
- *     className="rounded-lg p-4 data-[state=checked]:bg-blue-100 data-[state=unchecked]:bg-gray-100"
+ *     className="rounded-lg p-4 data-[state=checked]:bg-blue-100 data-[state=unchecked]:bg-grey-100"
  *   >
  *     옵션 1
  *   </RadioCardItem>

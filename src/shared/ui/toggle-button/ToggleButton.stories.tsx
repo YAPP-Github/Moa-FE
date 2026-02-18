@@ -110,7 +110,7 @@ const InteractiveToggle = () => {
       <ToggleButton pressed={pressed} onPressedChange={setPressed}>
         {pressed ? 'ON' : 'OFF'}
       </ToggleButton>
-      <span className="text-sm text-gray-500">State: {pressed ? 'Pressed' : 'Not Pressed'}</span>
+      <span className="text-sm text-grey-500">State: {pressed ? 'Pressed' : 'Not Pressed'}</span>
     </div>
   );
 };
