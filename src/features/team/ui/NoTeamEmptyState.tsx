@@ -1,18 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import { CreateTeamDialog } from '@/features/team/ui/CreateTeamDialog';
-import type { RetroRoomCreateResponse } from '@/shared/api/generated/index';
 import { Button } from '@/shared/ui/button/Button';
 import IcPlus from '@/shared/ui/icons/IcPlus';
 import IcNote from '@/shared/ui/logos/IcNote';
 
 export function NoTeamEmptyState() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSuccess = (result: RetroRoomCreateResponse) => {
-    navigate(`/teams/${result.retroRoomId}`);
-  };
 
   return (
     <>
@@ -30,11 +23,7 @@ export function NoTeamEmptyState() {
         </div>
       </div>
 
-      <CreateTeamDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        onSuccess={handleSuccess}
-      />
+      <CreateTeamDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </>
   );
 }
