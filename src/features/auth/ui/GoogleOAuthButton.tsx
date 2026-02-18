@@ -8,7 +8,7 @@ export function GoogleOAuthButton() {
 
   return (
     <button
-      className="w-[368px] h-12 bg-[#F8F9FC] hover:bg-gray-50 rounded-md cursor-pointer"
+      className="w-[368px] h-12 bg-[#F8F9FC] hover:bg-grey-50 rounded-md cursor-pointer"
       onClick={handleGoogleLogin}
       type="button"
       aria-label="구글로 시작하기"
