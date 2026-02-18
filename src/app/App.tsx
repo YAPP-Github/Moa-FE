@@ -9,7 +9,6 @@ import { OnboardingPage } from '@/pages/onboarding/ui/OnboardingPage';
 import { SigninPage } from '@/pages/signin/ui/SigninPage';
 import { TeamDashboardPage } from '@/pages/team-dashboard/ui/TeamDashboardPage';
 import { ToastContainer } from '@/shared/ui/toast/Toast';
-import { AuthLayout } from '@/widgets/layout/ui/AuthLayout';
 import { DashboardLayout } from '@/widgets/layout/ui/DashboardLayout';
 import { PlainLayout } from '@/widgets/layout/ui/PlainLayout';
 
@@ -18,18 +17,16 @@ function App() {
     <>
       <ToastContainer />
       <Routes>
-        {/* OAuth 콜백 - 가드 바깥 (자체 로딩 UI) */}
+        {/* OAuth 콜백 - 가드 바깥 */}
         <Route path="/callback" element={<CallbackPage />} />
 
-        {/* 인증 확인 게이트 - 로딩 중이면 GlobalLoadingPage */}
+        {/* 인증 확인 게이트 */}
         <Route element={<RouteGuard />}>
           {/* Public: 비로그인 유저만 */}
           <Route element={<PublicRoute />}>
-            <Route element={<AuthLayout />}>
-              <Route path="/signin" element={<SigninPage />} />
-              <Route element={<OnboardingRoute />}>
-                <Route path="/onboarding" element={<OnboardingPage />} />
-              </Route>
+            <Route path="/signin" element={<SigninPage />} />
+            <Route element={<OnboardingRoute />}>
+              <Route path="/onboarding" element={<OnboardingPage />} />
             </Route>
           </Route>
 
