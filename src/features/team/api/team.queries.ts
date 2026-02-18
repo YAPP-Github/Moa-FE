@@ -1,42 +1,24 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getApi } from '@/shared/api/generated/index';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { listRetroRoomMembers, listRetroRooms } from './team.api';
+
+export const teamQueryKeys = {
+  rooms: ['retroRooms'] as const,
+  members: (retroRoomId: number) => ['retroRoomMembers', retroRoomId] as const,
+};
 
 export function useRetroRooms() {
-  return useQuery({
-    queryKey: ['retroRooms'],
-    queryFn: () => getApi().listRetroRooms(),
-    staleTime: 1000 * 60 * 5, // 5분간 캐시 유지
+  return useSuspenseQuery({
+    queryKey: teamQueryKeys.rooms,
+    queryFn: listRetroRooms,
+    staleTime: 1000 * 60 * 5,
   });
 }
 
 export function useRetroRoomMembers(retroRoomId: number) {
   return useQuery({
-    queryKey: ['retroRoomMembers', retroRoomId],
-    queryFn: () => getApi().listRetroRoomMembers(retroRoomId),
+    queryKey: teamQueryKeys.members(retroRoomId),
+    queryFn: () => listRetroRoomMembers(retroRoomId),
     staleTime: 1000 * 60 * 5,
     enabled: retroRoomId > 0,
-  });
-}
-
-export function useUpdateRetroRoomName() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ retroRoomId, name }: { retroRoomId: number; name: string }) =>
-      getApi().updateRetroRoomName(retroRoomId, { name }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['retroRooms'] });
-    },
-  });
-}
-
-export function useDeleteRetroRoom() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (retroRoomId: number) => getApi().deleteRetroRoom(retroRoomId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['retroRooms'] });
-    },
   });
 }

@@ -10,7 +10,7 @@ const SvgIcPlus = (props: SVGProps<SVGSVGElement>) => (
     aria-hidden="true"
     {...props}
   >
-    <path stroke="#fff" strokeLinecap="round" strokeWidth={1.2} d="M.6 4.1h7M4.096.6v7" />
+    <path stroke="currentColor" strokeLinecap="round" strokeWidth={1.2} d="M.6 4.1h7M4.096.6v7" />
   </svg>
 );
 export default SvgIcPlus;

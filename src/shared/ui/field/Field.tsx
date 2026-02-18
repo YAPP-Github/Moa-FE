@@ -17,16 +17,20 @@ Field.displayName = 'Field';
 
 interface FieldLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   required?: boolean;
+  error?: boolean;
 }
 
 const FieldLabel = forwardRef<HTMLLabelElement, FieldLabelProps>(
-  ({ className, children, required, ...props }, ref) => {
+  ({ className, children, required, error, ...props }, ref) => {
     return (
       // biome-ignore lint/a11y/noLabelWithoutControl: Compound Component pattern - htmlFor is passed via props
       <label
         ref={ref}
         className={cn(
-          'text-sm font-medium leading-none text-[#333D4B] group-focus-within:text-[#3182F6]',
+          'text-sm font-medium leading-none text-[#333D4B]',
+          error
+            ? 'text-red-300 group-focus-within:text-red-300'
+            : 'group-focus-within:text-[#3182F6]',
           className
         )}
         {...props}
