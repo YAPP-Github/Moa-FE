@@ -3,7 +3,7 @@ import type { CreateRetrospectFormData } from '@/features/retrospective/model/sc
 import { FormHeader } from '@/features/retrospective/ui/steps/FormHeader';
 import { StepIndicator } from '@/features/retrospective/ui/steps/StepIndicator';
 import { Button } from '@/shared/ui/button/Button';
-import { Field, FieldError, FieldLabel } from '@/shared/ui/field/Field';
+import { Field, FieldLabel } from '@/shared/ui/field/Field';
 import { Input } from '@/shared/ui/input/Input';
 import { useStepContext } from '@/shared/ui/multi-step-form/MultiStepForm';
 
@@ -12,24 +12,16 @@ interface ProjectNameStepProps {
 }
 
 export function ProjectNameStep({ onClose }: ProjectNameStepProps) {
-  const {
-    register,
-    watch,
-    formState: { errors },
-  } = useFormContext<CreateRetrospectFormData>();
+  const { register, watch } = useFormContext<CreateRetrospectFormData>();
   const { goToNextStep } = useStepContext();
 
   const projectName = watch('projectName');
-
-  const handleNext = async () => {
-    await goToNextStep();
-  };
 
   return (
     <div className="flex h-full flex-col">
       <FormHeader onClose={onClose} />
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-[32px]">
         <div>
           <StepIndicator />
           <div className="flex flex-col">
@@ -39,32 +31,28 @@ export function ProjectNameStep({ onClose }: ProjectNameStepProps) {
         </div>
 
         <Field>
-          <FieldLabel htmlFor="projectName" required>
-            프로젝트 이름
-          </FieldLabel>
-          <div className="flex flex-col gap-0.5">
+          <FieldLabel htmlFor="projectName">프로젝트 이름</FieldLabel>
+          <div className="flex flex-col gap-[2px]">
             <Input
               id="projectName"
               placeholder="프로젝트 이름을 입력해주세요"
               maxLength={20}
-              error={!!errors.projectName}
               {...register('projectName')}
             />
             <div className="flex">
-              <FieldError>{errors.projectName?.message}</FieldError>
               <span className="ml-auto text-sm text-[#A0A9B7]">{projectName?.length ?? 0}/20</span>
             </div>
           </div>
         </Field>
       </div>
 
-      <div className="mt-auto flex justify-end pt-6">
+      <div className="mt-auto flex justify-end">
         <Button
           type="button"
           variant="primary"
-          size="lg"
-          onClick={handleNext}
+          onClick={goToNextStep}
           disabled={!projectName?.trim()}
+          className="h-[32px] px-[18.5px] py-[7px]"
         >
           다음
         </Button>

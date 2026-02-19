@@ -17,10 +17,6 @@ export function MethodStep({ onClose, onMethodChange }: MethodStepProps) {
 
   const retrospectMethod = watch('retrospectMethod');
 
-  const handleNext = async () => {
-    await goToNextStep();
-  };
-
   return (
     <div className="flex h-full flex-col">
       <FormHeader onClose={onClose} />
@@ -53,8 +49,9 @@ export function MethodStep({ onClose, onMethodChange }: MethodStepProps) {
           type="button"
           variant="primary"
           size="lg"
-          onClick={handleNext}
+          onClick={goToNextStep}
           disabled={!retrospectMethod}
+          className="h-[32px] px-[18.5px] py-[7px]"
         >
           다음
         </Button>

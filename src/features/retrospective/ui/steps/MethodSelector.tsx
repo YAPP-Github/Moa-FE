@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   RETROSPECT_METHOD_DESCRIPTIONS,
   RETROSPECT_METHOD_DETAILS,
@@ -29,9 +30,16 @@ const METHOD_OPTIONS = [
 ] as const;
 
 export function MethodSelector({ value, onChange }: MethodSelectorProps) {
+  const [openMethod, setOpenMethod] = useState<string | undefined>(undefined);
+
+  const handleChange = (method: string) => {
+    onChange(method);
+    setOpenMethod(method);
+  };
+
   return (
-    <div className="-mx-1 -my-1 flex-1 overflow-y-auto px-1 py-1 scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <RadioCardGroup value={value} onValueChange={onChange} className="flex flex-col gap-3">
+    <div className="flex-1 overflow-y-auto scrollbar-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <RadioCardGroup value={value} onValueChange={handleChange} className="flex flex-col gap-3">
         {METHOD_OPTIONS.map((method) => {
           const isSelected = value === method;
           return (
@@ -40,7 +48,10 @@ export function MethodSelector({ value, onChange }: MethodSelectorProps) {
               value={method}
               className="rounded-[10px] border border-grey-200 bg-white px-4 py-[9px] data-[state=checked]:border-blue-500"
             >
-              <AccordionRoot>
+              <AccordionRoot
+                value={openMethod === method ? method : undefined}
+                onValueChange={(v) => setOpenMethod(v)}
+              >
                 <AccordionItem value={method}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
@@ -67,7 +78,7 @@ export function MethodSelector({ value, onChange }: MethodSelectorProps) {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <AccordionTrigger className="p-1 transition-transform data-[state=open]:rotate-180">
+                      <AccordionTrigger className="p-1 data-[state=open]:rotate-180">
                         <SvgIcCaretDown />
                       </AccordionTrigger>
                     </div>

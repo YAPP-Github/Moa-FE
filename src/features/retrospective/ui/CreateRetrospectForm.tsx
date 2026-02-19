@@ -27,7 +27,6 @@ interface CreateRetrospectFormProps {
 interface CompletedData {
   projectName: string;
   retrospectDate: Date;
-  retrospectTime: string;
   retrospectMethod: string;
 }
 
@@ -54,7 +53,7 @@ export function CreateRetrospectForm({
         retroRoomId,
         projectName: data.projectName,
         retrospectDate: format(data.retrospectDate, 'yyyy-MM-dd'),
-        retrospectTime: data.retrospectTime,
+        retrospectTime: '00:00',
         retrospectMethod: data.retrospectMethod,
         referenceUrls: filteredUrls?.length ? filteredUrls : undefined,
       });
@@ -62,7 +61,6 @@ export function CreateRetrospectForm({
       setCompletedData({
         projectName: data.projectName,
         retrospectDate: data.retrospectDate,
-        retrospectTime: data.retrospectTime,
         retrospectMethod: data.retrospectMethod,
       });
       onSuccess?.();
@@ -84,7 +82,6 @@ export function CreateRetrospectForm({
         teamName={teamName}
         projectName={completedData.projectName}
         retrospectDate={completedData.retrospectDate}
-        retrospectTime={completedData.retrospectTime}
         retrospectMethod={completedData.retrospectMethod}
         shareLink=""
         onClose={handleComplete}
@@ -97,7 +94,6 @@ export function CreateRetrospectForm({
       resolver={zodResolver(createRetrospectSchema) as Resolver<CreateRetrospectFormData>}
       defaultValues={{
         projectName: '',
-        retrospectTime: '',
         retrospectMethod: undefined as unknown as CreateRetrospectFormData['retrospectMethod'],
         retrospectDate: undefined as unknown as Date,
         referenceUrls: [''],
@@ -109,7 +105,7 @@ export function CreateRetrospectForm({
       <MultiStepForm.Step fields={['projectName']} className="flex-1">
         <ProjectNameStep onClose={onClose} />
       </MultiStepForm.Step>
-      <MultiStepForm.Step fields={['retrospectDate', 'retrospectTime']} className="flex-1">
+      <MultiStepForm.Step fields={['retrospectDate']} className="flex-1">
         <DateTimeStep onClose={onClose} />
       </MultiStepForm.Step>
       <MultiStepForm.Step fields={['retrospectMethod']} className="min-h-0 flex-1">
