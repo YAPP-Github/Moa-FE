@@ -9,7 +9,7 @@ const iconButtonVariants = cva(
       variant: {
         primary: 'bg-[#3182F6] text hover:bg-[#0062BC]',
         secondary: 'bg-[#E6F2FF] text-[#3182F6] hover:bg-[#C1D9FD]',
-        tertiary: 'bg-[#E9EBF1] hover:bg-[#DEE0E4]',
+        tertiary: 'bg-[#F3F4F5] hover:bg-[#E9EBF1] disabled:bg-[#F3F4F5]',
         ghost: 'bg-transparent text-[#333D4B] hover:bg-[#F3F4F5]',
       },
       size: {
@@ -25,12 +25,12 @@ const iconButtonVariants = cva(
       },
     },
     compoundVariants: [
-      // Square shapes with appropriate border-radius per size
-      { shape: 'square', size: 'xs', class: 'rounded-[4.8px]' },
-      { shape: 'square', size: 'sm', class: 'rounded' },
-      { shape: 'square', size: 'md', class: 'rounded-md' },
-      { shape: 'square', size: 'lg', class: 'rounded-md' },
-      { shape: 'square', size: 'xl', class: 'rounded-lg' },
+      // Square shapes with 6px border-radius
+      { shape: 'square', size: 'xs', class: 'rounded-[6px]' },
+      { shape: 'square', size: 'sm', class: 'rounded-[6px]' },
+      { shape: 'square', size: 'md', class: 'rounded-[6px]' },
+      { shape: 'square', size: 'lg', class: 'rounded-[6px]' },
+      { shape: 'square', size: 'xl', class: 'rounded-[6px]' },
     ],
     defaultVariants: {
       variant: 'primary',

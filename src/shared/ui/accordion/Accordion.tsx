@@ -28,8 +28,12 @@ import { Button } from '../button/Button';
 // ============================================================================
 
 interface AccordionRootProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** 초기 열린 항목 */
+  /** 초기 열린 항목 (uncontrolled) */
   defaultValue?: string;
+  /** 열린 항목 (controlled) */
+  value?: string;
+  /** controlled 모드 변경 콜백 */
+  onValueChange?: (value: string | undefined) => void;
   children: React.ReactNode;
 }
 
@@ -90,12 +94,27 @@ function useAccordionItemContext() {
 // ============================================================================
 
 const AccordionRoot = forwardRef<HTMLDivElement, AccordionRootProps>((props, ref) => {
-  const { defaultValue, className, children, ...restProps } = props;
+  const {
+    defaultValue,
+    value: controlledValue,
+    onValueChange,
+    className,
+    children,
+    ...restProps
+  } = props;
 
-  const [value, setValue] = useState<string | undefined>(defaultValue);
+  const isControlled = controlledValue !== undefined || onValueChange !== undefined;
+  const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
+
+  const value = isControlled ? controlledValue : internalValue;
 
   const handleItemToggle = (itemValue: string) => {
-    setValue((prev) => (prev === itemValue ? undefined : itemValue));
+    const next = value === itemValue ? undefined : itemValue;
+    if (isControlled) {
+      onValueChange?.(next);
+    } else {
+      setInternalValue(next);
+    }
   };
 
   return (

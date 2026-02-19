@@ -17,12 +17,12 @@ import { cn } from '@/shared/lib/cn';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
 
 const dayVariants = cva(
-  'inline-flex items-center justify-center size-[27px] rounded-full text-[15px] font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3182F6]/30',
+  'inline-flex items-center justify-center size-[28px] rounded-full text-sub-title-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3182F6]/30',
   {
     variants: {
       state: {
-        default: 'cursor-pointer hover:bg-blue-100 hover:text-blue-600',
-        selected: 'bg-[#3182F6] text-white hover:bg-[#1B64DA] cursor-pointer',
+        default: 'text-grey-900 cursor-pointer hover:bg-blue-100 hover:text-blue-600',
+        selected: 'bg-blue-500 text-white hover:bg-blue-300 cursor-pointer',
         disabled: 'text-grey-600 opacity-50 cursor-not-allowed',
         outside: 'text-grey-600 opacity-50 cursor-pointer hover:bg-blue-100',
       },
@@ -165,11 +165,11 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     return (
       <div ref={ref} className="w-full">
         {/* Header: 월/년 + 네비게이션 */}
-        <div className="flex items-center justify-between">
-          <span className="text-sub-title-0 text-grey-1000">
+        <div className="grid grid-cols-7 items-center px-[20px]">
+          <span className="col-span-5 text-sub-title-0 text-grey-1000 truncate">
             {format(currentMonth, 'yyyy년 M월', { locale: ko })}
           </span>
-          <div className="flex items-center gap-1">
+          <div className="col-span-2 flex items-center justify-end gap-[8px]">
             <IconButton
               variant="tertiary"
               size="sm"
@@ -186,11 +186,11 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
         </div>
 
         {/* 요일 헤더 */}
-        <div className="grid grid-cols-7">
+        <div className="grid grid-cols-7 mt-[18px]">
           {WEEKDAYS.map((day) => (
             <div
               key={day}
-              className="flex h-8 items-center justify-center text-[13px] font-medium leading-[150%] text-[#8791A0]"
+              className="flex h-[28px] items-center justify-center text-caption-3 text-grey-600"
             >
               {day}
             </div>
@@ -198,10 +198,10 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
         </div>
 
         {/* 날짜 그리드 */}
-        <div ref={gridRef} className="grid grid-cols-7">
+        <div ref={gridRef} className="grid grid-cols-7 mt-[10px] gap-y-[10px]">
           {/* 빈 셀 */}
           {emptyCells.map((i) => (
-            <div key={`empty-${i}`} className="h-8" />
+            <div key={`empty-${i}`} className="h-[28px]" />
           ))}
 
           {/* 날짜 셀 */}
@@ -210,6 +210,7 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
             const isDisabled = state === 'disabled';
             const isFocused = focusedDate && isSameDay(date, focusedDate);
             const isSelected = state === 'selected';
+            const isToday = isSameDay(date, new Date());
             const isFirstDay = index === 0;
 
             // tabIndex 결정: focusedDate > selected > 첫 번째 날
@@ -219,14 +220,14 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
               (!focusedDate && !selected && isFirstDay);
 
             return (
-              <div key={date.toISOString()} className="flex h-10 items-center justify-center">
+              <div key={date.toISOString()} className="flex h-[28px] items-center justify-center">
                 <button
                   type="button"
                   data-date={date.toISOString().split('T')[0]}
                   data-selected={isSelected || undefined}
                   title={format(date, 'yyyy년 M월 d일', { locale: ko })}
                   tabIndex={shouldBeTabbable ? 0 : -1}
-                  className={cn(dayVariants({ state }))}
+                  className={cn(dayVariants({ state }), isToday && !isSelected && 'text-blue-500')}
                   onClick={() => handleSelectDate(date)}
                   onKeyDown={(e) => handleKeyDown(e, date)}
                   disabled={isDisabled}
