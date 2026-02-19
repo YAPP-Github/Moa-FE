@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { listRetrospects } from './retrospective.api';
 import type { ResponseCategory } from '@/shared/api/generated/index';
 import { getApi } from '@/shared/api/generated/index';
@@ -13,11 +13,10 @@ export const retrospectiveQueryKeys = {
 };
 
 export function useRetrospects(retroRoomId: number) {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: retrospectiveQueryKeys.list(retroRoomId),
     queryFn: () => listRetrospects(retroRoomId),
     staleTime: 1000 * 60 * 5,
-    enabled: retroRoomId > 0,
   });
 }
 
