@@ -1,6 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { useJoinRetroRoom } from '@/features/team/api/team.mutations';
+import { teamQueryKeys } from '@/features/team/api/team.queries';
 import { type JoinTeamFormData, joinTeamSchema } from '@/features/team/model/schema';
 import { Button } from '@/shared/ui/button/Button';
 import { Field, FieldLabel } from '@/shared/ui/field/Field';
@@ -15,6 +18,8 @@ interface JoinTeamFormProps {
 export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
   const mutation = useJoinRetroRoom();
   const { showToast } = useToast();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { register, handleSubmit, setValue, watch } = useForm<JoinTeamFormData>({
     resolver: zodResolver(joinTeamSchema),
@@ -24,14 +29,12 @@ export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
   const inviteUrl = watch('inviteUrl');
 
   const onSubmit = async (data: JoinTeamFormData) => {
-    try {
-      await mutation.mutateAsync({ inviteUrl: data.inviteUrl });
-      showToast({ variant: 'success', message: '팀에 입장했습니다.' });
-      onClose();
-      onSuccess?.();
-    } catch {
-      showToast({ variant: 'warning', message: '팀 입장에 실패했습니다.' });
-    }
+    const response = await mutation.mutateAsync({ inviteUrl: data.inviteUrl });
+    showToast({ variant: 'success', message: '팀에 입장했습니다.' });
+    onClose();
+    onSuccess?.();
+    await queryClient.invalidateQueries({ queryKey: teamQueryKeys.rooms });
+    navigate(`/teams/${response.result.retroRoomId}`, { replace: true });
   };
 
   return (

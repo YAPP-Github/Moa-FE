@@ -1,5 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router';
 import { useCreateRetroRoom } from '@/features/team/api/team.mutations';
+import { teamQueryKeys } from '@/features/team/api/team.queries';
 import { type CreateTeamFormData, createTeamSchema } from '@/features/team/model/schema';
 import { TeamNameStep } from '@/features/team/ui/TeamNameStep';
 import { MultiStepForm } from '@/shared/ui/multi-step-form/MultiStepForm';
@@ -12,11 +15,15 @@ interface CreateTeamFormProps {
 export function CreateTeamForm({ onClose }: CreateTeamFormProps) {
   const { mutateAsync: createRetroRoom } = useCreateRetroRoom();
   const { showToast } = useToast();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (data: CreateTeamFormData) => {
-    await createRetroRoom({ title: data.teamName });
+    const response = await createRetroRoom({ title: data.teamName });
     showToast({ variant: 'success', message: '새로운 팀이 생성되었습니다.' });
     onClose();
+    await queryClient.invalidateQueries({ queryKey: teamQueryKeys.rooms });
+    navigate(`/teams/${response.result.retroRoomId}`, { replace: true });
   };
 
   return (

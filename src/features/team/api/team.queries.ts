@@ -1,4 +1,4 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { queryOptions, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { getInviteCode, listRetroRoomMembers, listRetroRooms } from './team.api';
 
 export const teamQueryKeys = {
@@ -7,12 +7,14 @@ export const teamQueryKeys = {
   inviteCode: (retroRoomId: number) => ['inviteCode', retroRoomId] as const,
 };
 
+export const retroRoomsQueryOptions = queryOptions({
+  queryKey: teamQueryKeys.rooms,
+  queryFn: listRetroRooms,
+  staleTime: 1000 * 60 * 5,
+});
+
 export function useRetroRooms() {
-  return useSuspenseQuery({
-    queryKey: teamQueryKeys.rooms,
-    queryFn: listRetroRooms,
-    staleTime: 1000 * 60 * 5,
-  });
+  return useSuspenseQuery(retroRoomsQueryOptions);
 }
 
 export function useRetroRoomMembers(retroRoomId: number) {

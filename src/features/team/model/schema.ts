@@ -69,8 +69,6 @@ export const updateRetroRoomNameResponseSchema = baseResponseSchema(
   updateRetroRoomNameResultSchema
 );
 
-export const deleteRetroRoomResponseSchema = baseResponseSchema(z.null());
-
 const inviteCodeResultSchema = z.object({
   expiresAt: z.string(),
   inviteCode: z.string(),
