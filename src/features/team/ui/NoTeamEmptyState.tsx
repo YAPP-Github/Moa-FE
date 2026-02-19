@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { CreateTeamDialog } from '@/features/team/ui/CreateTeamDialog';
+import { JoinTeamDialog } from '@/features/team/ui/JoinTeamDialog';
 import { Button } from '@/shared/ui/button/Button';
 import IcPlus from '@/shared/ui/icons/IcPlus';
 import IcNote from '@/shared/ui/logos/IcNote';
 
 export function NoTeamEmptyState() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isJoinOpen, setIsJoinOpen] = useState(false);
 
   return (
     <>
@@ -17,13 +19,19 @@ export function NoTeamEmptyState() {
             회고를 시작하려면 팀 생성이 필요해요
           </p>
 
-          <Button size="lg" onClick={() => setIsDialogOpen(true)} className="gap-1">
-            <IcPlus className="w-3 h-3" /> 팀 생성하기
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button size="lg" onClick={() => setIsCreateOpen(true)} className="gap-1">
+              <IcPlus className="w-3 h-3" /> 팀 생성하기
+            </Button>
+            <Button size="lg" variant="secondary" onClick={() => setIsJoinOpen(true)}>
+              팀 참여하기
+            </Button>
+          </div>
         </div>
       </div>
 
-      <CreateTeamDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <CreateTeamDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+      <JoinTeamDialog open={isJoinOpen} onOpenChange={setIsJoinOpen} />
     </>
   );
 }

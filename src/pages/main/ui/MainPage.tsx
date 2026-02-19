@@ -12,7 +12,7 @@ export function MainPage() {
 
   useEffect(() => {
     if (hasTeam) {
-      navigate(`/teams/${teams[0].retroRoomId}`, { replace: true });
+      navigate(`/teams/${teams[teams.length - 1].retroRoomId}`, { replace: true });
     }
   }, [hasTeam, teams, navigate]);
 

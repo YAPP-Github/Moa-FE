@@ -1,8 +1,10 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { TeamMenuDropdown } from './TeamMenuDropdown';
 import { CreateRetrospectDialog } from '@/features/retrospective/ui/CreateRetrospectDialog';
 import { useDeleteRetroRoom } from '@/features/team/api/team.mutations';
+import { retroRoomsQueryOptions } from '@/features/team/api/team.queries';
 import { LeaveTeamModal } from '@/features/team/ui/LeaveTeamModal';
 import { TeamMemberDropdown } from '@/features/team/ui/TeamMemberDropdown';
 import { TeamName } from '@/features/team/ui/TeamName';
@@ -19,14 +21,22 @@ export function DashboardHeader({ teamId, teamName }: DashboardHeaderProps) {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const deleteRetroRoom = useDeleteRetroRoom();
 
-  const handleLeaveConfirm = (roomId: number) => {
-    deleteRetroRoom.mutate(roomId, {
-      onSuccess: () => {
-        navigate('/');
-      },
-    });
+  const handleLeaveConfirm = async (roomId: number) => {
+    const cachedData = queryClient.getQueryData(retroRoomsQueryOptions.queryKey);
+    const remainingTeams = (cachedData?.result ?? []).filter((t) => t.retroRoomId !== roomId);
+
+    await deleteRetroRoom.mutateAsync(roomId);
+
+    if (remainingTeams.length > 0) {
+      navigate(`/teams/${remainingTeams[remainingTeams.length - 1].retroRoomId}`, {
+        replace: true,
+      });
+    } else {
+      navigate('/', { replace: true });
+    }
   };
 
   return (

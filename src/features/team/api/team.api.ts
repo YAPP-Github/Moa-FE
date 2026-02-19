@@ -1,5 +1,4 @@
 import {
-  deleteRetroRoomResponseSchema,
   inviteCodeResponseSchema,
   joinRetroRoomResponseSchema,
   retroRoomCreateResponseSchema,
@@ -61,11 +60,10 @@ export async function updateRetroRoomName(
 }
 
 export async function deleteRetroRoom(retroRoomId: number) {
-  const data = await customInstance({
+  await customInstance({
     url: `/api/v1/retro-rooms/${retroRoomId}`,
     method: 'DELETE',
   });
-  return deleteRetroRoomResponseSchema.parse(data);
 }
 
 export async function getInviteCode(retroRoomId: number) {
