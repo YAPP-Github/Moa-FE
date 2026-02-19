@@ -9,7 +9,6 @@ interface CompleteStepProps {
   teamName: string;
   projectName: string;
   retrospectDate: Date;
-  retrospectTime: string;
   retrospectMethod: string;
   shareLink: string;
   onClose: () => void;
@@ -19,7 +18,6 @@ export function CompleteStep({
   teamName,
   projectName,
   retrospectDate,
-  retrospectTime,
   retrospectMethod,
   shareLink,
   onClose,
@@ -27,7 +25,6 @@ export function CompleteStep({
   const formattedDate = format(retrospectDate, 'yyyy년 M월 d일 EEEE', {
     locale: ko,
   });
-  const formattedDateTime = `${formattedDate} ${retrospectTime}`;
 
   return (
     <div className="flex h-full flex-col">
@@ -67,7 +64,7 @@ export function CompleteStep({
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               <span className="text-caption-3-medium text-grey-800">회고 날짜</span>
-              <span className="text-caption-4 text-grey-700">{formattedDateTime}</span>
+              <span className="text-caption-4 text-grey-700">{formattedDate}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-caption-3-medium text-grey-800">회고 유형</span>
