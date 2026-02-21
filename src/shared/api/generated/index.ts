@@ -8,8 +8,6 @@
 
 // TODO: 백엔드 OpenAPI 스펙 수정 후 제거 필요
 export type SocialType = 'GOOGLE' | 'KAKAO';
-export type DateTime = string;
-export type CurrentUserStatus = 'NOT_JOINED' | 'DRAFT' | 'SUBMITTED';
 export interface BaseResponse {
   code: number;
   isSuccess: boolean;
@@ -182,6 +180,8 @@ export const RetrospectMethod = {
 export interface CreateRetrospectRequest {
   /** 프로젝트 이름 (최소 1자, 최대 20자) */
   projectName: string;
+  /** 회고 질문 목록 (필수, 최소 1개, 빈 문자열 불가) */
+  questions: string[];
   /** 참고 자료 URL 리스트 (최대 10개, 각 URL 최대 2048자) */
   referenceUrls?: string[];
   /** 회고가 속한 회고방의 고유 ID */
@@ -189,8 +189,6 @@ export interface CreateRetrospectRequest {
   /** 회고 날짜 (ISO 8601 형식: YYYY-MM-DD) */
   retrospectDate: string;
   retrospectMethod: RetrospectMethod;
-  /** 회고 시간 (HH:mm 형식, 한국 시간 기준) */
-  retrospectTime: string;
 }
 
 /**
@@ -350,7 +348,7 @@ export interface LogoutRequest {
  * 회원 프로필 응답
  */
 export interface MemberProfileResponse {
-  createdAt: DateTime;
+  createdAt: string;
   email: string;
   insightCount: number;
   memberId: number;
@@ -477,7 +475,7 @@ export interface RetrospectQuestionItem {
  * 회고 상세 정보 응답 DTO
  */
 export interface RetrospectDetailResponse {
-  currentUserStatus: CurrentUserStatus;
+  currentUserStatus: 'NOT_JOINED' | 'DRAFT' | 'SUBMITTED';
   /** 참여 멤버 리스트 (참석 등록일 기준 오름차순 정렬) */
   members: RetrospectMemberItem[];
   /** 해당 회고의 질문 리스트 (index 기준 오름차순 정렬, 최대 5개) */
@@ -495,6 +493,17 @@ export interface RetrospectDetailResponse {
   totalLikeCount: number;
 }
 
+/**
+ * 회고 목록에서 표시되는 사용자별 회고 상태
+ */
+export type RetrospectListStatus = (typeof RetrospectListStatus)[keyof typeof RetrospectListStatus];
+
+export const RetrospectListStatus = {
+  IN_PROGRESS: 'IN_PROGRESS',
+  DRAFT: 'DRAFT',
+  COMPLETED: 'COMPLETED',
+} as const;
+
 export interface RetrospectListItem {
   /** 해당 회고의 참여자 수 */
   participantCount: number;
@@ -502,7 +511,7 @@ export interface RetrospectListItem {
   retrospectDate: string;
   retrospectId: number;
   retrospectMethod: string;
-  retrospectTime: string;
+  status: RetrospectListStatus;
 }
 
 /**
@@ -529,8 +538,6 @@ export interface SearchRetrospectItem {
   /** 회고 고유 식별자 */
   retrospectId: number;
   retrospectMethod: RetrospectMethod;
-  /** 회고 시간 (HH:mm) */
-  retrospectTime: string;
 }
 
 /**

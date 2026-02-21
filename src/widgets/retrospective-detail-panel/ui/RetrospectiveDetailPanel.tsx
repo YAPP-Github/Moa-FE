@@ -11,16 +11,12 @@ import {
   useCreateParticipant,
   useDeleteRetrospect,
   useSaveDraft,
-  useSubmitRetrospect,
 } from '@/features/retrospective/api/retrospective.mutations';
 import {
   useReferences,
   useRetrospectDetail,
 } from '@/features/retrospective/api/retrospective.queries';
-import { CloseConfirmModal } from '@/features/retrospective/ui/CloseConfirmModal';
-import { PreviewModal } from '@/features/retrospective/ui/PreviewModal';
-import { SubmitConfirmModal } from '@/features/retrospective/ui/SubmitConfirmModal';
-import type { GuideItem } from '@/shared/api/generated/index';
+import type { GuideItem } from '@/features/retrospective/model/types';
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -98,15 +94,6 @@ function saveDraftToStorage(retrospectId: number, answers: string[]): void {
   }
 }
 
-function removeDraftFromStorage(retrospectId: number): void {
-  try {
-    const key = getDraftStorageKey(retrospectId);
-    localStorage.removeItem(key);
-  } catch {
-    // 삭제 실패 시 무시
-  }
-}
-
 // ============================================================================
 // Submission Tracking Helpers (오늘 제출한 회고 추적)
 // ============================================================================
@@ -135,19 +122,6 @@ export function isSubmittedToday(retrospectId: number): boolean {
   return false;
 }
 
-/**
- * 회고 제출 상태 저장 (오늘 날짜로)
- */
-function saveSubmittedStatus(retrospectId: number): void {
-  try {
-    const key = getSubmittedStorageKey(retrospectId);
-    const today = new Date().toISOString().split('T')[0];
-    localStorage.setItem(key, today);
-  } catch {
-    // 저장 실패 시 무시
-  }
-}
-
 // ============================================================================
 // Component
 // ============================================================================
@@ -157,17 +131,13 @@ function RetrospectiveDetailPanel({
   onClose,
   isExpanded = false,
   onScaleToggle,
-  onSubmitted,
+  onSubmitted: _onSubmitted,
 }: RetrospectiveDetailPanelProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
-  const [savedDraft, setSavedDraft] = useState<string[]>([]);
   const [isMemberActive, setIsMemberActive] = useState(false);
   const [isLinkActive, setIsLinkActive] = useState(false);
   const [lastSelectedPanel, setLastSelectedPanel] = useState<'member' | 'link'>('member');
-  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
-  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   // 질문별 AI 어시스턴트 상태 (질문 인덱스 → 가이드 배열)
   const [assistantGuidesMap, setAssistantGuidesMap] = useState<Record<number, GuideItem[]>>({});
   const [assistantLoadingIndex, setAssistantLoadingIndex] = useState<number | null>(null);
@@ -186,12 +156,9 @@ function RetrospectiveDetailPanel({
       // 이전 회고와 다른 회고가 선택되면 모든 상태 초기화
       setCurrentQuestionIndex(0);
       setAnswers([]);
-      setSavedDraft([]);
+
       setIsMemberActive(false);
       setIsLinkActive(false);
-      setIsSubmitModalOpen(false);
-      setIsCloseModalOpen(false);
-      setIsPreviewModalOpen(false);
       setAssistantGuidesMap({});
       setAssistantLoadingIndex(null);
       hasRegisteredParticipant.current = false;
@@ -229,7 +196,6 @@ function RetrospectiveDetailPanel({
 
   // API Mutations
   const createParticipantMutation = useCreateParticipant(retrospect.retrospectId);
-  const submitMutation = useSubmitRetrospect(retrospect.retrospectId);
   const saveDraftMutation = useSaveDraft(retrospect.retrospectId);
   // questionId는 1-based index (API 스펙에 따라)
   const assistantMutation = useAssistantGuide(retrospect.retrospectId, currentQuestionIndex + 1);
@@ -281,11 +247,9 @@ function RetrospectiveDetailPanel({
       const draft = loadDraftFromStorage(retrospect.retrospectId);
       if (draft && draft.length === questions.length) {
         setAnswers(draft);
-        setSavedDraft(draft);
       } else {
         // 임시저장 데이터가 없으면 빈 배열로 초기화
         setAnswers(questions.map(() => ''));
-        setSavedDraft(questions.map(() => ''));
       }
     }
   }, [questions, answers.length, retrospect.retrospectId]);
@@ -362,49 +326,18 @@ function RetrospectiveDetailPanel({
       });
       return;
     }
-    setIsSubmitModalOpen(true);
-  };
-
-  const handleSubmitConfirm = async () => {
-    try {
-      await submitMutation.mutateAsync({
-        answers: answers.map((content, index) => ({
-          questionNumber: index + 1,
-          content,
-        })),
-      });
-      removeDraftFromStorage(retrospect.retrospectId);
-      saveSubmittedStatus(retrospect.retrospectId);
-      showToast({ variant: 'success', message: '회고 제출이 완료되었어요!' });
-      setIsSubmitModalOpen(false);
-      onSubmitted?.();
-    } catch {
-      showToast({
-        variant: 'warning',
-        message: '제출에 실패했어요. 다시 시도해주세요.',
-      });
-    }
-  };
-
-  // 현재 답변이 임시저장된 버전과 다른지 확인
-  const hasUnsavedChanges = (): boolean => {
-    return answers.some((answer, index) => answer !== savedDraft[index]);
+    // TODO: 제출 확인 모달 재구현
   };
 
   // 닫기 버튼 클릭 핸들러
   const handleCloseClick = () => {
-    if (hasUnsavedChanges()) {
-      setIsCloseModalOpen(true);
-    } else {
-      onClose();
-    }
+    onClose();
   };
 
   // 임시저장 핸들러
   const handleSaveDraft = async () => {
     // localStorage에 먼저 저장 (빠른 피드백)
     saveDraftToStorage(retrospect.retrospectId, answers);
-    setSavedDraft([...answers]);
 
     try {
       await saveDraftMutation.mutateAsync({
@@ -420,29 +353,6 @@ function RetrospectiveDetailPanel({
         message: '서버 저장에 실패했지만, 로컬에 저장되었어요.',
       });
     }
-  };
-
-  // 닫기 확인 모달에서 임시저장 클릭
-  const handleSaveAndClose = async () => {
-    // localStorage에 먼저 저장
-    saveDraftToStorage(retrospect.retrospectId, answers);
-    setSavedDraft([...answers]);
-
-    try {
-      await saveDraftMutation.mutateAsync({
-        drafts: answers.map((content, index) => ({
-          questionNumber: index + 1,
-          content: content || null,
-        })),
-      });
-      showToast({ variant: 'success', message: '임시저장 되었어요!' });
-    } catch {
-      showToast({
-        variant: 'warning',
-        message: '서버 저장에 실패했지만, 로컬에 저장되었어요.',
-      });
-    }
-    onClose();
   };
 
   // 질문 변경 또는 언마운트 시 진행 중인 API 호출 취소
@@ -506,11 +416,6 @@ function RetrospectiveDetailPanel({
     }
   };
 
-  // 닫기 확인 모달에서 나가기 클릭
-  const handleLeaveWithoutSave = () => {
-    onClose();
-  };
-
   // ============================================================================
   // 로딩 상태 렌더링
   // ============================================================================
@@ -560,7 +465,9 @@ function RetrospectiveDetailPanel({
             </button>
             <button
               type="button"
-              onClick={() => setIsPreviewModalOpen(true)}
+              onClick={() => {
+                /* TODO: 미리보기 모달 재구현 */
+              }}
               className="cursor-pointer rounded-md px-3 py-[6px] text-sub-title-3 bg-blue-200 text-blue-500 hover:bg-blue-300 transition-colors"
             >
               미리보기
@@ -879,28 +786,7 @@ function RetrospectiveDetailPanel({
         </div>
       </aside>
 
-      {/* 제출 확인 모달 */}
-      <SubmitConfirmModal
-        open={isSubmitModalOpen}
-        onOpenChange={setIsSubmitModalOpen}
-        onConfirm={handleSubmitConfirm}
-      />
-
-      {/* 닫기 확인 모달 */}
-      <CloseConfirmModal
-        open={isCloseModalOpen}
-        onOpenChange={setIsCloseModalOpen}
-        onSave={handleSaveAndClose}
-        onLeave={handleLeaveWithoutSave}
-      />
-
-      {/* 미리보기 모달 */}
-      <PreviewModal
-        open={isPreviewModalOpen}
-        onOpenChange={setIsPreviewModalOpen}
-        questions={questions}
-        answers={answers}
-      />
+      {/* TODO: 모달 컴포넌트 재구현 필요 */}
     </div>
   );
 }

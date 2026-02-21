@@ -7,7 +7,6 @@
  */
 
 import { useDeleteRetrospect } from '@/features/retrospective/api/retrospective.mutations';
-import { CompletedRetrospectiveView } from '@/features/retrospective/ui/CompletedRetrospectiveView';
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -149,16 +148,8 @@ function RetrospectiveCompletedPanel({
         </DropdownMenuRoot>
       </header>
 
-      {/* Content - 완료된 회고 뷰 */}
-      <div className="mt-3 flex-1 overflow-hidden bg-white">
-        <CompletedRetrospectiveView
-          retrospectId={retrospect.retrospectId}
-          projectName={retrospect.projectName}
-          retrospectMethod={retrospect.retrospectMethod}
-          participantCount={retrospect.participantCount ?? 0}
-          totalParticipants={retrospect.totalParticipants ?? 12}
-        />
-      </div>
+      {/* TODO: CompletedRetrospectiveView 재구현 필요 */}
+      <div className="mt-3 flex-1 overflow-hidden bg-white" />
     </div>
   );
 }

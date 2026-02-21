@@ -9,11 +9,9 @@ import {
 } from '@/features/retrospective/model/schema';
 import { CompleteStep } from '@/features/retrospective/ui/steps/CompleteStep';
 import { DateTimeStep } from '@/features/retrospective/ui/steps/DateTimeStep';
-import { FreeQuestionsStep } from '@/features/retrospective/ui/steps/FreeQuestionsStep';
 import { MethodStep } from '@/features/retrospective/ui/steps/MethodStep';
 import { ProjectNameStep } from '@/features/retrospective/ui/steps/ProjectNameStep';
 import { ReferenceStep } from '@/features/retrospective/ui/steps/ReferenceStep';
-import { RetrospectMethod } from '@/shared/api/generated/index';
 import { MultiStepForm } from '@/shared/ui/multi-step-form/MultiStepForm';
 import { useToast } from '@/shared/ui/toast/Toast';
 
@@ -37,24 +35,20 @@ export function CreateRetrospectForm({
   onClose,
 }: CreateRetrospectFormProps) {
   const [completedData, setCompletedData] = useState<CompletedData | null>(null);
-  const [isFreeMethod, setIsFreeMethod] = useState(false);
   const { mutateAsync: createRetrospect } = useCreateRetrospect(retroRoomId);
   const { showToast } = useToast();
-
-  const handleMethodChange = (method: string) => {
-    setIsFreeMethod(method === RetrospectMethod.FREE);
-  };
 
   const handleSubmit = async (data: CreateRetrospectFormData) => {
     try {
       const filteredUrls = data.referenceUrls?.filter((url) => url.trim() !== '');
+      const questions = data.questions.filter((q) => q.trim() !== '');
 
       await createRetrospect({
         retroRoomId,
         projectName: data.projectName,
         retrospectDate: format(data.retrospectDate, 'yyyy-MM-dd'),
-        retrospectTime: '00:00',
         retrospectMethod: data.retrospectMethod,
+        questions,
         referenceUrls: filteredUrls?.length ? filteredUrls : undefined,
       });
 
@@ -97,7 +91,7 @@ export function CreateRetrospectForm({
         retrospectMethod: undefined as unknown as CreateRetrospectFormData['retrospectMethod'],
         retrospectDate: undefined as unknown as Date,
         referenceUrls: [''],
-        freeQuestions: [''],
+        questions: [''],
       }}
       onSubmit={handleSubmit}
       className="min-h-0 flex-1"
@@ -108,14 +102,9 @@ export function CreateRetrospectForm({
       <MultiStepForm.Step fields={['retrospectDate']} className="flex-1">
         <DateTimeStep onClose={onClose} />
       </MultiStepForm.Step>
-      <MultiStepForm.Step fields={['retrospectMethod']} className="min-h-0 flex-1">
-        <MethodStep onClose={onClose} onMethodChange={handleMethodChange} />
+      <MultiStepForm.Step fields={['retrospectMethod', 'questions']} className="min-h-0 flex-1">
+        <MethodStep onClose={onClose} />
       </MultiStepForm.Step>
-      {isFreeMethod && (
-        <MultiStepForm.Step fields={['freeQuestions']} className="min-h-0 flex-1">
-          <FreeQuestionsStep onClose={onClose} />
-        </MultiStepForm.Step>
-      )}
       <MultiStepForm.Step fields={['referenceUrls']} className="min-h-0 flex-1">
         <ReferenceStep onClose={onClose} />
       </MultiStepForm.Step>

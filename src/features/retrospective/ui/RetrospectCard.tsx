@@ -1,33 +1,40 @@
-import type { RetrospectListItem } from '@/shared/api/generated/index';
+import { format, getDay } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { getDDayLabel } from '../lib/date';
+import { RETROSPECT_METHOD_LABELS } from '../model/constants';
+import type { RetrospectListItem } from '../model/schema';
+
+const DAY_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
 
 interface RetrospectCardProps {
-  retrospect: RetrospectListItem;
+  item: RetrospectListItem;
 }
 
-const METHOD_LABELS: Record<string, string> = {
-  KPT: 'KPT',
-  FOUR_L: '4L',
-  FIVE_F: '5F',
-  PMI: 'PMI',
-  FREE: '자유',
-};
-
-export function RetrospectCard({ retrospect }: RetrospectCardProps) {
-  const methodLabel = METHOD_LABELS[retrospect.retrospectMethod] ?? retrospect.retrospectMethod;
+export function RetrospectCard({ item }: RetrospectCardProps) {
+  const date = new Date(item.retrospectDate);
+  const formattedDate = format(date, 'yyyy.MM.dd', { locale: ko });
+  const dayOfWeek = DAY_LABELS[getDay(date)];
+  const methodLabel = RETROSPECT_METHOD_LABELS[item.retrospectMethod] ?? item.retrospectMethod;
+  const dDayLabel = getDDayLabel(item.retrospectDate);
 
   return (
-    <div className="rounded-lg border border-grey-200 bg-white p-4 hover:border-primary-300 transition-colors cursor-pointer">
-      <div className="flex items-start justify-between">
-        <div className="flex-1 min-w-0">
-          <h3 className="text-body-1 font-medium text-grey-900 truncate">
-            {retrospect.projectName}
-          </h3>
-          <p className="text-body-2 text-grey-500 mt-1">
-            {retrospect.retrospectDate} {retrospect.retrospectTime}
-          </p>
-        </div>
-        <span className="ml-2 shrink-0 rounded-full bg-grey-100 px-2 py-0.5 text-caption text-grey-600">
+    <div className="flex w-[284px] flex-col rounded-xl border border-grey-200 bg-white px-5 py-4">
+      <div className="flex items-center justify-between">
+        <span className="truncate text-title-5 text-grey-1000">{item.projectName}</span>
+        {dDayLabel && (
+          <span className="shrink-0 ml-2 rounded-md bg-blue-100 px-2 py-0.5 text-caption-5 text-blue-500">
+            {dDayLabel}
+          </span>
+        )}
+      </div>
+      <div className="mt-3 flex items-center gap-2">
+        <span className="rounded-[4px] bg-blue-200 px-2 py-0.5 text-caption-5 text-blue-500">
           {methodLabel}
+        </span>
+      </div>
+      <div className="mt-auto pt-4">
+        <span className="text-caption-3 text-grey-600">
+          {formattedDate} ({dayOfWeek})
         </span>
       </div>
     </div>
