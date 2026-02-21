@@ -1,11 +1,13 @@
 import { z } from 'zod';
-import { RetrospectMethod } from '@/shared/api/generated/index';
+import { MAX_QUESTIONS, MAX_REFERENCE_URLS, RetrospectMethod } from './constants';
 import { baseResponseSchema } from '@/shared/api/schema';
 
 // 에러 메시지 상수
 export const ERROR_MESSAGES = {
   EMPTY_QUESTION: '질문을 입력해주세요.',
-  NO_QUESTIONS: '자유 회고는 최소 1개의 질문이 필요해요.',
+  NO_QUESTIONS: '최소 1개의 질문이 필요해요.',
+  QUESTION_TOO_LONG: '질문은 300자 이내로 입력해주세요.',
+  EMPTY_URL: '링크를 입력해주세요.',
   INVALID_URL: '올바른 URL 형식을 입력해주세요.',
 } as const;
 
@@ -25,25 +27,21 @@ export const createRetrospectSchema = z
     retrospectDate: z.date(),
     referenceUrls: z
       .array(z.string().url(ERROR_MESSAGES.INVALID_URL).or(z.literal('')))
-      .max(10, '참고자료는 최대 10개까지 추가할 수 있어요.')
+      .max(MAX_REFERENCE_URLS, `참고자료는 최대 ${MAX_REFERENCE_URLS}개까지 추가할 수 있어요.`)
       .default([]),
-    freeQuestions: z
-      .array(z.string().min(1, ERROR_MESSAGES.EMPTY_QUESTION).or(z.literal('')))
-      .max(5, '질문은 최대 5개까지 추가할 수 있어요.')
-      .optional()
+    questions: z
+      .array(z.string().max(300, ERROR_MESSAGES.QUESTION_TOO_LONG).or(z.literal('')))
+      .max(MAX_QUESTIONS, `질문은 최대 ${MAX_QUESTIONS}개까지 추가할 수 있어요.`)
       .default([]),
   })
   .refine(
     (data) => {
-      if (data.retrospectMethod === RetrospectMethod.FREE) {
-        const validQuestions = data.freeQuestions?.filter((q) => q.trim() !== '') || [];
-        return validQuestions.length >= 1;
-      }
-      return true;
+      const validQuestions = data.questions.filter((q) => q.trim() !== '');
+      return validQuestions.length >= 1;
     },
     {
       message: ERROR_MESSAGES.NO_QUESTIONS,
-      path: ['freeQuestions'],
+      path: ['questions'],
     }
   );
 
@@ -56,8 +54,8 @@ const retrospectListItemSchema = z.object({
   projectName: z.string(),
   retrospectMethod: z.string(),
   retrospectDate: z.string(),
-  retrospectTime: z.string(),
   participantCount: z.number(),
+  status: z.string(),
 });
 
 export const retrospectListResponseSchema = baseResponseSchema(z.array(retrospectListItemSchema));
