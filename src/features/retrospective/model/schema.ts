@@ -49,6 +49,11 @@ export type CreateRetrospectFormData = z.infer<typeof createRetrospectSchema>;
 
 // --- API 응답 검증 ---
 
+const retrospectMemberSchema = z.object({
+  memberId: z.number(),
+  userName: z.string(),
+});
+
 const retrospectListItemSchema = z.object({
   retrospectId: z.number(),
   projectName: z.string(),
@@ -56,6 +61,7 @@ const retrospectListItemSchema = z.object({
   retrospectDate: z.string(),
   participantCount: z.number(),
   status: z.string(),
+  members: z.array(retrospectMemberSchema).optional(),
 });
 
 export const retrospectListResponseSchema = baseResponseSchema(z.array(retrospectListItemSchema));

@@ -17,7 +17,7 @@ export function TeamMemberList({ teamId }: TeamMemberListProps) {
     <>
       {members.map((member) => (
         <div key={member.memberId} className="flex items-center gap-[10px]">
-          <Avatar size="xs" src={member.profileImageUrl ?? undefined} alt={member.nickname} />
+          <Avatar size="xs" alt={member.nickname} />
           <span className="text-sub-title-3 text-grey-900">{member.nickname}</span>
         </div>
       ))}
