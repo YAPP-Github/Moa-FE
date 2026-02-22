@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useNavigate } from 'react-router';
+import { useDeleteRetrospect, useExportRetrospect } from '../api/retrospective.mutations';
 import { getDDayLabel } from '../lib/date';
 import { RETROSPECT_METHOD_LABELS } from '../model/constants';
 import type { RetrospectListItem } from '../model/schema';
@@ -22,7 +23,10 @@ interface RetrospectCardProps {
   teamId: number;
 }
 
-function CardMenu({ title }: { title: string }) {
+function CardMenu({ title, retrospectId }: { title: string; retrospectId: number }) {
+  const deleteMutation = useDeleteRetrospect();
+  const exportMutation = useExportRetrospect();
+
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
@@ -37,13 +41,16 @@ function CardMenu({ title }: { title: string }) {
         >
           <div className="flex flex-col gap-[12px]">
             <span className="text-caption-4 text-grey-700">{title}</span>
-            <DropdownMenuItem className="flex cursor-pointer items-center">
-              <span className="text-sub-title-3 text-grey-900">링크복사</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex cursor-pointer items-center">
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center"
+              onClick={() => exportMutation.mutate(retrospectId)}
+            >
               <span className="text-sub-title-3 text-grey-900">내보내기</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex cursor-pointer items-center">
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center"
+              onClick={() => deleteMutation.mutate(retrospectId)}
+            >
               <span className="text-sub-title-3 text-red-300">삭제하기</span>
             </DropdownMenuItem>
           </div>
@@ -75,12 +82,17 @@ function formatCardData(item: RetrospectListItem) {
   return { formattedDate, methodLabel };
 }
 
-function ActiveCard({ item }: RetrospectCardProps) {
+function ActiveCard({ item, teamId }: RetrospectCardProps) {
+  const navigate = useNavigate();
   const { formattedDate, methodLabel } = formatCardData(item);
   const dDayLabel = getDDayLabel(item.retrospectDate);
 
   return (
-    <div className={CARD_CLASS}>
+    <button
+      type="button"
+      className={`${CARD_CLASS} cursor-pointer text-left`}
+      onClick={() => navigate(`/teams/${teamId}/retrospects/${item.retrospectId}/write`)}
+    >
       <div className="flex items-center justify-between">
         {dDayLabel ? (
           <span className="flex items-center rounded-[4px] bg-grey-100 px-[10.5px] py-[4px] text-sub-title-5 text-grey-800">
@@ -89,11 +101,15 @@ function ActiveCard({ item }: RetrospectCardProps) {
         ) : (
           <span />
         )}
-        <CardMenu title={item.projectName} />
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
+        <div onClick={(e) => e.stopPropagation()}>
+          <CardMenu title={item.projectName} retrospectId={item.retrospectId} />
+        </div>
       </div>
       <span className="mt-3 truncate text-title-4 text-black">{item.projectName}</span>
       <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} />
-    </div>
+    </button>
   );
 }
 
@@ -112,7 +128,7 @@ function CompletedCard({ item, teamId }: RetrospectCardProps) {
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
         {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
         <div onClick={(e) => e.stopPropagation()}>
-          <CardMenu title={item.projectName} />
+          <CardMenu title={item.projectName} retrospectId={item.retrospectId} />
         </div>
       </div>
       <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} />
