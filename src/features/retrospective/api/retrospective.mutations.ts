@@ -107,7 +107,12 @@ export function useToggleLike() {
 }
 
 export function useAnalyzeRetrospective(retrospectId: number) {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => analyzeRetrospective(retrospectId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.analysis(retrospectId) });
+    },
   });
 }

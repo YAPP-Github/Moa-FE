@@ -62,6 +62,20 @@ export const RETROSPECT_METHOD_DETAILS: Record<string, string[]> = {
 export const MAX_QUESTIONS = 5;
 export const MAX_REFERENCE_URLS = 10;
 
+export const RETROSPECTIVE_TAB_LABELS: Record<string, string> = {
+  question: '질문',
+  member: '팀원',
+  analysis: '회고 분석',
+};
+
+export const QUESTION_CATEGORIES = [
+  'QUESTION_1',
+  'QUESTION_2',
+  'QUESTION_3',
+  'QUESTION_4',
+  'QUESTION_5',
+] as const;
+
 export const RETROSPECT_STATUS_LABELS: Record<string, string> = {
   [RetrospectListStatus.IN_PROGRESS]: '진행중',
   [RetrospectListStatus.DRAFT]: '임시저장',

@@ -48,6 +48,13 @@ export function deleteRetrospect(retrospectId: number) {
   });
 }
 
+export function getAnalysisResult(retrospectId: number) {
+  return customInstance<BaseApiResponse<AnalysisResponse>>({
+    url: `/api/v1/retrospects/${retrospectId}/analysis`,
+    method: 'GET',
+  });
+}
+
 export function analyzeRetrospective(retrospectId: number) {
   return customInstance<BaseApiResponse<AnalysisResponse>>({
     url: `/api/v1/retrospects/${retrospectId}/analysis`,

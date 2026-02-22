@@ -6,6 +6,7 @@ import { RouteGuard } from '@/features/auth/ui/routes/RouteGuard';
 import { CallbackPage } from '@/pages/callback/ui/CallbackPage';
 import { MainPage } from '@/pages/main/ui/MainPage';
 import { OnboardingPage } from '@/pages/onboarding/ui/OnboardingPage';
+import { RetrospectiveDetailPage } from '@/pages/retrospective-detail/ui/RetrospectiveDetailPage';
 import { SigninPage } from '@/pages/signin/ui/SigninPage';
 import { TeamDashboardPage } from '@/pages/team-dashboard/ui/TeamDashboardPage';
 import { ToastContainer } from '@/shared/ui/toast/Toast';
@@ -46,6 +47,10 @@ function App() {
                   <TeamDashboardPage />
                 </DashboardLayout>
               }
+            />
+            <Route
+              path="/teams/:teamId/retrospects/:retrospectId"
+              element={<RetrospectiveDetailPage />}
             />
           </Route>
         </Route>
