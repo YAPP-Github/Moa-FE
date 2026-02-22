@@ -5,7 +5,7 @@ import type { RetrospectMethod } from './constants';
  */
 
 // 탭 타입
-export type RetrospectiveTabType = 'content' | 'analysis';
+export type RetrospectiveTabType = 'question' | 'member' | 'analysis';
 
 // 완료된 회고 뷰 Props
 export interface CompletedRetrospectiveViewProps {
@@ -130,6 +130,8 @@ export interface ReferenceItem {
 export interface ResponseListItem {
   commentCount: number;
   content: string;
+  createdAt?: string;
+  isLiked?: boolean;
   likeCount: number;
   responseId: number;
   userName: string;

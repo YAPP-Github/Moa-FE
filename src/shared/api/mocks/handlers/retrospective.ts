@@ -3,9 +3,10 @@ import {
   analysisResult,
   assistantResult,
   comments,
+  emptyResponses,
   getNextRetrospectId,
   references,
-  responses,
+  responsesByRetrospect,
   retrospectDetails,
   retrospects,
 } from '../fixtures/retrospective';
@@ -98,8 +99,12 @@ export const retrospectiveHandlers = [
   }),
 
   // GET /api/v1/retrospects/:retrospectId/responses — 응답 목록
-  http.get('/api/v1/retrospects/:retrospectId/responses', () => {
-    return successResponse(responses);
+  http.get('/api/v1/retrospects/:retrospectId/responses', ({ params, request }) => {
+    const id = Number(params.retrospectId);
+    const url = new URL(request.url);
+    const category = url.searchParams.get('category') ?? 'QUESTION_1';
+    const data = responsesByRetrospect[id]?.[category] ?? emptyResponses;
+    return successResponse(data);
   }),
 
   // POST /api/v1/responses/:responseId/comments — 코멘트 작성
@@ -127,6 +132,16 @@ export const retrospectiveHandlers = [
       responseId,
       totalLikes: 1,
     });
+  }),
+
+  // GET /api/v1/retrospects/:retrospectId/analysis — 분석 결과 조회
+  http.get('/api/v1/retrospects/:retrospectId/analysis', ({ params }) => {
+    const id = Number(params.retrospectId);
+    // 104: 분석 결과 있음, 나머지: 분석 전 (empty state)
+    if (id === 104) {
+      return successResponse(analysisResult);
+    }
+    return successResponse(null);
   }),
 
   // POST /api/v1/retrospects/:retrospectId/analysis — AI 분석

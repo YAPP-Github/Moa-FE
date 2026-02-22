@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useNavigate } from 'react-router';
 import { getDDayLabel } from '../lib/date';
 import { RETROSPECT_METHOD_LABELS } from '../model/constants';
 import type { RetrospectListItem } from '../model/schema';
@@ -18,6 +19,7 @@ const CARD_CLASS = 'flex h-[141px] w-[284px] flex-col rounded-xl bg-white p-[18p
 
 interface RetrospectCardProps {
   item: RetrospectListItem;
+  teamId: number;
 }
 
 function CardMenu({ title }: { title: string }) {
@@ -95,18 +97,29 @@ function ActiveCard({ item }: RetrospectCardProps) {
   );
 }
 
-function CompletedCard({ item }: RetrospectCardProps) {
+function CompletedCard({ item, teamId }: RetrospectCardProps) {
+  const navigate = useNavigate();
   const { formattedDate, methodLabel } = formatCardData(item);
 
   return (
-    <div className={CARD_CLASS}>
+    <button
+      type="button"
+      className={`${CARD_CLASS} cursor-pointer text-left`}
+      onClick={() => navigate(`/teams/${teamId}/retrospects/${item.retrospectId}`)}
+    >
       <div className="flex items-center justify-between">
         <span className="truncate text-title-4 text-black">{item.projectName}</span>
-        <CardMenu title={item.projectName} />
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
+        <div onClick={(e) => e.stopPropagation()}>
+          <CardMenu title={item.projectName} />
+        </div>
       </div>
       <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} />
       {item.members && (
-        <div className="mt-[3px] flex items-center gap-3">
+        // biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for dropdown
+        // biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper
+        <div className="mt-[3px] flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
           <span className="text-sub-title-6 text-grey-700">참여인원</span>
           <DropdownMenuRoot>
             <DropdownMenuTrigger>
@@ -138,13 +151,13 @@ function CompletedCard({ item }: RetrospectCardProps) {
           </DropdownMenuRoot>
         </div>
       )}
-    </div>
+    </button>
   );
 }
 
-export function RetrospectCard({ item }: RetrospectCardProps) {
+export function RetrospectCard({ item, teamId }: RetrospectCardProps) {
   if (item.status === 'COMPLETED') {
-    return <CompletedCard item={item} />;
+    return <CompletedCard item={item} teamId={teamId} />;
   }
-  return <ActiveCard item={item} />;
+  return <ActiveCard item={item} teamId={teamId} />;
 }

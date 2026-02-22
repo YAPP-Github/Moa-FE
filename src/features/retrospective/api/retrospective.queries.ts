@@ -1,5 +1,6 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 import {
+  getAnalysisResult,
   getRetrospectDetail,
   listComments,
   listReferences,
@@ -15,6 +16,7 @@ export const retrospectiveQueryKeys = {
   responses: (retrospectId: number, category: string) =>
     ['responses', retrospectId, category] as const,
   comments: (responseId: number) => ['comments', responseId] as const,
+  analysis: (retrospectId: number) => ['analysis', retrospectId] as const,
 };
 
 export function useRetrospects(retroRoomId: number) {
@@ -26,11 +28,10 @@ export function useRetrospects(retroRoomId: number) {
 }
 
 export function useRetrospectDetail(retrospectId: number) {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: retrospectiveQueryKeys.detail(retrospectId),
     queryFn: () => getRetrospectDetail(retrospectId),
     staleTime: 1000 * 60 * 5,
-    enabled: !!retrospectId && retrospectId > 0,
   });
 }
 
@@ -44,11 +45,10 @@ export function useReferences(retrospectId: number) {
 }
 
 export function useResponses(retrospectId: number, category: ResponseCategory) {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: retrospectiveQueryKeys.responses(retrospectId, category),
     queryFn: () => listResponses(retrospectId, { category, size: 100 }),
     staleTime: 1000 * 60 * 2,
-    enabled: !!retrospectId && retrospectId > 0,
   });
 }
 
@@ -58,5 +58,23 @@ export function useComments(responseId: number) {
     queryFn: () => listComments(responseId, { size: 100 }),
     staleTime: 1000 * 60 * 2,
     enabled: !!responseId && responseId > 0,
+  });
+}
+
+export function useAnalysisResult(retrospectId: number) {
+  return useSuspenseQuery({
+    queryKey: retrospectiveQueryKeys.analysis(retrospectId),
+    queryFn: () => getAnalysisResult(retrospectId),
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useQuestionResponses(retrospectId: number, questionCategories: ResponseCategory[]) {
+  return useSuspenseQueries({
+    queries: questionCategories.map((category) => ({
+      queryKey: retrospectiveQueryKeys.responses(retrospectId, category),
+      queryFn: () => listResponses(retrospectId, { category, size: 100 }),
+      staleTime: 1000 * 60 * 2,
+    })),
   });
 }
