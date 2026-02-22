@@ -33,10 +33,10 @@ export type RetroRoomListItem = z.infer<typeof retroRoomItemSchema>;
 export const retroRoomListResponseSchema = baseResponseSchema(z.array(retroRoomItemSchema));
 
 const retroRoomMemberItemSchema = z.object({
+  joinedAt: z.string(),
   memberId: z.number(),
   nickname: z.string(),
-  profileImageUrl: z.string().nullable(),
-  joinedAt: z.string(),
+  role: z.string(),
 });
 
 export const retroRoomMembersResponseSchema = baseResponseSchema(

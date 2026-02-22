@@ -1,42 +1,150 @@
-import { format, getDay } from 'date-fns';
+import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { getDDayLabel } from '../lib/date';
 import { RETROSPECT_METHOD_LABELS } from '../model/constants';
 import type { RetrospectListItem } from '../model/schema';
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu/DropdownMenu';
+import { IconButton } from '@/shared/ui/icon-button/IconButton';
+import IcChevronDown from '@/shared/ui/icons/IcChevronDown';
+import IcMeatball from '@/shared/ui/icons/IcMeatball';
 
-const DAY_LABELS = ['일', '월', '화', '수', '목', '금', '토'];
+const CARD_CLASS = 'flex h-[141px] w-[284px] flex-col rounded-xl bg-white p-[18px]';
 
 interface RetrospectCardProps {
   item: RetrospectListItem;
 }
 
-export function RetrospectCard({ item }: RetrospectCardProps) {
-  const date = new Date(item.retrospectDate);
-  const formattedDate = format(date, 'yyyy.MM.dd', { locale: ko });
-  const dayOfWeek = DAY_LABELS[getDay(date)];
-  const methodLabel = RETROSPECT_METHOD_LABELS[item.retrospectMethod] ?? item.retrospectMethod;
-  const dDayLabel = getDDayLabel(item.retrospectDate);
-
+function CardMenu({ title }: { title: string }) {
   return (
-    <div className="flex w-[284px] flex-col rounded-xl border border-grey-200 bg-white px-5 py-4">
-      <div className="flex items-center justify-between">
-        <span className="truncate text-title-5 text-grey-1000">{item.projectName}</span>
-        {dDayLabel && (
-          <span className="shrink-0 ml-2 rounded-md bg-blue-100 px-2 py-0.5 text-caption-5 text-blue-500">
-            {dDayLabel}
-          </span>
-        )}
+    <DropdownMenuRoot>
+      <DropdownMenuTrigger>
+        <IconButton variant="ghost" size="xs" shape="square" aria-label="회고 메뉴">
+          <IcMeatball width={20} height={20} />
+        </IconButton>
+      </DropdownMenuTrigger>
+      <DropdownMenuPortal>
+        <DropdownMenuContent
+          align="end"
+          className="min-w-[118px] rounded-[8px] border border-grey-200 bg-white p-[12px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)]"
+        >
+          <div className="flex flex-col gap-[12px]">
+            <span className="text-caption-4 text-grey-700">{title}</span>
+            <DropdownMenuItem className="flex cursor-pointer items-center">
+              <span className="text-sub-title-3 text-grey-900">링크복사</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex cursor-pointer items-center">
+              <span className="text-sub-title-3 text-grey-900">내보내기</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex cursor-pointer items-center">
+              <span className="text-sub-title-3 text-red-300">삭제하기</span>
+            </DropdownMenuItem>
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
+    </DropdownMenuRoot>
+  );
+}
+
+function CardInfo({ methodLabel, formattedDate }: { methodLabel: string; formattedDate: string }) {
+  return (
+    <div className="mt-auto flex flex-col gap-[3px]">
+      <div className="flex items-center gap-3">
+        <span className="text-sub-title-6 text-grey-700">회고 방식</span>
+        <span className="text-sub-title-6 text-grey-800">{methodLabel}</span>
       </div>
-      <div className="mt-3 flex items-center gap-2">
-        <span className="rounded-[4px] bg-blue-200 px-2 py-0.5 text-caption-5 text-blue-500">
-          {methodLabel}
-        </span>
-      </div>
-      <div className="mt-auto pt-4">
-        <span className="text-caption-3 text-grey-600">
-          {formattedDate} ({dayOfWeek})
-        </span>
+      <div className="flex items-center gap-3">
+        <span className="text-sub-title-6 text-grey-700">날짜</span>
+        <span className="text-sub-title-6 text-grey-800">{formattedDate}</span>
       </div>
     </div>
   );
+}
+
+function formatCardData(item: RetrospectListItem) {
+  const date = new Date(item.retrospectDate);
+  const formattedDate = format(date, 'yyyy년 M월 d일', { locale: ko });
+  const methodLabel = RETROSPECT_METHOD_LABELS[item.retrospectMethod] ?? item.retrospectMethod;
+  return { formattedDate, methodLabel };
+}
+
+function ActiveCard({ item }: RetrospectCardProps) {
+  const { formattedDate, methodLabel } = formatCardData(item);
+  const dDayLabel = getDDayLabel(item.retrospectDate);
+
+  return (
+    <div className={CARD_CLASS}>
+      <div className="flex items-center justify-between">
+        {dDayLabel ? (
+          <span className="flex items-center rounded-[4px] bg-grey-100 px-[10.5px] py-[4px] text-sub-title-5 text-grey-800">
+            {dDayLabel}
+          </span>
+        ) : (
+          <span />
+        )}
+        <CardMenu title={item.projectName} />
+      </div>
+      <span className="mt-3 truncate text-title-4 text-black">{item.projectName}</span>
+      <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} />
+    </div>
+  );
+}
+
+function CompletedCard({ item }: RetrospectCardProps) {
+  const { formattedDate, methodLabel } = formatCardData(item);
+
+  return (
+    <div className={CARD_CLASS}>
+      <div className="flex items-center justify-between">
+        <span className="truncate text-title-4 text-black">{item.projectName}</span>
+        <CardMenu title={item.projectName} />
+      </div>
+      <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} />
+      {item.members && (
+        <div className="mt-[3px] flex items-center gap-3">
+          <span className="text-sub-title-6 text-grey-700">참여인원</span>
+          <DropdownMenuRoot>
+            <DropdownMenuTrigger>
+              <button
+                type="button"
+                className="flex items-center cursor-pointer text-sub-title-6 text-grey-800"
+              >
+                {item.members.length}명
+                <IcChevronDown width={18} height={18} />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuContent
+                align="end"
+                className="min-w-[100px] rounded-[8px] border border-grey-200 bg-white p-[12px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)]"
+              >
+                <div className="flex flex-col gap-[8px]">
+                  <span className="text-caption-4 text-grey-700">
+                    참여 인원 {item.members.length}명
+                  </span>
+                  {item.members.map((member) => (
+                    <span key={member.memberId} className="text-sub-title-3 text-grey-900">
+                      {member.userName}
+                    </span>
+                  ))}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenuPortal>
+          </DropdownMenuRoot>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function RetrospectCard({ item }: RetrospectCardProps) {
+  if (item.status === 'COMPLETED') {
+    return <CompletedCard item={item} />;
+  }
+  return <ActiveCard item={item} />;
 }
