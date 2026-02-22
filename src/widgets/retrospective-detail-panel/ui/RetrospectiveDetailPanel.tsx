@@ -24,6 +24,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu/DropdownMenu';
+import IcAiSpark from '@/shared/ui/icons/IcAiSpark';
 import IcChevronActiveRight from '@/shared/ui/icons/IcChevronActiveRight';
 import IcChevronDisabledLeft from '@/shared/ui/icons/IcChevronDisabledLeft';
 import IcChevronRightPink from '@/shared/ui/icons/IcChevronRightPink';
@@ -37,7 +38,6 @@ import IcOpen from '@/shared/ui/icons/IcOpen';
 import IcRefresh from '@/shared/ui/icons/IcRefresh';
 import IcScaleDown from '@/shared/ui/icons/IcScaleDown';
 import IcScaleUp from '@/shared/ui/icons/IcScaleUp';
-import IcSparklePink from '@/shared/ui/icons/IcSparklePink';
 import { useToast } from '@/shared/ui/toast/Toast';
 
 // ============================================================================
@@ -587,14 +587,14 @@ function RetrospectiveDetailPanel({
                   onClick={handleAssistantGenerate}
                   className="flex cursor-pointer items-center rounded-[8px] border border-pink-300 bg-pink-100 px-[10px] py-[6px]"
                 >
-                  <IcSparklePink className="h-[18px] w-[18px]" />
+                  <IcAiSpark className="h-[18px] w-[18px]" />
                   <span className="ml-1 text-title-7 text-pink-400">회고 어시스턴트</span>
                   <IcChevronRightPink className="h-6 w-6" />
                 </button>
               ) : isCurrentQuestionLoading ? (
                 // 로딩 상태 - "생성중"
                 <div className="inline-flex h-[38px] items-center rounded-[8px] border border-pink-300 bg-pink-100 px-[10px]">
-                  <IcSparklePink className="h-[18px] w-[18px]" />
+                  <IcAiSpark className="h-[18px] w-[18px]" />
                   <span className="ml-1 text-title-7 text-pink-400">생성중</span>
                 </div>
               ) : (
@@ -602,7 +602,7 @@ function RetrospectiveDetailPanel({
                 <div className="rounded-[8px] border border-pink-300 bg-pink-100 p-4">
                   {/* 헤더 */}
                   <div className="flex items-center">
-                    <IcSparklePink className="h-[18px] w-[18px]" />
+                    <IcAiSpark className="h-[18px] w-[18px]" />
                     <span className="ml-1 text-title-7 text-pink-400">회고 어시스턴트</span>
                   </div>
 

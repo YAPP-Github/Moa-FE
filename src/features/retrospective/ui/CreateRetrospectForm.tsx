@@ -13,7 +13,6 @@ import { MethodStep } from '@/features/retrospective/ui/steps/MethodStep';
 import { ProjectNameStep } from '@/features/retrospective/ui/steps/ProjectNameStep';
 import { ReferenceStep } from '@/features/retrospective/ui/steps/ReferenceStep';
 import { MultiStepForm } from '@/shared/ui/multi-step-form/MultiStepForm';
-import { useToast } from '@/shared/ui/toast/Toast';
 
 interface CreateRetrospectFormProps {
   retroRoomId: number;
@@ -36,34 +35,26 @@ export function CreateRetrospectForm({
 }: CreateRetrospectFormProps) {
   const [completedData, setCompletedData] = useState<CompletedData | null>(null);
   const { mutateAsync: createRetrospect } = useCreateRetrospect(retroRoomId);
-  const { showToast } = useToast();
 
   const handleSubmit = async (data: CreateRetrospectFormData) => {
-    try {
-      const filteredUrls = data.referenceUrls?.filter((url) => url.trim() !== '');
-      const questions = data.questions.filter((q) => q.trim() !== '');
+    const filteredUrls = data.referenceUrls?.filter((url) => url.trim() !== '');
+    const questions = data.questions.filter((q) => q.trim() !== '');
 
-      await createRetrospect({
-        retroRoomId,
-        projectName: data.projectName,
-        retrospectDate: format(data.retrospectDate, 'yyyy-MM-dd'),
-        retrospectMethod: data.retrospectMethod,
-        questions,
-        referenceUrls: filteredUrls?.length ? filteredUrls : undefined,
-      });
+    await createRetrospect({
+      retroRoomId,
+      projectName: data.projectName,
+      retrospectDate: format(data.retrospectDate, 'yyyy-MM-dd'),
+      retrospectMethod: data.retrospectMethod,
+      questions,
+      referenceUrls: filteredUrls?.length ? filteredUrls : undefined,
+    });
 
-      setCompletedData({
-        projectName: data.projectName,
-        retrospectDate: data.retrospectDate,
-        retrospectMethod: data.retrospectMethod,
-      });
-      onSuccess?.();
-    } catch {
-      showToast({
-        variant: 'warning',
-        message: '회고 생성에 실패했습니다. 다시 시도해주세요.',
-      });
-    }
+    setCompletedData({
+      projectName: data.projectName,
+      retrospectDate: data.retrospectDate,
+      retrospectMethod: data.retrospectMethod,
+    });
+    onSuccess?.();
   };
 
   const handleComplete = () => {
@@ -77,7 +68,6 @@ export function CreateRetrospectForm({
         projectName={completedData.projectName}
         retrospectDate={completedData.retrospectDate}
         retrospectMethod={completedData.retrospectMethod}
-        shareLink=""
         onClose={handleComplete}
       />
     );

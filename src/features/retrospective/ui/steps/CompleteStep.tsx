@@ -1,16 +1,15 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { RETROSPECT_METHOD_LABELS } from '@/features/retrospective/model/constants';
+import imgRetrospectComplete from '@/shared/assets/images/img_retrospect_complete.png';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
 import IcClose from '@/shared/ui/icons/IcClose';
-import IcLink from '@/shared/ui/icons/IcLink';
 
 interface CompleteStepProps {
   teamName: string;
   projectName: string;
   retrospectDate: Date;
   retrospectMethod: string;
-  shareLink: string;
   onClose: () => void;
 }
 
@@ -19,7 +18,6 @@ export function CompleteStep({
   projectName,
   retrospectDate,
   retrospectMethod,
-  shareLink,
   onClose,
 }: CompleteStepProps) {
   const formattedDate = format(retrospectDate, 'yyyy년 M월 d일 EEEE', {
@@ -37,23 +35,14 @@ export function CompleteStep({
 
       {/* Header */}
       <div className="flex flex-col gap-1">
-        <span className="text-sub-title-2 text-blue-500">{teamName} 팀 회고</span>
+        <span className="text-sub-title-2 text-blue-500">{teamName}팀 회고</span>
         <span className="text-title-2 text-grey-1000">회고 생성을 완료했어요</span>
       </div>
 
       {/* Illustration */}
       <div className="flex flex-1 items-center justify-center">
-        <div className="flex h-32 w-32 items-center justify-center rounded-full bg-blue-50">
-          <svg
-            aria-hidden="true"
-            className="h-16 w-16 text-blue-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
+        <div className="flex h-[215px] w-[394px] items-center justify-center">
+          <img src={imgRetrospectComplete} width={177} height={177} alt="회고 생성 완료" />
         </div>
       </div>
 
@@ -73,22 +62,6 @@ export function CompleteStep({
               </span>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Share Link */}
-      <div className="mt-6 flex flex-col gap-2.5">
-        <span className="text-sub-title-2 text-grey-1000">공유하기</span>
-        <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            onClick={() => navigator.clipboard.writeText(shareLink)}
-            className="flex size-12 items-center justify-center rounded-full bg-grey-100"
-            aria-label="링크 복사"
-          >
-            <IcLink className="size-5" />
-          </button>
-          <span className="text-long-2 text-grey-800">링크복사</span>
         </div>
       </div>
     </div>

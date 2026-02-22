@@ -7,6 +7,7 @@ import { CallbackPage } from '@/pages/callback/ui/CallbackPage';
 import { MainPage } from '@/pages/main/ui/MainPage';
 import { OnboardingPage } from '@/pages/onboarding/ui/OnboardingPage';
 import { RetrospectiveDetailPage } from '@/pages/retrospective-detail/ui/RetrospectiveDetailPage';
+import { RetrospectiveWritePage } from '@/pages/retrospective-write/ui/RetrospectiveWritePage';
 import { SigninPage } from '@/pages/signin/ui/SigninPage';
 import { TeamDashboardPage } from '@/pages/team-dashboard/ui/TeamDashboardPage';
 import { ToastContainer } from '@/shared/ui/toast/Toast';
@@ -51,6 +52,10 @@ function App() {
             <Route
               path="/teams/:teamId/retrospects/:retrospectId"
               element={<RetrospectiveDetailPage />}
+            />
+            <Route
+              path="/teams/:teamId/retrospects/:retrospectId/write"
+              element={<RetrospectiveWritePage />}
             />
           </Route>
         </Route>

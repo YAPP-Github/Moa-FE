@@ -130,7 +130,7 @@ export const retrospectDetails: Record<
     totalLikeCount: 8,
   },
   102: {
-    currentUserStatus: 'NOT_JOINED',
+    currentUserStatus: 'SUBMITTED',
     members: [
       { memberId: 1, userName: '홍길동' },
       { memberId: 2, userName: '김철수' },
@@ -147,6 +147,25 @@ export const retrospectDetails: Record<
     title: '온보딩 개선',
     totalCommentCount: 2,
     totalLikeCount: 3,
+  },
+  103: {
+    currentUserStatus: 'DRAFT',
+    members: [
+      { memberId: 1, userName: '홍길동' },
+      { memberId: 2, userName: '김철수' },
+      { memberId: 3, userName: '이영희' },
+    ],
+    questions: [
+      { content: '이번 작업에서 긍정적이었던 부분은 무엇인가요?', index: 0 },
+      { content: '부정적이거나 아쉬웠던 부분은 무엇인가요?', index: 1 },
+      { content: '흥미롭거나 새로 발견한 점이 있나요?', index: 2 },
+    ],
+    retroCategory: 'PMI',
+    retroRoomId: 1,
+    startTime: '2026-02-19T15:00:00',
+    title: '디자인 시스템 구축',
+    totalCommentCount: 0,
+    totalLikeCount: 0,
   },
   104: {
     currentUserStatus: 'SUBMITTED',
@@ -188,6 +207,24 @@ export const retrospectDetails: Record<
     totalCommentCount: 10,
     totalLikeCount: 15,
   },
+  201: {
+    currentUserStatus: 'NOT_JOINED',
+    members: [
+      { memberId: 1, userName: '김민지' },
+      { memberId: 4, userName: '손민수' },
+    ],
+    questions: [
+      { content: '이번 일을 통해 유지했으면 하는 문화나 방식이 있나요?', index: 0 },
+      { content: '이번 일을 하는 중 문제라고 판단되었던 점이 있나요?', index: 1 },
+      { content: '이번 일을 겪으면서 새롭게 시도해보고 싶은 게 있나요?', index: 2 },
+    ],
+    retroCategory: 'KPT',
+    retroRoomId: 2,
+    startTime: '2026-02-21T14:00:00',
+    title: 'API 리팩토링',
+    totalCommentCount: 0,
+    totalLikeCount: 0,
+  },
   202: {
     currentUserStatus: 'SUBMITTED',
     members: [
@@ -205,6 +242,27 @@ export const retrospectDetails: Record<
     title: 'DB 마이그레이션',
     totalCommentCount: 3,
     totalLikeCount: 4,
+  },
+  301: {
+    currentUserStatus: 'NOT_JOINED',
+    members: [
+      { memberId: 5, userName: '박지훈' },
+      { memberId: 6, userName: '최수아' },
+      { memberId: 7, userName: '정우진' },
+      { memberId: 8, userName: '한서연' },
+    ],
+    questions: [
+      { content: '이번 일을 하면서 기억에 남는 좋은 순간이 있었나요?', index: 0 },
+      { content: '이번 일을 통해 새롭게 알게 되거나 성장한 부분이 있나요?', index: 1 },
+      { content: '이번 일을 하면서 아쉬웠거나 더 필요했던 게 있나요?', index: 2 },
+      { content: '앞으로 일할 때 이런 부분이 개선되면 좋겠다고 생각한 게 있나요?', index: 3 },
+    ],
+    retroCategory: 'FOUR_L',
+    retroRoomId: 3,
+    startTime: '2026-02-22T11:00:00',
+    title: 'UI 컴포넌트 리뷰',
+    totalCommentCount: 0,
+    totalLikeCount: 0,
   },
 };
 
@@ -286,6 +344,75 @@ export const responsesByRetrospect: Record<
           likeCount: 3,
           responseId: 1007,
           userName: '이영희',
+        },
+      ],
+      hasNext: false,
+      nextCursor: null,
+    },
+  },
+  // 온보딩 개선 (FOUR_L, 질문 4개 — SUBMITTED 테스트용)
+  102: {
+    QUESTION_1: {
+      responses: [
+        {
+          commentCount: 1,
+          content: '팀원들과 온보딩 프로세스를 함께 설계한 시간이 좋았어요.',
+          likeCount: 3,
+          responseId: 1021,
+          userName: '홍길동',
+        },
+        {
+          commentCount: 0,
+          content: '신규 입사자분이 빠르게 적응하는 모습을 보며 보람을 느꼈습니다.',
+          likeCount: 2,
+          responseId: 1022,
+          userName: '김철수',
+        },
+      ],
+      hasNext: false,
+      nextCursor: null,
+    },
+    QUESTION_2: {
+      responses: [
+        {
+          commentCount: 0,
+          content: '문서화 도구 사용법을 익히면서 기술 스택 이해도가 높아졌어요.',
+          likeCount: 2,
+          responseId: 1023,
+          userName: '홍길동',
+        },
+      ],
+      hasNext: false,
+      nextCursor: null,
+    },
+    QUESTION_3: {
+      responses: [
+        {
+          commentCount: 1,
+          content: '온보딩 체크리스트가 너무 길어서 핵심 내용이 묻힌 감이 있었어요.',
+          likeCount: 3,
+          responseId: 1024,
+          userName: '홍길동',
+        },
+        {
+          commentCount: 0,
+          content: '멘토링 시간이 부족했던 것 같습니다.',
+          likeCount: 1,
+          responseId: 1025,
+          userName: '김철수',
+        },
+      ],
+      hasNext: false,
+      nextCursor: null,
+    },
+    QUESTION_4: {
+      responses: [
+        {
+          commentCount: 0,
+          content: '온보딩 가이드를 영상으로도 제공하면 좋겠어요.',
+          likeCount: 4,
+          responseId: 1026,
+          userName: '홍길동',
         },
       ],
       hasNext: false,

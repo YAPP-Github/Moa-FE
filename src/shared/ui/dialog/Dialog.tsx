@@ -302,7 +302,7 @@ const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
           aria-labelledby={titleId}
           aria-describedby={descriptionId}
           data-state={open ? 'open' : 'closed'}
-          className={cn('relative z-50 w-full max-w-[calc(100%-2rem)] sm:max-w-lg', className)}
+          className={cn('relative z-50 w-full', className)}
           {...props}
         >
           {!hideCloseButton && (
