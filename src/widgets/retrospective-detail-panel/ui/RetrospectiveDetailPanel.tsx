@@ -17,6 +17,7 @@ import {
   useRetrospectDetail,
 } from '@/features/retrospective/api/retrospective.queries';
 import type { GuideItem } from '@/features/retrospective/model/types';
+import { useOgMetadata } from '@/shared/api/og';
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -39,6 +40,28 @@ import IcRefresh from '@/shared/ui/icons/IcRefresh';
 import IcScaleDown from '@/shared/ui/icons/IcScaleDown';
 import IcScaleUp from '@/shared/ui/icons/IcScaleUp';
 import { useToast } from '@/shared/ui/toast/Toast';
+
+// ============================================================================
+// Sub-Components
+// ============================================================================
+
+function ReferenceLink({ url, urlName }: { url: string; urlName: string }) {
+  const { data: ogData } = useOgMetadata(url);
+  const og = ogData?.result;
+  const displayTitle = og?.title || urlName || url;
+
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 text-caption-2 text-blue-500 hover:underline"
+    >
+      <IcLinkActive className="h-4 w-4 shrink-0" />
+      <span className="truncate">{displayTitle}</span>
+    </a>
+  );
+}
 
 // ============================================================================
 // Types
@@ -705,16 +728,7 @@ function RetrospectiveDetailPanel({
               <div className="mt-3 flex flex-col gap-[10px]">
                 {references.length > 0 ? (
                   references.map((ref) => (
-                    <a
-                      key={ref.referenceId}
-                      href={ref.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-caption-2 text-blue-500 hover:underline"
-                    >
-                      <IcLinkActive className="h-4 w-4 shrink-0" />
-                      <span className="truncate">{ref.urlName || ref.url}</span>
-                    </a>
+                    <ReferenceLink key={ref.referenceId} url={ref.url} urlName={ref.urlName} />
                   ))
                 ) : (
                   <p className="text-caption-3 text-grey-500">등록된 참고자료가 없습니다.</p>
