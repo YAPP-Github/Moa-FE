@@ -24,9 +24,9 @@ export function AnalysisEmptyState({
     <div className="flex flex-1 flex-col items-center justify-center gap-4">
       <IcNote width={28.5} />
       <p className="text-center text-sub-title-4 text-grey-800">
-        현재까지 작성된 회고를 기반으로
+        {mutation.isPending ? 'AI가 회고를 분석하고 있어요' : '현재까지 작성된 회고를 기반으로'}
         <br />
-        인사이트가 생성돼요
+        {mutation.isPending ? '잠시만 기다려주세요' : '인사이트가 생성돼요'}
       </p>
       <div className="flex items-center gap-1 text-caption-3-medium text-grey-700">
         <IcUser width={16} height={16} />
@@ -36,12 +36,17 @@ export function AnalysisEmptyState({
       </div>
       <button
         type="button"
-        className="flex h-[36px] cursor-pointer items-center justify-center gap-1 rounded-[6px] border border-blue-100 bg-linear-to-r from-[#EEF5FF] to-[#F2FFFB] py-[7px] pr-[14px] pl-[10px]"
+        className="flex h-[36px] cursor-pointer items-center justify-center gap-1 rounded-[6px] border border-blue-100 bg-linear-to-r from-[#EEF5FF] to-[#F2FFFB] py-[7px] pr-[14px] pl-[10px] disabled:cursor-not-allowed disabled:opacity-50"
         onClick={handleAnalyze}
+        disabled={mutation.isPending}
       >
-        <IcAiSpark width={18} height={18} />
+        {mutation.isPending ? (
+          <div className="h-[18px] w-[18px] animate-spin rounded-full border-2 border-blue-200 border-t-blue-500" />
+        ) : (
+          <IcAiSpark width={18} height={18} />
+        )}
         <span className="bg-linear-to-r from-[#3182F6] to-[#52E79D] bg-clip-text text-[14px] font-semibold leading-none text-transparent">
-          AI 회고 분석 하기
+          {mutation.isPending ? '분석 중...' : 'AI 회고 분석 하기'}
         </span>
       </button>
     </div>

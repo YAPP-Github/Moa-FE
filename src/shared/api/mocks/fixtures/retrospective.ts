@@ -99,7 +99,7 @@ export const retrospects: Record<
 export const retrospectDetails: Record<
   number,
   {
-    currentUserStatus: 'NOT_JOINED' | 'DRAFT' | 'SUBMITTED';
+    currentUserStatus: 'NOT_PARTICIPATED' | 'IN_PROGRESS' | 'SUBMITTED';
     members: { memberId: number; userName: string }[];
     questions: { content: string; index: number }[];
     retroCategory: string;
@@ -111,7 +111,7 @@ export const retrospectDetails: Record<
   }
 > = {
   101: {
-    currentUserStatus: 'DRAFT',
+    currentUserStatus: 'IN_PROGRESS',
     members: [
       { memberId: 1, userName: '홍길동' },
       { memberId: 2, userName: '김철수' },
@@ -149,7 +149,7 @@ export const retrospectDetails: Record<
     totalLikeCount: 3,
   },
   103: {
-    currentUserStatus: 'DRAFT',
+    currentUserStatus: 'IN_PROGRESS',
     members: [
       { memberId: 1, userName: '홍길동' },
       { memberId: 2, userName: '김철수' },
@@ -208,7 +208,7 @@ export const retrospectDetails: Record<
     totalLikeCount: 15,
   },
   201: {
-    currentUserStatus: 'NOT_JOINED',
+    currentUserStatus: 'NOT_PARTICIPATED',
     members: [
       { memberId: 1, userName: '김민지' },
       { memberId: 4, userName: '손민수' },
@@ -244,7 +244,7 @@ export const retrospectDetails: Record<
     totalLikeCount: 4,
   },
   301: {
-    currentUserStatus: 'NOT_JOINED',
+    currentUserStatus: 'NOT_PARTICIPATED',
     members: [
       { memberId: 5, userName: '박지훈' },
       { memberId: 6, userName: '최수아' },

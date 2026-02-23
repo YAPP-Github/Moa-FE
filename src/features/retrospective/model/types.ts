@@ -110,7 +110,7 @@ export interface RetrospectMemberItem {
 }
 
 export interface RetrospectDetailResponse {
-  currentUserStatus: 'NOT_JOINED' | 'DRAFT' | 'SUBMITTED';
+  currentUserStatus: 'NOT_PARTICIPATED' | 'IN_PROGRESS' | 'SUBMITTED';
   members: RetrospectMemberItem[];
   questions: RetrospectQuestionItem[];
   retroCategory: RetrospectMethod;

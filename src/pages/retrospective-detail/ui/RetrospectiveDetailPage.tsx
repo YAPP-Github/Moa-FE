@@ -43,13 +43,11 @@ function DetailContent({ retrospectId, teamId }: { retrospectId: number; teamId:
               </Suspense>
             )}
             {activeTab === 'analysis' && (
-              <Suspense fallback={null}>
-                <AnalysisTabContent
-                  retrospectId={retrospectId}
-                  participantCount={detail.members.length}
-                  totalParticipants={detail.members.length}
-                />
-              </Suspense>
+              <AnalysisTabContent
+                retrospectId={retrospectId}
+                participantCount={detail.members.length}
+                totalParticipants={detail.members.length}
+              />
             )}
           </div>
         </div>
