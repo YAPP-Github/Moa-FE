@@ -1,9 +1,11 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useDeleteRetrospect, useExportRetrospect } from '../api/retrospective.mutations';
+import { DeleteRetrospectDialog } from './DeleteRetrospectDialog';
+import { useDeleteRetrospect } from '../api/retrospective.mutations';
 import { getDDayLabel } from '../lib/date';
-import { RETROSPECT_METHOD_LABELS } from '../model/constants';
+import { RETROSPECT_METHOD_LABELS, RetrospectListStatus } from '../model/constants';
 import type { RetrospectListItem } from '../model/schema';
 import {
   DropdownMenuContent,
@@ -15,6 +17,7 @@ import {
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
 import IcChevronDown from '@/shared/ui/icons/IcChevronDown';
 import IcMeatball from '@/shared/ui/icons/IcMeatball';
+import { useToast } from '@/shared/ui/toast/Toast';
 
 const CARD_CLASS = 'flex h-[141px] w-[284px] flex-col rounded-xl bg-white p-[18px]';
 
@@ -23,40 +26,81 @@ interface RetrospectCardProps {
   teamId: number;
 }
 
-function CardMenu({ title, retrospectId }: { title: string; retrospectId: number }) {
+interface CardMenuProps {
+  title: string;
+  retrospectId: number;
+  teamId: number;
+  status: string;
+}
+
+function CardMenu({ title, retrospectId, teamId, status }: CardMenuProps) {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const deleteMutation = useDeleteRetrospect();
-  const exportMutation = useExportRetrospect();
+  const { showToast } = useToast();
+
+  const handleCopyLink = async () => {
+    const path =
+      status === RetrospectListStatus.COMPLETED
+        ? `/teams/${teamId}/retrospects/${retrospectId}`
+        : `/teams/${teamId}/retrospects/${retrospectId}/write`;
+    const url = `${window.location.origin}${path}`;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast({ variant: 'success', message: '링크가 복사되었습니다.' });
+    } catch {
+      showToast({ variant: 'warning', message: '링크 복사에 실패했습니다.' });
+    }
+  };
+
+  const handleDeleteConfirm = () => {
+    deleteMutation.mutate(retrospectId, {
+      onSuccess: () => {
+        showToast({ variant: 'success', message: '회고가 삭제되었습니다.' });
+        setDeleteDialogOpen(false);
+      },
+    });
+  };
 
   return (
-    <DropdownMenuRoot>
-      <DropdownMenuTrigger>
-        <IconButton variant="ghost" size="xs" shape="square" aria-label="회고 메뉴">
-          <IcMeatball width={20} height={20} />
-        </IconButton>
-      </DropdownMenuTrigger>
-      <DropdownMenuPortal>
-        <DropdownMenuContent
-          align="end"
-          className="min-w-[118px] rounded-[8px] border border-grey-200 bg-white p-[12px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)]"
-        >
-          <div className="flex flex-col gap-[12px]">
-            <span className="text-caption-4 text-grey-700">{title}</span>
-            <DropdownMenuItem
-              className="flex cursor-pointer items-center"
-              onClick={() => exportMutation.mutate(retrospectId)}
-            >
-              <span className="text-sub-title-3 text-grey-900">내보내기</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="flex cursor-pointer items-center"
-              onClick={() => deleteMutation.mutate(retrospectId)}
-            >
-              <span className="text-sub-title-3 text-red-300">삭제하기</span>
-            </DropdownMenuItem>
-          </div>
-        </DropdownMenuContent>
-      </DropdownMenuPortal>
-    </DropdownMenuRoot>
+    <>
+      <DropdownMenuRoot>
+        <DropdownMenuTrigger>
+          <IconButton variant="ghost" size="xs" shape="square" aria-label="회고 메뉴">
+            <IcMeatball width={20} height={20} />
+          </IconButton>
+        </DropdownMenuTrigger>
+        <DropdownMenuPortal>
+          <DropdownMenuContent
+            align="end"
+            className="min-w-[118px] rounded-[8px] border border-grey-200 bg-white p-[12px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)]"
+          >
+            <div className="flex flex-col gap-[12px]">
+              <span className="text-caption-4 text-grey-700">{title}</span>
+              <DropdownMenuItem
+                className="flex cursor-pointer items-center"
+                onClick={handleCopyLink}
+              >
+                <span className="text-sub-title-3 text-grey-900">링크 복사</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="flex cursor-pointer items-center"
+                onClick={() => setDeleteDialogOpen(true)}
+              >
+                <span className="text-sub-title-3 text-red-300">삭제하기</span>
+              </DropdownMenuItem>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenuRoot>
+      <DeleteRetrospectDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title={title}
+        onConfirm={handleDeleteConfirm}
+        isLoading={deleteMutation.isPending}
+      />
+    </>
   );
 }
 
@@ -104,7 +148,12 @@ function ActiveCard({ item, teamId }: RetrospectCardProps) {
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
         {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
         <div onClick={(e) => e.stopPropagation()}>
-          <CardMenu title={item.projectName} retrospectId={item.retrospectId} />
+          <CardMenu
+            title={item.projectName}
+            retrospectId={item.retrospectId}
+            teamId={teamId}
+            status={item.status}
+          />
         </div>
       </div>
       <span className="mt-3 truncate text-title-4 text-black">{item.projectName}</span>
@@ -128,7 +177,12 @@ function CompletedCard({ item, teamId }: RetrospectCardProps) {
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
         {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
         <div onClick={(e) => e.stopPropagation()}>
-          <CardMenu title={item.projectName} retrospectId={item.retrospectId} />
+          <CardMenu
+            title={item.projectName}
+            retrospectId={item.retrospectId}
+            teamId={teamId}
+            status={item.status}
+          />
         </div>
       </div>
       <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} />
