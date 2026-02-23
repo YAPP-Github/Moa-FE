@@ -2,7 +2,9 @@
  * WriteSidebar - 우측 사이드바 (전체 질문 목록 + 참고자료)
  */
 
+import { useState } from 'react';
 import type { ReferenceItem } from '@/features/retrospective/model/types';
+import { useOgMetadata } from '@/shared/api/og';
 
 interface WriteSidebarProps {
   questions: string[];
@@ -20,6 +22,13 @@ function extractDomain(url: string): string {
 }
 
 function ReferenceCard({ url, urlName }: ReferenceItem) {
+  const { data: ogData } = useOgMetadata(url);
+  const [imgError, setImgError] = useState(false);
+
+  const og = ogData?.result;
+  const displayTitle = og?.title || urlName || url;
+  const ogImage = og?.image;
+
   return (
     <a
       href={url}
@@ -27,9 +36,18 @@ function ReferenceCard({ url, urlName }: ReferenceItem) {
       rel="noopener noreferrer"
       className="block overflow-hidden rounded-[10px] shadow-[0_0_4px_#1C1C1C14]"
     >
-      <div className="h-[130px] bg-grey-100" />
+      {ogImage && !imgError ? (
+        <img
+          src={ogImage}
+          alt=""
+          className="h-[130px] w-full object-cover"
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <div className="h-[130px] bg-grey-100" />
+      )}
       <div className="px-4 py-3">
-        <p className="line-clamp-2 text-caption-2 text-grey-800">{urlName || url}</p>
+        <p className="line-clamp-2 text-caption-2 text-grey-800">{displayTitle}</p>
         <p className="mt-1 text-[12px] leading-[130%] text-[#7E7E7E]">{extractDomain(url)}</p>
       </div>
     </a>
