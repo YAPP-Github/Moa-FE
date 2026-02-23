@@ -97,9 +97,9 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
   const submitMutation = useSubmitRetrospect(retrospectId);
   const assistantMutation = useAssistantGuide(retrospectId, currentQuestionIndex + 1);
 
-  // ---- 참가자 등록 (NOT_JOINED인 경우 한 번만) ----
+  // ---- 참가자 등록 (NOT_PARTICIPATED인 경우 한 번만) ----
   useEffect(() => {
-    if (detail.currentUserStatus === 'NOT_JOINED' && !hasRegisteredParticipant.current) {
+    if (detail.currentUserStatus === 'NOT_PARTICIPATED' && !hasRegisteredParticipant.current) {
       hasRegisteredParticipant.current = true;
       createParticipantMutation.mutate();
     }

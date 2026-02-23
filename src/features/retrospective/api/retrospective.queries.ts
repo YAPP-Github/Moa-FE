@@ -8,6 +8,7 @@ import {
   listRetrospects,
 } from './retrospective.api';
 import type { ResponseCategory } from '../model/types';
+import { ApiError } from '@/shared/api/error';
 
 export const retrospectiveQueryKeys = {
   list: (retroRoomId: number) => ['retrospects', retroRoomId] as const,
@@ -62,10 +63,14 @@ export function useComments(responseId: number) {
 }
 
 export function useAnalysisResult(retrospectId: number) {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: retrospectiveQueryKeys.analysis(retrospectId),
     queryFn: () => getAnalysisResult(retrospectId),
     staleTime: 1000 * 60 * 5,
+    retry: (_, error) => {
+      if (error instanceof ApiError && error.status === 404) return false;
+      return false;
+    },
   });
 }
 

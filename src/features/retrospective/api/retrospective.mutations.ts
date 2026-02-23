@@ -19,6 +19,7 @@ import type {
   DraftSaveRequest,
   SubmitRetrospectRequest,
 } from '../model/types';
+import { ApiError } from '@/shared/api/error';
 
 export function useCreateRetrospect(retroRoomId: number) {
   const queryClient = useQueryClient();
@@ -111,8 +112,14 @@ export function useAnalyzeRetrospective(retrospectId: number) {
 
   return useMutation({
     mutationFn: () => analyzeRetrospective(retrospectId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.analysis(retrospectId) });
+    onSuccess: (data) => {
+      queryClient.setQueryData(retrospectiveQueryKeys.analysis(retrospectId), data);
     },
+    onError: (error) => {
+      if (error instanceof ApiError && error.status === 409) {
+        queryClient.refetchQueries({ queryKey: retrospectiveQueryKeys.analysis(retrospectId) });
+      }
+    },
+    meta: { skipGlobalError: true },
   });
 }

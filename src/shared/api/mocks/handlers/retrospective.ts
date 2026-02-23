@@ -38,7 +38,7 @@ export const retrospectiveHandlers = [
     if (detail) return successResponse(detail);
 
     return successResponse({
-      currentUserStatus: 'NOT_JOINED',
+      currentUserStatus: 'NOT_PARTICIPATED',
       members: [],
       questions: [{ content: '질문 1', index: 0 }],
       retroCategory: 'KPT',
