@@ -93,13 +93,9 @@ export function ReferenceUrlStep({ onClose, onBack }: ReferenceUrlStepProps) {
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col gap-6">
-        <div>
-          <div className="flex flex-col">
-            <span className="text-title-2 text-grey-1000">참고 자료 링크를 입력해주세요</span>
-            <span className="mt-1 text-body-2 text-grey-700">
-              팀원들이 회고 작성에 참고할 수 있어요
-            </span>
-          </div>
+        <div className="flex flex-col">
+          <span className="text-caption-4 text-grey-600">회고 참고 자료</span>
+          <span className="text-title-2 text-grey-1000">회고 참고 자료를 입력해 주세요</span>
         </div>
 
         <div className="flex flex-col gap-3">
