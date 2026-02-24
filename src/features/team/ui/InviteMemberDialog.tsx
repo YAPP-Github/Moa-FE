@@ -21,12 +21,12 @@ export function InviteMemberDialog({ open, onOpenChange, retroRoomId }: InviteMe
   const { showToast } = useToast();
   const { data } = useInviteCode(retroRoomId, open);
 
-  const inviteLink = data?.result.inviteCode;
+  const inviteCode = data?.result.inviteCode;
 
   const handleCopyLink = async () => {
-    if (!inviteLink) return;
+    if (!inviteCode) return;
 
-    await navigator.clipboard.writeText(inviteLink);
+    await navigator.clipboard.writeText(inviteCode);
     showToast({ variant: 'success', message: '초대 링크가 복사되었습니다.' });
     onOpenChange(false);
   };
