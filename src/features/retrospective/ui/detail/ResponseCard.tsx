@@ -28,7 +28,9 @@ export function ResponseCard({ response, hideAuthor = false }: ResponseCardProps
                 {formatRelativeTime(response.createdAt)}
               </span>
             )}
-            <p className="whitespace-pre-wrap text-long-2 text-grey-900">{response.content}</p>
+            <p className="whitespace-pre-wrap break-all text-long-2 text-grey-900">
+              {response.content}
+            </p>
           </div>
           <div className="mt-4 flex flex-col gap-3">
             <div className="flex items-center gap-1.5">

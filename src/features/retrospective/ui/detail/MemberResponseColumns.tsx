@@ -24,7 +24,7 @@ export function MemberResponseColumns({
         const memberResponse = responses.find((r) => r.userName === memberName);
 
         return (
-          <div key={question.index} className="w-[354px] shrink-0">
+          <div key={question.index} className="w-[354px] shrink-0 overflow-hidden">
             <h3 className="text-title-3 text-grey-1000">
               {idx + 1}. {question.content}
             </h3>
