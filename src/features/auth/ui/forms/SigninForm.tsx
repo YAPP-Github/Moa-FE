@@ -1,19 +1,21 @@
 import { GoogleOAuthButton } from '../GoogleOAuthButton';
 import { KakaoOAuthButton } from '../KaKaoOAuthButton';
+import IcLandingLogo from '@/shared/ui/icons/IcLandingLogo';
 
 export function SigninForm() {
   return (
-    <>
-      {/* 로고 스켈레톤 */}
-      <div className="mb-10 flex justify-center">
-        <div className="w-40 h-40 bg-[#E5E5E5] rounded-xl animate-pulse" />
+    <div className="flex flex-col items-center">
+      {/* 로고 + 서브타이틀 */}
+      <div className="flex flex-col items-center gap-3">
+        <IcLandingLogo />
+        <p className="text-sub-title-3 text-grey-1000">함께 성장하는 회고 경험의 시작</p>
       </div>
 
-      {/* 로그인 버튼 그룹 */}
-      <div className="flex flex-col gap-3">
+      {/* 소셜 로그인 버튼 그룹 */}
+      <div className="mt-20 flex flex-col gap-3">
         <KakaoOAuthButton />
         <GoogleOAuthButton />
       </div>
-    </>
+    </div>
   );
 }
