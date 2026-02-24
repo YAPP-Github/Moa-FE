@@ -19,6 +19,7 @@ export default {
           },
         },
       },
+      'prefixIds',
     ],
   },
   outDir: 'src/shared/ui/logos',

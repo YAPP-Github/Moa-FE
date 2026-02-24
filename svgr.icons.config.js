@@ -22,6 +22,7 @@ export default {
       // icons that have different background/foreground colors.
       // For single-color icons that need to respond to text color,
       // manually set colors to "currentColor" in the source SVG.
+      'prefixIds',
     ],
   },
   outDir: 'src/shared/ui/icons',

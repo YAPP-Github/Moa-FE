@@ -19,6 +19,7 @@ interface CreateRetrospectFormProps {
   teamName: string;
   onSuccess?: () => void;
   onClose: () => void;
+  onCompleteChange?: (isComplete: boolean) => void;
 }
 
 interface CompletedData {
@@ -32,6 +33,7 @@ export function CreateRetrospectForm({
   teamName,
   onSuccess,
   onClose,
+  onCompleteChange,
 }: CreateRetrospectFormProps) {
   const [completedData, setCompletedData] = useState<CompletedData | null>(null);
   const { mutateAsync: createRetrospect } = useCreateRetrospect(retroRoomId);
@@ -54,6 +56,7 @@ export function CreateRetrospectForm({
       retrospectDate: data.retrospectDate,
       retrospectMethod: data.retrospectMethod,
     });
+    onCompleteChange?.(true);
     onSuccess?.();
   };
 

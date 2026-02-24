@@ -7,7 +7,7 @@ export const ERROR_MESSAGES = {
   EMPTY_QUESTION: '질문을 입력해주세요.',
   NO_QUESTIONS: '최소 1개의 질문이 필요해요.',
   QUESTION_TOO_LONG: '질문은 300자 이내로 입력해주세요.',
-  EMPTY_URL: '링크를 입력해주세요.',
+  EMPTY_URL: '빈칸을 채워야 넘어갈 수 있어요',
   INVALID_URL: '올바른 URL 형식을 입력해주세요.',
 } as const;
 

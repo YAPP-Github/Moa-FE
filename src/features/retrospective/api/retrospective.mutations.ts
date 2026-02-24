@@ -44,14 +44,8 @@ export function useCreateParticipant(retrospectId: number) {
 }
 
 export function useSubmitRetrospect(retrospectId: number) {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: (request: SubmitRetrospectRequest) => submitRetrospect(retrospectId, request),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.detail(retrospectId) });
-      queryClient.invalidateQueries({ queryKey: ['retrospects'] });
-    },
   });
 }
 

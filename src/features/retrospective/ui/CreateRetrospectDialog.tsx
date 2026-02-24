@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CreateRetrospectForm } from '@/features/retrospective/ui/CreateRetrospectForm';
 import { DialogContent, DialogOverlay, DialogPortal, DialogRoot } from '@/shared/ui/dialog/Dialog';
 
@@ -16,12 +17,23 @@ export function CreateRetrospectDialog({
   teamName,
   onSuccess,
 }: CreateRetrospectDialogProps) {
+  const [isComplete, setIsComplete] = useState(false);
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) setIsComplete(false);
+    onOpenChange(nextOpen);
+  };
+
   return (
-    <DialogRoot open={open} onOpenChange={onOpenChange}>
+    <DialogRoot open={open} onOpenChange={handleOpenChange}>
       <DialogPortal>
         <DialogOverlay className="bg-black/50" />
         <DialogContent
-          className="flex h-[620px] w-[434px] flex-col rounded-2xl bg-white p-6 shadow-xl"
+          className={
+            isComplete
+              ? 'flex w-[300px] flex-col rounded-2xl bg-white p-6 shadow-xl'
+              : 'flex h-[620px] w-[434px] flex-col rounded-2xl bg-white p-6 shadow-xl'
+          }
           disableOutsideClick={true}
           hideCloseButton={true}
         >
@@ -29,7 +41,8 @@ export function CreateRetrospectDialog({
             retroRoomId={retroRoomId}
             teamName={teamName}
             onSuccess={onSuccess}
-            onClose={() => onOpenChange(false)}
+            onClose={() => handleOpenChange(false)}
+            onCompleteChange={setIsComplete}
           />
         </DialogContent>
       </DialogPortal>

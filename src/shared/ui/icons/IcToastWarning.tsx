@@ -10,7 +10,7 @@ const SvgIcToastWarning = (props: SVGProps<SVGSVGElement>) => (
     aria-hidden="true"
     {...props}
   >
-    <g clipPath="url(#a)">
+    <g clipPath="url(#ic_toast_warning_svg__a)">
       <circle cx={8} cy={8} r={8} fill="#FFC342" />
       <path
         fill="#212124"
@@ -19,7 +19,7 @@ const SvgIcToastWarning = (props: SVGProps<SVGSVGElement>) => (
       <rect width={1.778} height={1.778} x={7.111} y={10.311} fill="#212124" rx={0.889} />
     </g>
     <defs>
-      <clipPath id="a">
+      <clipPath id="ic_toast_warning_svg__a">
         <path fill="#fff" d="M0 0h16v16H0z" />
       </clipPath>
     </defs>

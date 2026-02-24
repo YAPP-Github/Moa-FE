@@ -4,6 +4,7 @@
  * 질문별 답변 작성, AI 어시스턴트, 사이드바, 하단 바를 조립합니다.
  */
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { PreviewModal } from './PreviewModal';
@@ -18,7 +19,10 @@ import {
   useSaveDraft,
   useSubmitRetrospect,
 } from '@/features/retrospective/api/retrospective.mutations';
-import { useReferences } from '@/features/retrospective/api/retrospective.queries';
+import {
+  retrospectiveQueryKeys,
+  useReferences,
+} from '@/features/retrospective/api/retrospective.queries';
 import type { GuideItem, RetrospectDetailResponse } from '@/features/retrospective/model/types';
 import { useRetroRooms } from '@/features/team/api/team.queries';
 import { useToast } from '@/shared/ui/toast/Toast';
@@ -63,6 +67,7 @@ interface WritePageContentProps {
 
 export function WritePageContent({ retrospectId, teamId, detail }: WritePageContentProps) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { showToast } = useToast();
 
   // ---- State ----
@@ -194,13 +199,20 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
     }
   };
 
+  const invalidateAfterSubmit = () => {
+    queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.detail(retrospectId) });
+    queryClient.invalidateQueries({ queryKey: ['retrospects'] });
+  };
+
   const handleSuccessClose = () => {
     setSubmitSuccessOpen(false);
+    invalidateAfterSubmit();
     navigate(`/teams/${teamId}`, { replace: true });
   };
 
   const handleSuccessConfirm = () => {
     setSubmitSuccessOpen(false);
+    invalidateAfterSubmit();
     navigate(`/teams/${teamId}/retrospects/${retrospectId}`, { replace: true });
   };
 
