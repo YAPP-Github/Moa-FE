@@ -9,11 +9,11 @@ export const signinSchema = z.object({
   teamName: z
     .string()
     .trim()
-    .min(1, '팀 이름을 입력해주세요')
     .max(10, '팀 이름은 10글자 이내로 입력해주세요')
-    .regex(/^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s]+$/, '팀 이름은 한글, 영문, 숫자만 가능해요.')
-    .optional(),
-  inviteLink: z.url('올바른 링크를 입력해주세요').optional().or(z.literal('')),
+    .regex(/^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9\s]*$/, '팀 이름은 한글, 영문, 숫자만 가능해요.')
+    .optional()
+    .or(z.literal('')),
+  inviteLink: z.string().optional().or(z.literal('')),
 });
 
 export type SigninFormData = z.infer<typeof signinSchema>;

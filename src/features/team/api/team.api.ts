@@ -39,10 +39,14 @@ export async function createRetroRoom(request: RetroRoomCreateRequest) {
 }
 
 export async function joinRetroRoom(request: JoinRetroRoomRequest) {
+  const inviteUrl = request.inviteUrl.startsWith('http')
+    ? request.inviteUrl
+    : `${window.location.origin}/invite/${request.inviteUrl}`;
+
   const data = await customInstance({
     url: '/api/v1/retro-rooms/join',
     method: 'POST',
-    data: request,
+    data: { inviteUrl },
   });
   return joinRetroRoomResponseSchema.parse(data);
 }

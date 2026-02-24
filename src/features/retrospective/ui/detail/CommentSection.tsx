@@ -21,7 +21,9 @@ export function CommentSection({ responseId }: CommentSectionProps) {
           <Avatar size="sm" />
           <div className="flex flex-1 flex-col gap-1">
             <span className="text-sub-title-4 text-grey-700">{comment.userName}</span>
-            <p className="whitespace-pre-wrap text-long-2 text-grey-900">{comment.content}</p>
+            <p className="whitespace-pre-wrap break-all text-long-2 text-grey-900">
+              {comment.content}
+            </p>
           </div>
         </div>
       ))}
