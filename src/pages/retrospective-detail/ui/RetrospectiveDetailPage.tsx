@@ -45,7 +45,7 @@ function DetailContent({ retrospectId, teamId }: { retrospectId: number; teamId:
             {activeTab === 'analysis' && (
               <AnalysisTabContent
                 retrospectId={retrospectId}
-                participantCount={detail.members.length}
+                participantCount={detail.members.filter((m) => m.status === 'SUBMITTED').length}
                 totalParticipants={detail.members.length}
               />
             )}
