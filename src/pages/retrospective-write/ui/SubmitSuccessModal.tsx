@@ -17,10 +17,7 @@ export function SubmitSuccessModal({ open, onClose, onConfirm }: SubmitSuccessMo
     <DialogRoot open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogPortal>
         <DialogOverlay className="bg-black/50" />
-        <DialogContent
-          hideCloseButton
-          className="w-[434px] rounded-2xl bg-white px-[20px] py-[28px] shadow-xl"
-        >
+        <DialogContent hideCloseButton className="w-[300px] rounded-2xl bg-white p-5 shadow-xl">
           <div className="flex flex-col items-center">
             <IcCheckBlueBgLightblue width={48} height={48} />
 
@@ -29,18 +26,18 @@ export function SubmitSuccessModal({ open, onClose, onConfirm }: SubmitSuccessMo
               <p className="text-caption-4 text-grey-800">팀원들의 회고 내용을 확인할까요?</p>
             </div>
 
-            <div className="mt-7 flex gap-2">
+            <div className="mt-7 flex w-full justify-end gap-2">
               <Button
                 variant="tertiary"
                 onClick={onClose}
-                className="h-[48px] rounded-[12px] px-[28px] text-sub-title-3"
+                className="rounded-[8px] px-[10px] py-[8px] text-sub-title-4 leading-[140%]"
               >
                 닫기
               </Button>
               <Button
                 variant="primary"
                 onClick={onConfirm}
-                className="h-[48px] rounded-[12px] px-[28px] text-sub-title-3"
+                className="rounded-[8px] px-[10px] py-[8px] text-sub-title-4 leading-[140%]"
               >
                 확인하기
               </Button>

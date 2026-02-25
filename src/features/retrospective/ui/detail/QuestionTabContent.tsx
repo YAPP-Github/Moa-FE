@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ResponseCard } from './ResponseCard';
 import { useResponses } from '../../api/retrospective.queries';
 import { QUESTION_CATEGORIES } from '../../model/constants';
@@ -12,6 +12,16 @@ interface QuestionTabContentProps {
 
 export function QuestionTabContent({ retrospectId, questions }: QuestionTabContentProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [openCommentId, setOpenCommentId] = useState<number | null>(null);
+  const draftMapRef = useRef<Map<number, string>>(new Map());
+
+  const handleToggleComment = (responseId: number) => {
+    setOpenCommentId((prev) => (prev === responseId ? null : responseId));
+  };
+
+  const handleDraftChange = (responseId: number, content: string) => {
+    draftMapRef.current.set(responseId, content);
+  };
   const selectedCategory = QUESTION_CATEGORIES[selectedIndex] as ResponseCategory;
 
   const selectedQuestion = questions[selectedIndex];
@@ -50,7 +60,14 @@ export function QuestionTabContent({ retrospectId, questions }: QuestionTabConte
 
           <div className="mt-4 flex flex-col">
             {responses.map((response) => (
-              <ResponseCard key={response.responseId} response={response} />
+              <ResponseCard
+                key={response.responseId}
+                response={response}
+                openCommentId={openCommentId}
+                onToggleComment={handleToggleComment}
+                draft={draftMapRef.current.get(response.responseId) ?? ''}
+                onDraftChange={handleDraftChange}
+              />
             ))}
           </div>
         </div>

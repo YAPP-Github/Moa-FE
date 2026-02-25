@@ -4,15 +4,21 @@ import { Avatar } from '@/shared/ui/avatar/Avatar';
 
 interface CommentSectionProps {
   responseId: number;
+  draft: string;
+  onDraftChange: (content: string) => void;
 }
 
-export function CommentSection({ responseId }: CommentSectionProps) {
+export function CommentSection({ responseId, draft, onDraftChange }: CommentSectionProps) {
   const { data, isLoading } = useComments(responseId);
   const comments = data?.result?.comments ?? [];
 
   return (
     <div className="flex flex-col gap-3">
-      <CommentInput responseId={responseId} />
+      <CommentInput
+        responseId={responseId}
+        initialContent={draft}
+        onContentChange={onDraftChange}
+      />
 
       {isLoading && <p className="text-caption-4 text-grey-400">댓글 불러오는 중...</p>}
 

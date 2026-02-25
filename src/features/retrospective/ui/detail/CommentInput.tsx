@@ -4,10 +4,12 @@ import { Button } from '@/shared/ui/button/Button';
 
 interface CommentInputProps {
   responseId: number;
+  initialContent: string;
+  onContentChange: (content: string) => void;
 }
 
-export function CommentInput({ responseId }: CommentInputProps) {
-  const [content, setContent] = useState('');
+export function CommentInput({ responseId, initialContent, onContentChange }: CommentInputProps) {
+  const [content, setContent] = useState(initialContent);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const mutation = useCreateComment(responseId);
 
@@ -15,19 +17,18 @@ export function CommentInput({ responseId }: CommentInputProps) {
     textareaRef.current?.focus();
   }, []);
 
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+    onContentChange(e.target.value);
+  };
+
   const handleSubmit = async () => {
     const trimmed = content.trim();
     if (!trimmed) return;
 
     await mutation.mutateAsync({ content: trimmed });
     setContent('');
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit();
-    }
+    onContentChange('');
   };
 
   return (
@@ -35,8 +36,7 @@ export function CommentInput({ responseId }: CommentInputProps) {
       <textarea
         ref={textareaRef}
         value={content}
-        onChange={(e) => setContent(e.target.value)}
-        onKeyDown={handleKeyDown}
+        onChange={handleChange}
         placeholder="댓글로 의견을 남겨보세요"
         rows={1}
         className="max-h-[120px] flex-1 resize-none bg-transparent text-caption-3-medium leading-[normal] text-grey-900 outline-none [field-sizing:content] placeholder:text-grey-500"

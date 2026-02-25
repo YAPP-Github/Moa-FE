@@ -19,7 +19,7 @@ export function JoinTeamDialog({ open, onOpenChange }: JoinTeamDialogProps) {
       <DialogPortal>
         <DialogOverlay className="bg-black/50" />
         <DialogContent className="w-[400px] bg-white rounded-[12px] p-[20px]" disableOutsideClick>
-          <DialogHeader>
+          <DialogHeader className="mb-4">
             <DialogTitle className="text-xl font-bold">팀 참여하기</DialogTitle>
           </DialogHeader>
 

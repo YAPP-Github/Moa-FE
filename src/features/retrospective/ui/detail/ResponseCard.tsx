@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { CommentButton } from './CommentButton';
 import { CommentSection } from './CommentSection';
 import { LikeButton } from './LikeButton';
@@ -9,10 +8,21 @@ import { Avatar } from '@/shared/ui/avatar/Avatar';
 interface ResponseCardProps {
   response: ResponseListItem;
   hideAuthor?: boolean;
+  openCommentId: number | null;
+  onToggleComment: (responseId: number) => void;
+  draft: string;
+  onDraftChange: (responseId: number, content: string) => void;
 }
 
-export function ResponseCard({ response, hideAuthor = false }: ResponseCardProps) {
-  const [showComments, setShowComments] = useState(false);
+export function ResponseCard({
+  response,
+  hideAuthor = false,
+  openCommentId,
+  onToggleComment,
+  draft,
+  onDraftChange,
+}: ResponseCardProps) {
+  const showComments = openCommentId === response.responseId;
 
   return (
     <div className={hideAuthor ? 'py-4' : 'border-b border-grey-100 py-4 last:border-b-0'}>
@@ -41,11 +51,17 @@ export function ResponseCard({ response, hideAuthor = false }: ResponseCardProps
               />
               <CommentButton
                 commentCount={response.commentCount}
-                onClick={() => setShowComments((prev) => !prev)}
+                onClick={() => onToggleComment(response.responseId)}
               />
             </div>
 
-            {showComments && <CommentSection responseId={response.responseId} />}
+            {showComments && (
+              <CommentSection
+                responseId={response.responseId}
+                draft={draft}
+                onDraftChange={(content) => onDraftChange(response.responseId, content)}
+              />
+            )}
           </div>
         </div>
       </div>
