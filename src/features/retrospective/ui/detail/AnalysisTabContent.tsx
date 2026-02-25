@@ -13,8 +13,10 @@ export function AnalysisTabContent({
   participantCount,
   totalParticipants,
 }: AnalysisTabContentProps) {
-  const { data } = useAnalysisResult(retrospectId);
+  const { data, isPending } = useAnalysisResult(retrospectId);
   const analysis = data?.result;
+
+  if (isPending) return null;
 
   if (!analysis || (!analysis.emotionRank.length && !analysis.insight)) {
     return (
@@ -27,7 +29,7 @@ export function AnalysisTabContent({
   }
 
   return (
-    <div className="px-6">
+    <div className="px-10 py-8">
       <AnalysisResult analysis={analysis} />
     </div>
   );

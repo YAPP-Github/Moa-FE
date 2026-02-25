@@ -107,6 +107,7 @@ export interface RetrospectQuestionItem {
 export interface RetrospectMemberItem {
   memberId: number;
   userName: string;
+  status: 'IN_PROGRESS' | 'DRAFT' | 'SUBMITTED';
 }
 
 export interface RetrospectDetailResponse {

@@ -34,7 +34,7 @@ export function AnalysisResult({ analysis }: AnalysisResultProps) {
   const currentUser = analysis.personalMissions[0];
 
   return (
-    <div className="flex flex-col gap-[68px] py-8">
+    <div className="flex flex-col gap-[68px]">
       {/* AI 인사이트 */}
       {analysis.insight && (
         <section>
