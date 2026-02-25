@@ -20,11 +20,20 @@ export function NoTeamEmptyState() {
           </p>
 
           <div className="flex items-center gap-2">
-            <Button size="lg" onClick={() => setIsCreateOpen(true)} className="gap-1">
+            <Button
+              size="lg"
+              onClick={() => setIsCreateOpen(true)}
+              className="gap-1 px-[10px] py-2"
+            >
               <IcPlus className="w-3 h-3" /> 팀 생성하기
             </Button>
-            <Button size="lg" variant="secondary" onClick={() => setIsJoinOpen(true)}>
-              팀 참여하기
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={() => setIsJoinOpen(true)}
+              className="px-[10px] py-2"
+            >
+              기존 팀 참여하기
             </Button>
           </div>
         </div>

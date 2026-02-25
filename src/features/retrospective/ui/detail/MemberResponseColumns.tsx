@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { ResponseCard } from './ResponseCard';
 import type {
   BaseApiResponse,
@@ -16,6 +17,17 @@ export function MemberResponseColumns({
   queryResults,
   memberName,
 }: MemberResponseColumnsProps) {
+  const [openCommentId, setOpenCommentId] = useState<number | null>(null);
+  const draftMapRef = useRef<Map<number, string>>(new Map());
+
+  const handleToggleComment = (responseId: number) => {
+    setOpenCommentId((prev) => (prev === responseId ? null : responseId));
+  };
+
+  const handleDraftChange = (responseId: number, content: string) => {
+    draftMapRef.current.set(responseId, content);
+  };
+
   return (
     <div className="flex gap-5">
       {questions.map((question, idx) => {
@@ -29,7 +41,16 @@ export function MemberResponseColumns({
               {idx + 1}. {question.content}
             </h3>
             <div className="mt-3">
-              {memberResponse && <ResponseCard response={memberResponse} hideAuthor />}
+              {memberResponse && (
+                <ResponseCard
+                  response={memberResponse}
+                  hideAuthor
+                  openCommentId={openCommentId}
+                  onToggleComment={handleToggleComment}
+                  draft={draftMapRef.current.get(memberResponse.responseId) ?? ''}
+                  onDraftChange={handleDraftChange}
+                />
+              )}
             </div>
           </div>
         );
