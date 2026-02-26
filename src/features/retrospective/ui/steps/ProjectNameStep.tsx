@@ -40,7 +40,9 @@ export function ProjectNameStep({ onClose }: ProjectNameStepProps) {
               {...register('projectName')}
             />
             <div className="flex">
-              <span className="ml-auto text-sm text-[#A0A9B7]">{projectName?.length ?? 0}/20</span>
+              <span className="ml-auto text-caption-3-medium text-grey-400">
+                {projectName?.length ?? 0}/20
+              </span>
             </div>
           </div>
         </Field>
