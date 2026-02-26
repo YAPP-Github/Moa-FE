@@ -25,10 +25,10 @@ export function TeamMenuDropdown({ teamName, onEditTeamName, onLeaveTeam }: Team
       <DropdownMenuPortal>
         <DropdownMenuContent
           align="end"
-          className="min-w-[118px] rounded-[8px] border border-grey-200 bg-white p-[12px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)]"
+          className="min-w-[118px] rounded-[8px] border border-grey-200 bg-white p-3 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)]"
         >
-          <div className="flex flex-col gap-[12px]">
-            <span className="text-long-2 text-grey-700">{teamName}</span>
+          <div className="flex flex-col gap-3">
+            <span className="text-caption-4 text-grey-700">{teamName}</span>
             <DropdownMenuItem
               onSelect={onEditTeamName}
               className="flex items-center cursor-pointer"
