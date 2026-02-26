@@ -30,11 +30,11 @@ export function DateTimeStep({ onClose }: DateTimeStepProps) {
 
       <div className="flex flex-1 flex-col justify-between">
         <div className="flex flex-col gap-6">
-          <div>
+          <div className="px-2">
             <StepIndicator />
             <div className="flex flex-col">
-              <span className="text-title-2 text-grey-1000">회고를 하는 날짜를</span>
-              <span className="text-title-2 text-grey-1000">선택해주세요</span>
+              <span className="text-title-2 text-grey-1000">회고 진행 날짜를</span>
+              <span className="text-title-2 text-grey-1000">선택해 주세요</span>
             </div>
           </div>
 
@@ -52,7 +52,7 @@ export function DateTimeStep({ onClose }: DateTimeStepProps) {
         </div>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between px-2">
         <div className="flex items-center gap-[6px]">
           {selectedDateText && (
             <>

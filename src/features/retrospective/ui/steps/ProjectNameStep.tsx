@@ -21,7 +21,7 @@ export function ProjectNameStep({ onClose }: ProjectNameStepProps) {
     <div className="flex h-full flex-col">
       <FormHeader onClose={onClose} />
 
-      <div className="flex flex-col gap-[32px]">
+      <div className="flex flex-col gap-[32px] px-2">
         <div>
           <StepIndicator />
           <div className="flex flex-col">
@@ -40,13 +40,15 @@ export function ProjectNameStep({ onClose }: ProjectNameStepProps) {
               {...register('projectName')}
             />
             <div className="flex">
-              <span className="ml-auto text-sm text-[#A0A9B7]">{projectName?.length ?? 0}/20</span>
+              <span className="ml-auto text-caption-3-medium text-grey-400">
+                {projectName?.length ?? 0}/20
+              </span>
             </div>
           </div>
         </Field>
       </div>
 
-      <div className="mt-auto flex justify-end">
+      <div className="mt-auto flex justify-end px-2">
         <Button
           type="button"
           variant="primary"

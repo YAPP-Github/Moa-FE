@@ -15,15 +15,13 @@ export function NoTeamEmptyState() {
         <div className="flex flex-col items-center gap-4">
           <IcNote />
 
-          <p className="text-[20px] text-[#4E5968] font-semibold leading-none">
-            회고를 시작하려면 팀 생성이 필요해요
-          </p>
+          <p className="text-sub-title-2 text-grey-800">회고를 시작하려면 팀 생성이 필요해요</p>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Button
               size="lg"
               onClick={() => setIsCreateOpen(true)}
-              className="gap-1 px-[10px] py-2"
+              className="gap-1 pl-3 pr-4 py-2 text-sub-title-3"
             >
               <IcPlus className="w-3 h-3" /> 팀 생성하기
             </Button>
@@ -31,7 +29,7 @@ export function NoTeamEmptyState() {
               size="lg"
               variant="secondary"
               onClick={() => setIsJoinOpen(true)}
-              className="px-[10px] py-2"
+              className="px-4 py-2 text-sub-title-3"
             >
               기존 팀 참여하기
             </Button>

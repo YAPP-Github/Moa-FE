@@ -41,13 +41,13 @@ export function ReferenceStep({ onClose }: ReferenceStepProps) {
     <div className="flex h-full flex-col">
       <FormHeader onClose={onClose} />
 
-      <div className="flex min-h-0 flex-1 flex-col gap-6">
+      <div className="flex min-h-0 flex-1 flex-col gap-6 px-2">
         <div>
           <StepIndicator />
           <div className="flex flex-col">
             <span className="text-title-2 text-grey-1000">회고에 참고할 자료가 있나요?</span>
-            <span className="mt-1 text-body-2 text-grey-700">
-              팀원들이 회고 작성에 참고할 수 있어요
+            <span className="mt-1 text-caption-2 text-[#6e6e6e]">
+              파일을 업로드하면 팀원들이 회고 작성에 참고할 수 있어요
             </span>
           </div>
         </div>
@@ -95,7 +95,7 @@ export function ReferenceStep({ onClose }: ReferenceStepProps) {
         </RadioCardGroup>
       </div>
 
-      <div className="shrink-0 flex justify-end pt-4">
+      <div className="shrink-0 flex justify-end pt-4 px-2">
         <Button
           type="button"
           variant="primary"

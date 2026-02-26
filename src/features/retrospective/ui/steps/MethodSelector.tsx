@@ -42,6 +42,8 @@ export function MethodSelector({ value, onChange, onEditQuestions }: MethodSelec
 
   const handleCardClick = (method: string, isSelected: boolean) => {
     if (isSelected) {
+      onChange('');
+      setExpandedMethod(undefined);
       return;
     }
     setExpandedMethod((prev) => (prev === method ? undefined : method));
@@ -71,7 +73,10 @@ export function MethodSelector({ value, onChange, onEditQuestions }: MethodSelec
               key={method}
               value={method}
               className="rounded-[10px] border border-grey-200 bg-white px-4 py-[18px] data-[state=checked]:border-blue-500"
-              onClick={() => handleCardClick(method, isSelected)}
+              onClick={(e) => {
+                if (isSelected) e.preventDefault();
+                handleCardClick(method, isSelected);
+              }}
             >
               <AccordionRoot value={open ? method : undefined} onValueChange={() => {}}>
                 <AccordionItem value={method}>
@@ -115,7 +120,7 @@ export function MethodSelector({ value, onChange, onEditQuestions }: MethodSelec
                             type="button"
                             variant="tertiary"
                             size="sm"
-                            className="flex items-center text-caption-5 grey-900 px-[6px] py-[4.5px] gap-[5px]"
+                            className="flex items-center rounded-[6px] text-caption-5 text-grey-900 pl-[6px] pr-2 py-1 gap-[6px]"
                             onClick={(e) => {
                               e.stopPropagation();
                               onEditQuestions?.();
@@ -132,7 +137,7 @@ export function MethodSelector({ value, onChange, onEditQuestions }: MethodSelec
                             <span className="shrink-0 text-sub-title-6 text-grey-700">
                               질문 {index + 1}
                             </span>
-                            <span className="text-caption-2 text-grey-900">{question}</span>
+                            <span className="text-caption-2 text-grey-1000">{question}</span>
                           </li>
                         ))}
                       </ul>

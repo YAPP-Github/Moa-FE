@@ -16,7 +16,7 @@ import {
 } from '@/shared/ui/dropdown-menu/DropdownMenu';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
 import IcChevronDown from '@/shared/ui/icons/IcChevronDown';
-import IcMeatball from '@/shared/ui/icons/IcMeatball';
+import IcMoreGrey from '@/shared/ui/icons/IcMoreGrey';
 import { useToast } from '@/shared/ui/toast/Toast';
 
 const CARD_CLASS = 'flex h-[141px] w-[284px] flex-col rounded-xl bg-white p-[18px]';
@@ -67,7 +67,7 @@ function CardMenu({ title, retrospectId, teamId, status }: CardMenuProps) {
       <DropdownMenuRoot>
         <DropdownMenuTrigger>
           <IconButton variant="ghost" size="xs" shape="square" aria-label="회고 메뉴">
-            <IcMeatball width={20} height={20} />
+            <IcMoreGrey width={20} height={20} />
           </IconButton>
         </DropdownMenuTrigger>
         <DropdownMenuPortal>

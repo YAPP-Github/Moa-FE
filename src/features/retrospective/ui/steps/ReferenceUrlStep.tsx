@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { MAX_REFERENCE_URLS } from '@/features/retrospective/model/constants';
 import {
@@ -46,6 +46,13 @@ export function ReferenceUrlStep({ onClose, onBack }: ReferenceUrlStepProps) {
   const referenceUrls = watch('referenceUrls') || [];
   const hasValidUrl = referenceUrls.some((url) => url.trim() !== '' && isValidUrl(url.trim()));
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 마운트 시 1회만 실행
+  useEffect(() => {
+    if (fields.length === 0) {
+      append('');
+    }
+  }, []);
+
   const handleAddLink = () => {
     setErrorIndexes(new Set());
     append('');
@@ -85,14 +92,14 @@ export function ReferenceUrlStep({ onClose, onBack }: ReferenceUrlStepProps) {
     <div className="flex h-full flex-col">
       <div className="mb-6 flex items-center justify-between">
         <IconButton type="button" variant="ghost" size="sm" onClick={onBack} aria-label="돌아가기">
-          <IcBack className="size-5" />
+          <IcBack className="size-6" />
         </IconButton>
         <IconButton type="button" variant="ghost" size="sm" onClick={onClose} aria-label="닫기">
-          <SvgIcClose className="size-5" />
+          <SvgIcClose className="size-6" />
         </IconButton>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-6">
+      <div className="flex min-h-0 flex-1 flex-col gap-6 px-2">
         <div className="flex flex-col">
           <span className="text-caption-4 text-grey-600">회고 참고 자료</span>
           <span className="text-title-2 text-grey-1000">회고 참고 자료를 입력해 주세요</span>
@@ -129,13 +136,13 @@ export function ReferenceUrlStep({ onClose, onBack }: ReferenceUrlStepProps) {
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-200">
                 <SvgIcPlusBlue className="h-2 w-2" />
               </div>
-              <span className="leading-5 text-caption-5 text-blue-500">추가하기</span>
+              <span className="leading-5 text-sub-title-3 text-blue-500">추가하기</span>
             </button>
           )}
         </div>
       </div>
 
-      <div className="shrink-0 flex justify-end gap-2 pt-4">
+      <div className="shrink-0 flex justify-end gap-2 pt-4 px-2">
         <Button
           type="button"
           variant="primary"

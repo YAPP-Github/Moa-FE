@@ -18,8 +18,8 @@ export function TeamNameStep() {
 
   return (
     <Field className="flex flex-col gap-[20px]">
-      <div className="mt-[20px]">
-        <FieldLabel htmlFor="teamName" error={hasError}>
+      <div className="mt-[20px] flex flex-col gap-2">
+        <FieldLabel htmlFor="teamName" error={hasError} className="text-sub-title-4 text-grey-900">
           팀 이름
         </FieldLabel>
         <div className="flex flex-col gap-[2px]">
@@ -36,7 +36,7 @@ export function TeamNameStep() {
           />
           <div className="flex min-h-[20px]">
             <FieldError>{errors.teamName?.message}</FieldError>
-            <span className="ml-auto text-caption-3-medium text-[#C9C9C9]">
+            <span className="ml-auto text-caption-2 text-grey-400">
               <span className={cn((teamName?.length ?? 0) > 0 && 'text-[#333D4B]')}>
                 {teamName?.length ?? 0}
               </span>
@@ -46,8 +46,8 @@ export function TeamNameStep() {
         </div>
       </div>
 
-      <div className="mt-auto flex justify-end">
-        <Button type="submit" size="md">
+      <div className="flex justify-end">
+        <Button type="submit" size="md" className="px-3 py-2">
           만들기
         </Button>
       </div>
