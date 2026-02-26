@@ -9,7 +9,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu/DropdownMenu';
-import IcPlus from '@/shared/ui/icons/IcPlus';
+import IcPlusBlueStrong from '@/shared/ui/icons/IcPlusBlueStrong';
 import IcUser from '@/shared/ui/icons/IcUser';
 
 interface TeamMemberDropdownProps {
@@ -38,8 +38,8 @@ export function TeamMemberDropdown({ teamId }: TeamMemberDropdownProps) {
               <div className="h-px bg-grey-200" />
               <DropdownMenuItem onSelect={() => setIsInviteOpen(true)} className="cursor-pointer">
                 <div className="flex items-center gap-[8px]">
-                  <span className="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-blue-200">
-                    <IcPlus className="h-[12px] w-[12px] text-blue-500" />
+                  <span className="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-blue-500/17">
+                    <IcPlusBlueStrong className="h-[12px] w-[12px]" />
                   </span>
                   <span className="text-sub-title-3 text-blue-500">추가하기</span>
                 </div>
