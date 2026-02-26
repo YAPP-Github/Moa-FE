@@ -20,7 +20,7 @@ export function CreateTeamForm({ onClose }: CreateTeamFormProps) {
 
   const handleSubmit = async (data: CreateTeamFormData) => {
     const response = await createRetroRoom({ title: data.teamName });
-    showToast({ variant: 'success', message: '새로운 팀이 생성되었습니다.' });
+    showToast({ variant: 'success', message: '팀 생성이 완료되었어요!' });
     onClose();
     await queryClient.invalidateQueries({ queryKey: teamQueryKeys.rooms });
     navigate(`/teams/${response.result.retroRoomId}`, { replace: true });

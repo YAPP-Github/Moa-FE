@@ -1,6 +1,7 @@
 import {
   inviteCodeResponseSchema,
   joinRetroRoomResponseSchema,
+  leaveRetroRoomResponseSchema,
   retroRoomCreateResponseSchema,
   retroRoomListResponseSchema,
   retroRoomMembersResponseSchema,
@@ -63,11 +64,12 @@ export async function updateRetroRoomName(
   return updateRetroRoomNameResponseSchema.parse(data);
 }
 
-export async function deleteRetroRoom(retroRoomId: number) {
-  await customInstance({
-    url: `/api/v1/retro-rooms/${retroRoomId}`,
-    method: 'DELETE',
+export async function leaveRetroRoom(retroRoomId: number) {
+  const data = await customInstance({
+    url: `/api/v1/retro-rooms/${retroRoomId}/leave`,
+    method: 'POST',
   });
+  return leaveRetroRoomResponseSchema.parse(data);
 }
 
 export async function getInviteCode(retroRoomId: number) {

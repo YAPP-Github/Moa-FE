@@ -79,3 +79,10 @@ const inviteCodeResultSchema = z.object({
 export type InviteCodeResult = z.infer<typeof inviteCodeResultSchema>;
 
 export const inviteCodeResponseSchema = baseResponseSchema(inviteCodeResultSchema);
+
+const leaveRetroRoomResultSchema = z.object({
+  leftAt: z.string(),
+  retroRoomId: z.number(),
+});
+
+export const leaveRetroRoomResponseSchema = baseResponseSchema(leaveRetroRoomResultSchema);

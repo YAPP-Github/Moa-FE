@@ -9,16 +9,16 @@ export const retroRoomMembers: Record<
   { joinedAt: string; memberId: number; nickname: string; role: string }[]
 > = {
   1: [
-    { joinedAt: '2026-01-10T09:00:00', memberId: 1, nickname: '홍길동', role: 'OWNER' },
+    { joinedAt: '2026-01-10T09:00:00', memberId: 1, nickname: '홍길동', role: 'MEMBER' },
     { joinedAt: '2026-01-11T10:00:00', memberId: 2, nickname: '김철수', role: 'MEMBER' },
     { joinedAt: '2026-01-12T11:00:00', memberId: 3, nickname: '이영희', role: 'MEMBER' },
   ],
   2: [
-    { joinedAt: '2026-01-15T09:00:00', memberId: 1, nickname: '홍길동', role: 'OWNER' },
+    { joinedAt: '2026-01-15T09:00:00', memberId: 1, nickname: '홍길동', role: 'MEMBER' },
     { joinedAt: '2026-01-16T10:00:00', memberId: 4, nickname: '박지민', role: 'MEMBER' },
   ],
   3: [
-    { joinedAt: '2026-02-01T09:00:00', memberId: 5, nickname: '정수연', role: 'OWNER' },
+    { joinedAt: '2026-02-01T09:00:00', memberId: 5, nickname: '정수연', role: 'MEMBER' },
     { joinedAt: '2026-02-02T10:00:00', memberId: 6, nickname: '최민호', role: 'MEMBER' },
     { joinedAt: '2026-02-03T11:00:00', memberId: 1, nickname: '홍길동', role: 'MEMBER' },
     { joinedAt: '2026-02-04T12:00:00', memberId: 2, nickname: '김철수', role: 'MEMBER' },

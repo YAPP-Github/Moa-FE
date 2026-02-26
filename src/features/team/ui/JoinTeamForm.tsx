@@ -30,7 +30,7 @@ export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
 
   const onSubmit = async (data: JoinTeamFormData) => {
     const response = await mutation.mutateAsync({ inviteUrl: data.inviteUrl });
-    showToast({ variant: 'success', message: '팀에 입장했습니다.' });
+    showToast({ variant: 'success', message: '팀 참여가 완료되었어요!' });
     onClose();
     onSuccess?.();
     await queryClient.invalidateQueries({ queryKey: teamQueryKeys.rooms });
