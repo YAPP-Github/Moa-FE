@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { MAX_REFERENCE_URLS } from '@/features/retrospective/model/constants';
 import {
@@ -45,6 +45,13 @@ export function ReferenceUrlStep({ onClose, onBack }: ReferenceUrlStepProps) {
 
   const referenceUrls = watch('referenceUrls') || [];
   const hasValidUrl = referenceUrls.some((url) => url.trim() !== '' && isValidUrl(url.trim()));
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: 마운트 시 1회만 실행
+  useEffect(() => {
+    if (fields.length === 0) {
+      append('');
+    }
+  }, []);
 
   const handleAddLink = () => {
     setErrorIndexes(new Set());
@@ -129,7 +136,7 @@ export function ReferenceUrlStep({ onClose, onBack }: ReferenceUrlStepProps) {
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-200">
                 <SvgIcPlusBlue className="h-2 w-2" />
               </div>
-              <span className="leading-5 text-caption-5 text-blue-500">추가하기</span>
+              <span className="leading-5 text-sub-title-3 text-blue-500">추가하기</span>
             </button>
           )}
         </div>
