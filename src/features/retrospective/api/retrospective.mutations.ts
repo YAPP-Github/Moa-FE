@@ -62,13 +62,14 @@ export function useSaveDraft(retrospectId: number) {
   });
 }
 
-export function useDeleteRetrospect() {
+export function useDeleteRetrospect(retroRoomId: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (retrospectId: number) => deleteRetrospect(retrospectId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['retrospects'] });
+      queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.list(retroRoomId) });
+      queryClient.invalidateQueries({ queryKey: ['retroRooms'] });
     },
   });
 }

@@ -35,7 +35,7 @@ interface CardMenuProps {
 
 function CardMenu({ title, retrospectId, teamId, status }: CardMenuProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const deleteMutation = useDeleteRetrospect();
+  const deleteMutation = useDeleteRetrospect(teamId);
   const { showToast } = useToast();
 
   const handleCopyLink = async () => {

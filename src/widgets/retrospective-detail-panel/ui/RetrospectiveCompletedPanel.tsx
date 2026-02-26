@@ -36,6 +36,7 @@ interface Retrospect {
 
 interface RetrospectiveCompletedPanelProps {
   retrospect: Retrospect;
+  retroRoomId: number;
   onClose: () => void;
   isExpanded?: boolean;
   onScaleToggle?: () => void;
@@ -47,12 +48,13 @@ interface RetrospectiveCompletedPanelProps {
 
 function RetrospectiveCompletedPanel({
   retrospect,
+  retroRoomId,
   onClose,
   isExpanded = false,
   onScaleToggle,
 }: RetrospectiveCompletedPanelProps) {
   const { showToast } = useToast();
-  const deleteRetrospect = useDeleteRetrospect();
+  const deleteRetrospect = useDeleteRetrospect(retroRoomId);
 
   const handleCopyLink = async () => {
     const url = `${window.location.origin}/retrospects/${retrospect.retrospectId}`;
