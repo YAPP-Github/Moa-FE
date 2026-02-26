@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createRetroRoom, deleteRetroRoom, joinRetroRoom, updateRetroRoomName } from './team.api';
+import { createRetroRoom, joinRetroRoom, leaveRetroRoom, updateRetroRoomName } from './team.api';
 import { teamQueryKeys } from './team.queries';
 import type { JoinRetroRoomRequest, RetroRoomCreateRequest } from '../model/types';
 
@@ -37,11 +37,11 @@ export function useUpdateRetroRoomName() {
   });
 }
 
-export function useDeleteRetroRoom() {
+export function useLeaveRetroRoom() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (retroRoomId: number) => deleteRetroRoom(retroRoomId),
+    mutationFn: (retroRoomId: number) => leaveRetroRoom(retroRoomId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: teamQueryKeys.rooms });
     },

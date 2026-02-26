@@ -26,13 +26,13 @@ export const teamHandlers = [
     });
   }),
 
-  // DELETE /api/v1/retro-rooms/:retroRoomId — 팀 나가기/삭제
-  http.delete('/api/v1/retro-rooms/:retroRoomId', ({ params }) => {
+  // POST /api/v1/retro-rooms/:retroRoomId/leave — 팀 나가기
+  http.post('/api/v1/retro-rooms/:retroRoomId/leave', ({ params }) => {
     const roomId = Number(params.retroRoomId);
     const index = retroRooms.findIndex((r) => r.retroRoomId === roomId);
     if (index !== -1) retroRooms.splice(index, 1);
     return successResponse({
-      deletedAt: new Date().toISOString(),
+      leftAt: new Date().toISOString(),
       retroRoomId: roomId,
     });
   }),

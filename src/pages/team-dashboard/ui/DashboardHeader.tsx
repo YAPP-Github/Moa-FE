@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { TeamMenuDropdown } from './TeamMenuDropdown';
 import { CreateRetrospectDialog } from '@/features/retrospective/ui/CreateRetrospectDialog';
-import { useDeleteRetroRoom } from '@/features/team/api/team.mutations';
+import { useLeaveRetroRoom } from '@/features/team/api/team.mutations';
 import { retroRoomsQueryOptions } from '@/features/team/api/team.queries';
 import { LeaveTeamModal } from '@/features/team/ui/LeaveTeamModal';
 import { TeamMemberDropdown } from '@/features/team/ui/TeamMemberDropdown';
 import { TeamName } from '@/features/team/ui/TeamName';
 import { Button } from '@/shared/ui/button/Button';
 import IcPlus from '@/shared/ui/icons/IcPlus';
+import { useToast } from '@/shared/ui/toast/Toast';
 
 interface DashboardHeaderProps {
   teamId: number;
@@ -22,13 +23,15 @@ export function DashboardHeader({ teamId, teamName }: DashboardHeaderProps) {
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const deleteRetroRoom = useDeleteRetroRoom();
+  const leaveRetroRoom = useLeaveRetroRoom();
+  const { showToast } = useToast();
 
   const handleLeaveConfirm = async (roomId: number) => {
     const cachedData = queryClient.getQueryData(retroRoomsQueryOptions.queryKey);
     const remainingTeams = (cachedData?.result ?? []).filter((t) => t.retroRoomId !== roomId);
 
-    await deleteRetroRoom.mutateAsync(roomId);
+    await leaveRetroRoom.mutateAsync(roomId);
+    showToast({ variant: 'success', message: '팀 나가기가 완료되었어요!' });
 
     if (remainingTeams.length > 0) {
       navigate(`/teams/${remainingTeams[remainingTeams.length - 1].retroRoomId}`, {
