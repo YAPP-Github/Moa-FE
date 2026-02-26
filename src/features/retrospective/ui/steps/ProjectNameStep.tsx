@@ -21,7 +21,7 @@ export function ProjectNameStep({ onClose }: ProjectNameStepProps) {
     <div className="flex h-full flex-col">
       <FormHeader onClose={onClose} />
 
-      <div className="flex flex-col gap-[32px]">
+      <div className="flex flex-col gap-[32px] px-2">
         <div>
           <StepIndicator />
           <div className="flex flex-col">
@@ -48,7 +48,7 @@ export function ProjectNameStep({ onClose }: ProjectNameStepProps) {
         </Field>
       </div>
 
-      <div className="mt-auto flex justify-end">
+      <div className="mt-auto flex justify-end px-2">
         <Button
           type="button"
           variant="primary"

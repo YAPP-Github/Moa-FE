@@ -85,14 +85,14 @@ export function ReferenceUrlStep({ onClose, onBack }: ReferenceUrlStepProps) {
     <div className="flex h-full flex-col">
       <div className="mb-6 flex items-center justify-between">
         <IconButton type="button" variant="ghost" size="sm" onClick={onBack} aria-label="돌아가기">
-          <IcBack className="size-5" />
+          <IcBack className="size-6" />
         </IconButton>
         <IconButton type="button" variant="ghost" size="sm" onClick={onClose} aria-label="닫기">
-          <SvgIcClose className="size-5" />
+          <SvgIcClose className="size-6" />
         </IconButton>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-6">
+      <div className="flex min-h-0 flex-1 flex-col gap-6 px-2">
         <div className="flex flex-col">
           <span className="text-caption-4 text-grey-600">회고 참고 자료</span>
           <span className="text-title-2 text-grey-1000">회고 참고 자료를 입력해 주세요</span>
@@ -135,7 +135,7 @@ export function ReferenceUrlStep({ onClose, onBack }: ReferenceUrlStepProps) {
         </div>
       </div>
 
-      <div className="shrink-0 flex justify-end gap-2 pt-4">
+      <div className="shrink-0 flex justify-end gap-2 pt-4 px-2">
         <Button
           type="button"
           variant="primary"

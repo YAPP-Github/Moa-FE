@@ -42,6 +42,8 @@ export function MethodSelector({ value, onChange, onEditQuestions }: MethodSelec
 
   const handleCardClick = (method: string, isSelected: boolean) => {
     if (isSelected) {
+      onChange('');
+      setExpandedMethod(undefined);
       return;
     }
     setExpandedMethod((prev) => (prev === method ? undefined : method));
@@ -71,7 +73,10 @@ export function MethodSelector({ value, onChange, onEditQuestions }: MethodSelec
               key={method}
               value={method}
               className="rounded-[10px] border border-grey-200 bg-white px-4 py-[18px] data-[state=checked]:border-blue-500"
-              onClick={() => handleCardClick(method, isSelected)}
+              onClick={(e) => {
+                if (isSelected) e.preventDefault();
+                handleCardClick(method, isSelected);
+              }}
             >
               <AccordionRoot value={open ? method : undefined} onValueChange={() => {}}>
                 <AccordionItem value={method}>

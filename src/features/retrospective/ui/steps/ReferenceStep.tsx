@@ -41,7 +41,7 @@ export function ReferenceStep({ onClose }: ReferenceStepProps) {
     <div className="flex h-full flex-col">
       <FormHeader onClose={onClose} />
 
-      <div className="flex min-h-0 flex-1 flex-col gap-6">
+      <div className="flex min-h-0 flex-1 flex-col gap-6 px-2">
         <div>
           <StepIndicator />
           <div className="flex flex-col">
@@ -95,7 +95,7 @@ export function ReferenceStep({ onClose }: ReferenceStepProps) {
         </RadioCardGroup>
       </div>
 
-      <div className="shrink-0 flex justify-end pt-4">
+      <div className="shrink-0 flex justify-end pt-4 px-2">
         <Button
           type="button"
           variant="primary"
