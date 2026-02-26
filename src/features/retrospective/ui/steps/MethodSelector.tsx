@@ -115,7 +115,7 @@ export function MethodSelector({ value, onChange, onEditQuestions }: MethodSelec
                             type="button"
                             variant="tertiary"
                             size="sm"
-                            className="flex items-center text-caption-5 grey-900 px-[6px] py-[4.5px] gap-[5px]"
+                            className="flex items-center rounded-[6px] text-caption-5 text-grey-900 pl-[6px] pr-2 py-1 gap-[6px]"
                             onClick={(e) => {
                               e.stopPropagation();
                               onEditQuestions?.();
@@ -132,7 +132,7 @@ export function MethodSelector({ value, onChange, onEditQuestions }: MethodSelec
                             <span className="shrink-0 text-sub-title-6 text-grey-700">
                               질문 {index + 1}
                             </span>
-                            <span className="text-caption-2 text-grey-900">{question}</span>
+                            <span className="text-caption-2 text-grey-1000">{question}</span>
                           </li>
                         ))}
                       </ul>
