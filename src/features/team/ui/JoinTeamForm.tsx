@@ -40,7 +40,9 @@ export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <Field>
-        <FieldLabel htmlFor="inviteUrl">초대 링크</FieldLabel>
+        <FieldLabel htmlFor="inviteUrl" className="text-sub-title-4 text-grey-900">
+          초대 링크
+        </FieldLabel>
         <Input
           id="inviteUrl"
           type="text"
@@ -52,7 +54,7 @@ export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
       </Field>
 
       <div className="flex justify-end gap-2">
-        <Button type="submit" disabled={!inviteUrl?.trim()}>
+        <Button type="submit" disabled={!inviteUrl?.trim()} className="px-3 py-2">
           확인
         </Button>
       </div>
