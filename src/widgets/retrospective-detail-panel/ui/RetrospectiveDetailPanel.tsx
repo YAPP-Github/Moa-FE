@@ -79,6 +79,7 @@ interface Retrospect {
 
 interface RetrospectiveDetailPanelProps {
   retrospect: Retrospect;
+  retroRoomId: number;
   onClose: () => void;
   isExpanded?: boolean;
   onScaleToggle?: () => void;
@@ -151,6 +152,7 @@ export function isSubmittedToday(retrospectId: number): boolean {
 
 function RetrospectiveDetailPanel({
   retrospect,
+  retroRoomId,
   onClose,
   isExpanded = false,
   onScaleToggle,
@@ -222,7 +224,7 @@ function RetrospectiveDetailPanel({
   const saveDraftMutation = useSaveDraft(retrospect.retrospectId);
   // questionId는 1-based index (API 스펙에 따라)
   const assistantMutation = useAssistantGuide(retrospect.retrospectId, currentQuestionIndex + 1);
-  const deleteRetrospect = useDeleteRetrospect();
+  const deleteRetrospect = useDeleteRetrospect(retroRoomId);
 
   // 링크 복사 핸들러
   const handleCopyLink = async () => {
