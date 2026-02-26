@@ -19,10 +19,10 @@ export function FormHeader({ onClose }: FormHeaderProps) {
         className={isFirstStep ? 'invisible' : ''}
         aria-label="이전 단계"
       >
-        <IcBack className="size-5" />
+        <IcBack className="size-7" />
       </IconButton>
       <IconButton variant="ghost" size="sm" onClick={onClose} aria-label="닫기">
-        <IcClose className="size-5" />
+        <IcClose className="size-7" />
       </IconButton>
     </div>
   );

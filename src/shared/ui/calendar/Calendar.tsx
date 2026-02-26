@@ -23,7 +23,7 @@ const dayVariants = cva(
       state: {
         default: 'text-grey-900 cursor-pointer hover:bg-blue-100 hover:text-blue-600',
         selected: 'bg-blue-500 text-white hover:bg-blue-300 cursor-pointer',
-        disabled: 'text-grey-600 opacity-50 cursor-not-allowed',
+        disabled: 'text-grey-400 cursor-not-allowed',
         outside: 'text-grey-600 opacity-50 cursor-pointer hover:bg-blue-100',
       },
     },
@@ -190,7 +190,7 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
           {WEEKDAYS.map((day) => (
             <div
               key={day}
-              className="flex h-[28px] items-center justify-center text-caption-3 text-grey-600"
+              className="flex h-[28px] items-center justify-center text-caption-3-medium text-grey-400"
             >
               {day}
             </div>
