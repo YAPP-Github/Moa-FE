@@ -8,6 +8,7 @@ import { useOgMetadata } from '@/shared/api/og';
 
 interface WriteSidebarProps {
   questions: string[];
+  answers: string[];
   currentQuestionIndex: number;
   onQuestionSelect: (index: number) => void;
   references: ReferenceItem[];
@@ -56,6 +57,7 @@ function ReferenceCard({ url, urlName }: ReferenceItem) {
 
 export function WriteSidebar({
   questions,
+  answers,
   currentQuestionIndex,
   onQuestionSelect,
   references,
@@ -74,7 +76,9 @@ export function WriteSidebar({
               className={`cursor-pointer border-l-2 pl-3 text-left text-sub-title-3 ${
                 currentQuestionIndex === index
                   ? 'border-[#1C8AFF] text-blue-500'
-                  : 'border-grey-300 text-grey-800'
+                  : answers[index]?.trim()
+                    ? 'border-grey-800 text-grey-800'
+                    : 'border-grey-300 text-grey-800'
               }`}
             >
               질문 {index + 1}. {question}

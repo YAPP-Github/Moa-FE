@@ -320,6 +320,7 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
           {/* Right Sidebar */}
           <WriteSidebar
             questions={questions}
+            answers={answers}
             currentQuestionIndex={currentQuestionIndex}
             onQuestionSelect={handleQuestionSelect}
             references={references}
