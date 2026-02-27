@@ -94,7 +94,7 @@ function AssistantSection({
       <button
         type="button"
         onClick={onGenerate}
-        className="mt-3 flex cursor-pointer items-center gap-2 text-grey-500"
+        className="mt-3 flex cursor-pointer items-center gap-2 rounded-[4px] px-2 py-1 text-grey-500 hover:bg-grey-100"
       >
         <IcRefresh width={12} height={12} />
         <span className="text-sub-title-6">다시 생성</span>

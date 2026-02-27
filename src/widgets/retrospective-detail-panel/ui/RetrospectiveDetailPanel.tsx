@@ -653,7 +653,7 @@ function RetrospectiveDetailPanel({
                 <button
                   type="button"
                   onClick={handleAssistantGenerate}
-                  className="mt-3 flex cursor-pointer items-center gap-2 text-grey-500"
+                  className="mt-3 flex cursor-pointer items-center gap-2 rounded-[4px] px-2 py-1 text-grey-500 hover:bg-grey-100"
                 >
                   <IcRefresh className="h-4 w-4" />
                   <span className="text-sub-title-4">다시 생성</span>
