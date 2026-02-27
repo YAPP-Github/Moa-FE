@@ -5,6 +5,8 @@
 import type { GuideItem } from '@/features/retrospective/model/types';
 import { Button } from '@/shared/ui/button/Button';
 import IcAiSpark from '@/shared/ui/icons/IcAiSpark';
+import IcChevronLeftFitDisabled from '@/shared/ui/icons/IcChevronLeftFitDisabled';
+import IcChevronRightFitGrey from '@/shared/ui/icons/IcChevronRightFitGrey';
 import IcRefresh from '@/shared/ui/icons/IcRefresh';
 
 interface WriteContentProps {
@@ -78,7 +80,7 @@ function AssistantSection({
         <ul className="flex flex-col gap-4">
           {guides?.map((guide) => (
             <li key={guide.title} className="flex gap-2">
-              <div className="mt-[6px] h-[6px] w-[6px] shrink-0 rounded-full bg-grey-900" />
+              <div className="mt-[7px] h-[4px] w-[4px] shrink-0 rounded-full bg-grey-900" />
               <div className="flex-1">
                 <p className="text-[14px] font-bold leading-[140%] text-grey-900">{guide.title}</p>
                 <p className="text-[14px] font-medium leading-[140%] text-grey-900">
@@ -134,7 +136,14 @@ export function WriteContent({
             }`}
             aria-label="이전 질문"
           >
-            &lt; 이전
+            <span className="flex items-center gap-[8px]">
+              {isFirstQuestion ? (
+                <IcChevronLeftFitDisabled />
+              ) : (
+                <IcChevronRightFitGrey className="rotate-180" />
+              )}
+              이전
+            </span>
           </Button>
           <Button
             variant="tertiary"
@@ -145,7 +154,14 @@ export function WriteContent({
             }`}
             aria-label="다음 질문"
           >
-            다음 &gt;
+            <span className="flex items-center gap-[8px]">
+              다음
+              {isLastQuestion ? (
+                <IcChevronLeftFitDisabled className="rotate-180" />
+              ) : (
+                <IcChevronRightFitGrey />
+              )}
+            </span>
           </Button>
         </div>
       </div>
