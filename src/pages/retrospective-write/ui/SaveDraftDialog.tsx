@@ -26,32 +26,30 @@ export function SaveDraftDialog({
     <DialogRoot open={open} onOpenChange={onOpenChange}>
       <DialogPortal>
         <DialogOverlay className="bg-black/50" />
-        <DialogContent className="w-fit rounded-2xl bg-white p-5 shadow-xl">
+        <DialogContent hideCloseButton className="w-fit rounded-2xl bg-white p-5 shadow-xl">
           <DialogHeader className="sr-only">
             <DialogTitle>회고 임시저장</DialogTitle>
           </DialogHeader>
 
-          <h2 className="mt-8 text-title-2 text-grey-1000">작성 중인 회고를 임시저장할까요?</h2>
-          <p className="mt-1 text-caption-1 text-grey-800">
-            임시저장하면 나중에 이어서 작성할 수 있어요.
-          </p>
+          <h2 className="text-title-2 text-grey-1000">정말 나가시겠어요?</h2>
+          <p className="mt-1 text-caption-1 text-grey-800">저장 하지 않은 내용은 모두 사라져요.</p>
 
-          <div className="mt-6 flex justify-end gap-2.5">
-            <button
-              type="button"
-              onClick={onLeave}
-              disabled={isSaving}
-              className="cursor-pointer rounded-lg bg-grey-100 px-5 py-1.5 text-sub-title-2 text-grey-900 transition-colors hover:bg-grey-200 disabled:pointer-events-none disabled:opacity-50"
-            >
-              나가기
-            </button>
+          <div className="mt-6 flex justify-end gap-[10px]">
             <button
               type="button"
               onClick={onSaveAndLeave}
               disabled={isSaving}
-              className="cursor-pointer rounded-lg bg-[#3182F6] px-5 py-1.5 text-sub-title-2 text-white transition-colors hover:bg-[#2373EB] disabled:pointer-events-none disabled:opacity-50"
+              className="cursor-pointer rounded-lg bg-grey-100 px-5 py-2 text-sub-title-2 text-grey-900 transition-colors hover:bg-grey-200 disabled:pointer-events-none disabled:opacity-50"
             >
-              {isSaving ? '저장 중...' : '임시저장 후 나가기'}
+              {isSaving ? '저장 중...' : '임시저장'}
+            </button>
+            <button
+              type="button"
+              onClick={onLeave}
+              disabled={isSaving}
+              className="cursor-pointer rounded-lg bg-[#3182F6] px-5 py-2 text-sub-title-2 text-white transition-colors hover:bg-[#2373EB] disabled:pointer-events-none disabled:opacity-50"
+            >
+              나가기
             </button>
           </div>
         </DialogContent>
