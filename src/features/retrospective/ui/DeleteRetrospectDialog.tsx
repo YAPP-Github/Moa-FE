@@ -31,10 +31,7 @@ export function DeleteRetrospectDialog({
     <DialogRoot open={open} onOpenChange={handleClose}>
       <DialogPortal>
         <DialogOverlay className="bg-black/50" />
-        <DialogContent
-          className="w-[426px] rounded-2xl bg-white p-5 shadow-xl"
-          hideCloseButton={true}
-        >
+        <DialogContent className="w-fit rounded-2xl bg-white p-5 shadow-xl" hideCloseButton={true}>
           <DialogHeader className="sr-only">
             <DialogTitle>회고 삭제 확인</DialogTitle>
           </DialogHeader>
