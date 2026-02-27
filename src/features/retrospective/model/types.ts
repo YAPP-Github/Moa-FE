@@ -132,6 +132,7 @@ export interface ResponseListItem {
   commentCount: number;
   content: string;
   createdAt?: string;
+  submittedAt?: string;
   isLiked?: boolean;
   likeCount: number;
   responseId: number;
