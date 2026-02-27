@@ -7,7 +7,7 @@ export function SigninPage() {
       <OnboardingHeader />
       <main className="flex-1 flex flex-col overflow-y-auto">
         <div className="flex-1 flex flex-col items-center py-4">
-          <div className="flex-1 w-[720px] bg-white rounded-2xl flex items-center justify-center">
+          <div className="flex-1 w-full max-w-[720px] bg-white rounded-2xl flex items-center justify-center">
             <SigninForm />
           </div>
         </div>

@@ -18,7 +18,7 @@ export function SigninForm() {
       </div>
 
       {/* 소셜 로그인 버튼 그룹 */}
-      <div className="mt-[90px] flex flex-col gap-3">
+      <div className="mt-[clamp(24px,8vh,90px)] flex flex-col gap-3">
         <KakaoOAuthButton />
         <GoogleOAuthButton />
       </div>
