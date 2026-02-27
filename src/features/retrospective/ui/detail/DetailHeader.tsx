@@ -21,8 +21,8 @@ export function DetailHeader({ title, activeTab, onTabChange }: DetailHeaderProp
             key={tab}
             type="button"
             className={cn(
-              'cursor-pointer rounded-[27px] px-4 py-[4.5px] text-sub-title-2 text-grey-900 transition-colors',
-              activeTab === tab ? 'bg-grey-200' : 'hover:bg-grey-200'
+              'cursor-pointer rounded-[27px] px-4 py-[4.5px] text-grey-900 transition-colors',
+              activeTab === tab ? 'bg-grey-200 text-sub-title-2' : 'text-log-1 hover:bg-grey-200'
             )}
             onClick={() => onTabChange(tab)}
           >
