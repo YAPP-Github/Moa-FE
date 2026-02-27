@@ -1,3 +1,7 @@
+/**
+ * @deprecated 회고 생성 완료 시 토스트 알림으로 대체됨. 추후 제거 예정.
+ * @see CreateRetrospectForm - showToast({ variant: 'success', message: '회고 생성 완료!' })
+ */
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { RETROSPECT_METHOD_LABELS } from '@/features/retrospective/model/constants';
