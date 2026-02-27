@@ -21,14 +21,16 @@ function App() {
         {/* OAuth 콜백 - 가드 바깥 */}
         <Route path="/callback" element={<CallbackPage />} />
 
+        {/* 온보딩: RouteGuard 바깥 (신규/탈퇴 후 재가입 유저는 세션 없음) */}
+        <Route element={<OnboardingRoute />}>
+          <Route path="/onboarding" element={<OnboardingPage />} />
+        </Route>
+
         {/* 인증 확인 게이트 */}
         <Route element={<RouteGuard />}>
           {/* Public: 비로그인 유저만 */}
           <Route element={<PublicRoute />}>
             <Route path="/signin" element={<SigninPage />} />
-            <Route element={<OnboardingRoute />}>
-              <Route path="/onboarding" element={<OnboardingPage />} />
-            </Route>
           </Route>
 
           {/* Private: 로그인 유저만 */}
