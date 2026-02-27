@@ -119,12 +119,12 @@ function CardInfo({
 }) {
   return (
     <div className={`${className} flex flex-col gap-[3px]`}>
-      <div className="flex items-center gap-3">
-        <span className="text-sub-title-6 text-grey-700">회고 방식</span>
+      <div className="flex items-center">
+        <span className="w-[52px] shrink-0 text-sub-title-6 text-grey-700">회고 방식</span>
         <span className="text-sub-title-6 text-grey-800">{methodLabel}</span>
       </div>
-      <div className="flex items-center gap-3">
-        <span className="text-sub-title-6 text-grey-700">날짜</span>
+      <div className="flex items-center">
+        <span className="w-[52px] shrink-0 text-sub-title-6 text-grey-700">날짜</span>
         <span className="text-sub-title-6 text-grey-800">{formattedDate}</span>
       </div>
     </div>
@@ -190,8 +190,8 @@ function ActiveCard({ item, teamId }: RetrospectCardProps) {
           <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="" />
           {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for dropdown */}
           {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
-          <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
-            <span className="text-sub-title-6 text-grey-700">참여인원</span>
+          <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
+            <span className="w-[52px] shrink-0 text-sub-title-6 text-grey-700">참여인원</span>
             <ParticipantDropdown
               retrospectId={item.retrospectId}
               participantCount={item.participantCount}
@@ -263,16 +263,18 @@ function CompletedCard({ item, teamId }: RetrospectCardProps) {
       className="flex w-[284px] flex-col rounded-xl bg-white p-[18px] cursor-pointer text-left"
       onClick={() => navigate(`/teams/${teamId}/retrospects/${item.retrospectId}`)}
     >
-      {dDayLabel && (
-        <span className="mb-[6px] flex items-center self-start rounded-[4px] bg-grey-100 px-[10.5px] py-[4px] text-sub-title-5 text-grey-800">
-          {dDayLabel}
-        </span>
-      )}
-      <div className="flex items-center justify-between">
-        <span className="truncate text-title-4 text-black">{item.projectName}</span>
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col">
+          {dDayLabel && (
+            <span className="mb-[6px] flex items-center self-start rounded-[4px] bg-grey-100 px-[10.5px] py-[4px] text-sub-title-5 text-grey-800">
+              {dDayLabel}
+            </span>
+          )}
+          <span className="truncate text-title-4 text-black">{item.projectName}</span>
+        </div>
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
         {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
-        <div onClick={(e) => e.stopPropagation()}>
+        <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
           <CardMenu
             title={item.projectName}
             retrospectId={item.retrospectId}
@@ -281,12 +283,12 @@ function CompletedCard({ item, teamId }: RetrospectCardProps) {
           />
         </div>
       </div>
-      <div className="mt-4 flex flex-col gap-[3px]">
+      <div className={`${dDayLabel ? 'mt-3' : 'mt-4'} flex flex-col gap-[3px]`}>
         <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="" />
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for dropdown */}
         {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
-        <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
-          <span className="text-sub-title-6 text-grey-700">참여인원</span>
+        <div className="flex items-center" onClick={(e) => e.stopPropagation()}>
+          <span className="w-[52px] shrink-0 text-sub-title-6 text-grey-700">참여인원</span>
           <ParticipantDropdown
             retrospectId={item.retrospectId}
             participantCount={item.participantCount}
