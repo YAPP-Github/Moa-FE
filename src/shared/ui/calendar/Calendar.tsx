@@ -217,8 +217,6 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
               (!focusedDate && isSelected) ||
               (!focusedDate && !selected && isFirstDay);
 
-            const dow = getDay(date);
-
             return (
               <div key={date.toISOString()} className="flex h-[28px] items-center justify-center">
                 <button
