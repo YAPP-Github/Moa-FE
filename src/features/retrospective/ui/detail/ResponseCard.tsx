@@ -33,9 +33,9 @@ export function ResponseCard({
             {!hideAuthor && (
               <span className="text-sub-title-4 text-grey-900">{response.userName}</span>
             )}
-            {!hideAuthor && response.createdAt && (
+            {!hideAuthor && response.submittedAt && (
               <span className="text-caption-6 text-grey-700">
-                {formatRelativeTime(response.createdAt)}
+                {formatRelativeTime(response.submittedAt)}
               </span>
             )}
             <p className="whitespace-pre-wrap break-all text-long-2 text-grey-900">

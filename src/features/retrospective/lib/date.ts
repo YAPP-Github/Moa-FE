@@ -1,9 +1,4 @@
-import {
-  differenceInCalendarDays,
-  differenceInHours,
-  differenceInMinutes,
-  startOfDay,
-} from 'date-fns';
+import { differenceInCalendarDays, differenceInMinutes, startOfDay } from 'date-fns';
 
 /**
  * 회고 날짜를 기준으로 D-day 라벨을 반환한다.
@@ -25,14 +20,8 @@ export function formatRelativeTime(dateString?: string): string {
   const target = new Date(dateString);
   const mins = differenceInMinutes(now, target);
 
-  if (mins < 1) return '방금 전';
-  if (mins < 60) return `${mins}분전`;
-
-  const hours = differenceInHours(now, target);
-  if (hours < 24) return `${hours}시간전`;
+  if (mins < 1440) return `${Math.max(mins, 1)}분전`;
 
   const days = differenceInCalendarDays(now, target);
-  if (days < 30) return `${days}일 후`;
-
-  return target.toLocaleDateString('ko-KR');
+  return `${days}일 후`;
 }
