@@ -30,6 +30,7 @@ export function useCreateRetrospect(retroRoomId: number) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.list(retroRoomId) });
     },
+    meta: { skipGlobalError: true },
   });
 }
 
