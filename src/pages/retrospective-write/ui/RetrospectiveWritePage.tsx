@@ -14,12 +14,7 @@ function WritePageLoader({ retrospectId, teamId }: { retrospectId: number; teamI
     return <Navigate to={`/teams/${teamId}/retrospects/${retrospectId}`} replace />;
   }
 
-  return (
-    <>
-      <RetrospectivePageHeader teamId={teamId} title={detail.title} />
-      <WritePageContent retrospectId={retrospectId} teamId={teamId} detail={detail} />
-    </>
-  );
+  return <WritePageContent retrospectId={retrospectId} teamId={teamId} detail={detail} />;
 }
 
 export function RetrospectiveWritePage() {

@@ -8,6 +8,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { PreviewModal } from './PreviewModal';
+import { SaveDraftDialog } from './SaveDraftDialog';
 import { SubmitConfirmModal } from './SubmitConfirmModal';
 import { SubmitSuccessModal } from './SubmitSuccessModal';
 import { WriteBottomBar } from './WriteBottomBar';
@@ -26,6 +27,7 @@ import {
 import type { GuideItem, RetrospectDetailResponse } from '@/features/retrospective/model/types';
 import { useRetroRooms } from '@/features/team/api/team.queries';
 import { useToast } from '@/shared/ui/toast/Toast';
+import { RetrospectivePageHeader } from '@/widgets/header/ui/RetrospectivePageHeader';
 
 // ============================================================================
 // LocalStorage Helpers
@@ -78,6 +80,7 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
   const [previewOpen, setPreviewOpen] = useState(false);
   const [submitConfirmOpen, setSubmitConfirmOpen] = useState(false);
   const [submitSuccessOpen, setSubmitSuccessOpen] = useState(false);
+  const [saveDraftDialogOpen, setSaveDraftDialogOpen] = useState(false);
   const hasRegisteredParticipant = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -249,70 +252,110 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
     }
   };
 
+  // ---- 홈 이동 시 임시저장 팝업 ----
+  const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (answers.some((a) => a.trim() !== '')) {
+      e.preventDefault();
+      setSaveDraftDialogOpen(true);
+    }
+  };
+
+  const handleSaveDraftAndLeave = async () => {
+    saveDraftToStorage(retrospectId, answers);
+    try {
+      await saveDraftMutation.mutateAsync({
+        drafts: answers.map((content, index) => ({
+          questionNumber: index + 1,
+          content: content || null,
+        })),
+      });
+      showToast({ variant: 'success', message: '임시 저장 완료!' });
+    } catch {
+      // 글로벌 에러 핸들러에서 처리
+    }
+    setSaveDraftDialogOpen(false);
+    navigate(`/teams/${teamId}`);
+  };
+
+  const handleLeaveWithoutSave = () => {
+    setSaveDraftDialogOpen(false);
+    navigate(`/teams/${teamId}`);
+  };
+
   const currentAssistantGuides = assistantGuidesMap[currentQuestionIndex];
   const isCurrentQuestionLoading = assistantLoadingIndex === currentQuestionIndex;
 
   return (
-    <div className="flex h-[calc(100vh-54px)] flex-col bg-white">
-      <div className="flex min-h-0 flex-1">
-        {/* Main Content */}
-        <div className="flex flex-1 flex-col">
-          <div className="mx-auto flex w-full max-w-[802px] flex-1 flex-col overflow-y-auto pt-10">
-            <WriteContent
-              questions={questions}
-              currentQuestionIndex={currentQuestionIndex}
-              currentAnswer={currentAnswer}
-              maxLength={maxLength}
-              onAnswerChange={handleAnswerChange}
-              onPrevQuestion={handlePrevQuestion}
-              onNextQuestion={handleNextQuestion}
-              assistantGuides={currentAssistantGuides}
-              isAssistantLoading={isCurrentQuestionLoading}
-              onAssistantGenerate={handleAssistantGenerate}
-            />
+    <>
+      <RetrospectivePageHeader teamId={teamId} title={detail.title} onHomeClick={handleHomeClick} />
+      <div className="flex h-[calc(100vh-54px)] flex-col bg-white">
+        <div className="flex min-h-0 flex-1">
+          {/* Main Content */}
+          <div className="flex flex-1 flex-col">
+            <div className="mx-auto flex w-full max-w-[802px] flex-1 flex-col overflow-y-auto pt-10">
+              <WriteContent
+                questions={questions}
+                currentQuestionIndex={currentQuestionIndex}
+                currentAnswer={currentAnswer}
+                maxLength={maxLength}
+                onAnswerChange={handleAnswerChange}
+                onPrevQuestion={handlePrevQuestion}
+                onNextQuestion={handleNextQuestion}
+                assistantGuides={currentAssistantGuides}
+                isAssistantLoading={isCurrentQuestionLoading}
+                onAssistantGenerate={handleAssistantGenerate}
+              />
+            </div>
           </div>
+
+          {/* Right Sidebar */}
+          <WriteSidebar
+            questions={questions}
+            currentQuestionIndex={currentQuestionIndex}
+            onQuestionSelect={handleQuestionSelect}
+            references={references}
+          />
         </div>
 
-        {/* Right Sidebar */}
-        <WriteSidebar
+        {/* Bottom Bar */}
+        <WriteBottomBar
+          title={detail.title}
+          teamName={teamName}
+          onPreview={handlePreview}
+          onSaveDraft={handleSaveDraft}
+          onSubmit={handleSubmit}
+          isSaving={saveDraftMutation.isPending}
+          isSubmitting={submitMutation.isPending}
+        />
+
+        {/* Modals */}
+        <PreviewModal
+          open={previewOpen}
+          onOpenChange={setPreviewOpen}
           questions={questions}
-          currentQuestionIndex={currentQuestionIndex}
-          onQuestionSelect={handleQuestionSelect}
-          references={references}
+          answers={answers}
+        />
+        <SubmitConfirmModal
+          open={submitConfirmOpen}
+          onOpenChange={setSubmitConfirmOpen}
+          questions={questions}
+          answers={answers}
+          onSubmit={handleConfirmSubmit}
+          isSubmitting={submitMutation.isPending}
+        />
+        <SubmitSuccessModal
+          open={submitSuccessOpen}
+          onClose={handleSuccessClose}
+          onConfirm={handleSuccessConfirm}
+        />
+        <SaveDraftDialog
+          open={saveDraftDialogOpen}
+          onOpenChange={setSaveDraftDialogOpen}
+          onSaveAndLeave={handleSaveDraftAndLeave}
+          onLeave={handleLeaveWithoutSave}
+          isSaving={saveDraftMutation.isPending}
         />
       </div>
-
-      {/* Bottom Bar */}
-      <WriteBottomBar
-        title={detail.title}
-        teamName={teamName}
-        onPreview={handlePreview}
-        onSaveDraft={handleSaveDraft}
-        onSubmit={handleSubmit}
-        isSaving={saveDraftMutation.isPending}
-        isSubmitting={submitMutation.isPending}
-      />
-
-      {/* Modals */}
-      <PreviewModal
-        open={previewOpen}
-        onOpenChange={setPreviewOpen}
-        questions={questions}
-        answers={answers}
-      />
-      <SubmitConfirmModal
-        open={submitConfirmOpen}
-        onOpenChange={setSubmitConfirmOpen}
-        questions={questions}
-        answers={answers}
-        onSubmit={handleConfirmSubmit}
-        isSubmitting={submitMutation.isPending}
-      />
-      <SubmitSuccessModal
-        open={submitSuccessOpen}
-        onClose={handleSuccessClose}
-        onConfirm={handleSuccessConfirm}
-      />
-    </div>
+    </>
   );
 }
