@@ -19,7 +19,7 @@ export function SubmitSuccessModal({ open, onClose, onConfirm }: SubmitSuccessMo
         <DialogOverlay className="bg-black/50" />
         <DialogContent hideCloseButton className="w-[300px] rounded-2xl bg-white p-5 shadow-xl">
           <div className="flex flex-col items-center">
-            <IcCheckBlueBgLightblue width={48} height={48} />
+            <IcCheckBlueBgLightblue />
 
             <div className="mt-3 flex flex-col items-center gap-1">
               <h2 className="text-title-2 text-grey-1000">회고가 제출되었어요</h2>
