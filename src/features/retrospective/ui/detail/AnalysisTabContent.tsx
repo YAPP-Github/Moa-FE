@@ -29,7 +29,7 @@ export function AnalysisTabContent({
   }
 
   return (
-    <div className="px-10 py-8">
+    <div className="px-10 py-9">
       <AnalysisResult analysis={analysis} />
     </div>
   );

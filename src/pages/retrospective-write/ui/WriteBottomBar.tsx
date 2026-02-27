@@ -24,9 +24,9 @@ export function WriteBottomBar({
   isSubmitting,
 }: WriteBottomBarProps) {
   return (
-    <div className="flex h-[81px] shrink-0 items-center justify-between border-t border-grey-200 bg-white px-6">
+    <div className="flex shrink-0 items-center justify-between border-t border-grey-200 bg-white px-9 py-4">
       {/* Left: 미리보기 + 회고 정보 */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-[28px]">
         <Button
           variant="ghost"
           size="xl"

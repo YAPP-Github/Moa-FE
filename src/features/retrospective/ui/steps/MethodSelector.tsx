@@ -111,9 +111,9 @@ export function MethodSelector({ value, onChange, onEditQuestions }: MethodSelec
                     />
                   </div>
                   <AccordionContent className="mt-3">
-                    <div className="mb-3 h-px bg-grey-200" />
+                    <div className="h-px bg-grey-200" />
                     <div>
-                      <div className="mb-2 flex items-center justify-between">
+                      <div className="my-[14px] flex items-center justify-between">
                         <span className="text-title-6 text-grey-900">전체 질문</span>
                         {isSelected && (
                           <Button

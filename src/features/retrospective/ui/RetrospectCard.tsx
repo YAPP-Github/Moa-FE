@@ -166,7 +166,7 @@ function ActiveCard({ item, teamId }: RetrospectCardProps) {
               />
             </div>
           </div>
-          <span className="mt-3 truncate text-title-4 text-black">{item.projectName}</span>
+          <span className="mt-[6px] truncate text-title-4 text-black">{item.projectName}</span>
         </>
       ) : (
         <div className="flex items-center justify-between">
@@ -184,23 +184,20 @@ function ActiveCard({ item, teamId }: RetrospectCardProps) {
         </div>
       )}
       {dDayLabel ? (
-        <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="mt-auto" />
+        <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="mt-4" />
       ) : (
-        <>
-          <div className="flex-1 min-h-4" />
-          <div className="flex flex-col gap-[3px]">
-            <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="" />
-            {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for dropdown */}
-            {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
-            <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
-              <span className="text-sub-title-6 text-grey-700">참여인원</span>
-              <ParticipantDropdown
-                retrospectId={item.retrospectId}
-                participantCount={item.participantCount}
-              />
-            </div>
+        <div className="mt-4 flex flex-col gap-[3px]">
+          <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="" />
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for dropdown */}
+          {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
+          <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
+            <span className="text-sub-title-6 text-grey-700">참여인원</span>
+            <ParticipantDropdown
+              retrospectId={item.retrospectId}
+              participantCount={item.participantCount}
+            />
           </div>
-        </>
+        </div>
       )}
     </button>
   );
@@ -258,13 +255,19 @@ function ParticipantDropdown({
 function CompletedCard({ item, teamId }: RetrospectCardProps) {
   const navigate = useNavigate();
   const { formattedDate, methodLabel } = formatCardData(item);
+  const dDayLabel = getDDayLabel(item.retrospectDate);
 
   return (
     <button
       type="button"
-      className={`${CARD_CLASS} cursor-pointer text-left`}
+      className="flex w-[284px] flex-col rounded-xl bg-white p-[18px] cursor-pointer text-left"
       onClick={() => navigate(`/teams/${teamId}/retrospects/${item.retrospectId}`)}
     >
+      {dDayLabel && (
+        <span className="mb-[6px] flex items-center self-start rounded-[4px] bg-grey-100 px-[10.5px] py-[4px] text-sub-title-5 text-grey-800">
+          {dDayLabel}
+        </span>
+      )}
       <div className="flex items-center justify-between">
         <span className="truncate text-title-4 text-black">{item.projectName}</span>
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
@@ -278,8 +281,7 @@ function CompletedCard({ item, teamId }: RetrospectCardProps) {
           />
         </div>
       </div>
-      <div className="flex-1 min-h-4" />
-      <div className="flex flex-col gap-[3px]">
+      <div className="mt-4 flex flex-col gap-[3px]">
         <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="" />
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for dropdown */}
         {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}

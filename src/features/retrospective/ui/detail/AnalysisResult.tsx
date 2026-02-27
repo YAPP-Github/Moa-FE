@@ -24,7 +24,7 @@ function KeywordItem({
       </span>
       <div className="flex flex-col gap-1">
         <p className="text-sub-title-3 text-grey-1000">{description}</p>
-        <span className="text-caption-6 text-grey-600">{count}개의 응답과 연관 &darr;</span>
+        <span className="text-caption-6 text-grey-600">{count}개의 응답과 연관</span>
       </div>
     </div>
   );

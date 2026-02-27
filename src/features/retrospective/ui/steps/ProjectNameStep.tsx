@@ -41,7 +41,12 @@ export function ProjectNameStep({ onClose }: ProjectNameStepProps) {
             />
             <div className="flex">
               <span className="ml-auto text-caption-3-medium text-grey-400">
-                {projectName?.length ?? 0}/20
+                <span
+                  className={(projectName?.length ?? 0) > 0 ? 'text-grey-900' : 'text-grey-400'}
+                >
+                  {projectName?.length ?? 0}
+                </span>
+                /20
               </span>
             </div>
           </div>

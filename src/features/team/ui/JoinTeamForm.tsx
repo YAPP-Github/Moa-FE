@@ -39,22 +39,23 @@ export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      <Field>
+      <Field className="mt-[20px] flex flex-col gap-2">
         <FieldLabel htmlFor="inviteUrl" className="text-sub-title-4 text-grey-900">
-          초대 링크
+          링크
         </FieldLabel>
         <Input
           id="inviteUrl"
           type="text"
-          placeholder="초대 링크를 입력해주세요"
-          {...register('inviteUrl')}
+          placeholder="공유받은 링크를 입력해주세요"
           clearable
           onClear={() => setValue('inviteUrl', '')}
+          {...register('inviteUrl')}
+          value={inviteUrl ?? ''}
         />
       </Field>
 
-      <div className="flex justify-end gap-2">
-        <Button type="submit" disabled={!inviteUrl?.trim()} className="px-3 py-2">
+      <div className="flex justify-end">
+        <Button type="submit" disabled={!inviteUrl?.trim()} size="md" className="px-3 py-2">
           확인
         </Button>
       </div>

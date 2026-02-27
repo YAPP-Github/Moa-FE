@@ -21,7 +21,7 @@ export function QuestionAnswerList({ questions, answers }: QuestionAnswerListPro
           </div>
           <div className="flex gap-2.5">
             <div className="w-[2px] shrink-0 self-stretch rounded-[5px] bg-grey-200" />
-            <p className="min-w-0 whitespace-pre-wrap break-words text-title-6 text-grey-1000">
+            <p className="min-w-0 whitespace-pre-wrap break-words text-caption-2 text-grey-1000">
               {answers[index]}
             </p>
           </div>

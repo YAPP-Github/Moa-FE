@@ -29,7 +29,7 @@ export function QuestionTabContent({ retrospectId, questions }: QuestionTabConte
   const responses = data?.result?.responses ?? [];
 
   return (
-    <div className="flex h-full gap-6 py-6 pl-6 pr-2">
+    <div className="flex h-full gap-[42px] py-6 pl-6 pr-2">
       <nav className="flex w-[84px] shrink-0 flex-col gap-3">
         {questions.map((q, idx) => (
           <button
