@@ -59,7 +59,7 @@ export function ProjectNameStep({ onClose }: ProjectNameStepProps) {
           variant="primary"
           onClick={goToNextStep}
           disabled={!projectName?.trim()}
-          className="h-[32px] px-[18.5px] py-[7px]"
+          className="h-[32px] px-[18.5px] py-[7px] text-sub-title-4"
         >
           다음
         </Button>

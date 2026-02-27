@@ -67,7 +67,7 @@ export function DateTimeStep({ onClose }: DateTimeStepProps) {
           size="lg"
           onClick={goToNextStep}
           disabled={!isValid}
-          className="h-[32px] px-[18.5px] py-[7px]"
+          className="h-[32px] px-[18.5px] py-[7px] text-sub-title-4"
         >
           다음
         </Button>

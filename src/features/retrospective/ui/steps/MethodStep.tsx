@@ -77,7 +77,7 @@ export function MethodStep({ onClose }: MethodStepProps) {
           size="lg"
           onClick={goToNextStep}
           disabled={!retrospectMethod}
-          className="h-[32px] px-[18.5px] py-[7px]"
+          className="h-[32px] px-[18.5px] py-[7px] text-sub-title-4"
         >
           다음
         </Button>

@@ -52,7 +52,7 @@ export function TeamActionStep() {
         </Field>
 
         <div className="mt-[clamp(24px,calc(100dvh-700px),260px)] flex justify-end">
-          <Button type="submit" disabled={!teamName?.trim()} size="md">
+          <Button type="submit" disabled={!teamName?.trim()} size="md" className="text-sub-title-5">
             다음
           </Button>
         </div>
@@ -90,7 +90,12 @@ export function TeamActionStep() {
         </Field>
 
         <div className="mt-[clamp(24px,calc(100dvh-700px),260px)] flex justify-end">
-          <Button type="submit" disabled={!inviteLink?.trim() || !!errors.inviteLink} size="md">
+          <Button
+            type="submit"
+            disabled={!inviteLink?.trim() || !!errors.inviteLink}
+            size="md"
+            className="text-sub-title-5"
+          >
             다음
           </Button>
         </div>

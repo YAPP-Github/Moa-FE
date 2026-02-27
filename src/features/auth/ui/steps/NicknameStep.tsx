@@ -47,7 +47,12 @@ export function NicknameStep() {
       </Field>
 
       <div className="mt-[clamp(24px,calc(100dvh-700px),260px)] flex justify-end">
-        <Button onClick={goToNextStep} disabled={!nickname?.trim()} size="md">
+        <Button
+          onClick={goToNextStep}
+          disabled={!nickname?.trim()}
+          size="md"
+          className="text-sub-title-5"
+        >
           다음
         </Button>
       </div>

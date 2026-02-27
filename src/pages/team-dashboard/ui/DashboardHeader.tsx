@@ -64,7 +64,7 @@ export function DashboardHeader({ teamId, teamName }: DashboardHeaderProps) {
         <Button
           variant="primary"
           size="md"
-          className="gap-[6px] px-[10px] py-[7.5px]"
+          className="gap-[6px] px-[10px] py-[7.5px] text-sub-title-5"
           onClick={() => setIsCreateOpen(true)}
         >
           <IcPlus className="h-[12px] w-[12px]" />

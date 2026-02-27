@@ -47,7 +47,7 @@ export function TeamNameStep() {
       </div>
 
       <div className="flex justify-end">
-        <Button type="submit" size="md" className="px-3 py-2">
+        <Button type="submit" size="md" className="px-3 py-2 text-sub-title-5">
           만들기
         </Button>
       </div>

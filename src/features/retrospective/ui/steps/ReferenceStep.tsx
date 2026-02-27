@@ -102,7 +102,7 @@ export function ReferenceStep({ onClose }: ReferenceStepProps) {
           size="md"
           disabled={!choice || isSubmitting}
           onClick={handleConfirmClick}
-          className="h-[32px] px-[18.5px] py-[7px]"
+          className="h-[32px] px-[18.5px] py-[7px] text-sub-title-5"
         >
           {choice === 'no' ? '완료' : '다음'}
         </Button>
