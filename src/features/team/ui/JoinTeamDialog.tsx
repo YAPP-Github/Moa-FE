@@ -18,10 +18,7 @@ export function JoinTeamDialog({ open, onOpenChange }: JoinTeamDialogProps) {
     <DialogRoot open={open} onOpenChange={onOpenChange}>
       <DialogPortal>
         <DialogOverlay className="bg-black/50" />
-        <DialogContent
-          className="w-[400px] h-[232px] bg-white rounded-[12px] p-[20px]"
-          disableOutsideClick
-        >
+        <DialogContent className="w-[400px] bg-white rounded-[12px] p-[20px]" disableOutsideClick>
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">공유받은 링크 입력하기</DialogTitle>
           </DialogHeader>
