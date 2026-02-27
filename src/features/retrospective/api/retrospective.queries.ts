@@ -1,4 +1,9 @@
-import { useQuery, useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  useQuery,
+  useQueryClient,
+  useSuspenseQueries,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
 import {
   getAnalysisResult,
   getRetrospectDetail,
@@ -34,6 +39,26 @@ export function useRetrospectDetail(retrospectId: number) {
     queryFn: () => getRetrospectDetail(retrospectId),
     staleTime: 1000 * 60 * 5,
   });
+}
+
+export function useRetrospectDetailOnDemand(retrospectId: number, enabled: boolean) {
+  return useQuery({
+    queryKey: retrospectiveQueryKeys.detail(retrospectId),
+    queryFn: () => getRetrospectDetail(retrospectId),
+    staleTime: 1000 * 60 * 5,
+    enabled,
+  });
+}
+
+export function usePrefetchRetrospectDetail() {
+  const queryClient = useQueryClient();
+  return (retrospectId: number) => {
+    queryClient.prefetchQuery({
+      queryKey: retrospectiveQueryKeys.detail(retrospectId),
+      queryFn: () => getRetrospectDetail(retrospectId),
+      staleTime: 1000 * 60 * 5,
+    });
+  };
 }
 
 export function useReferences(retrospectId: number) {
