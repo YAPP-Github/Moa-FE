@@ -24,8 +24,8 @@ export function TeamMemberDropdown({ teamId }: TeamMemberDropdownProps) {
       <DropdownMenuRoot>
         <DropdownMenuTrigger>
           <Button type="button" variant="ghost" size="lg" className="gap-[4px] px-[8px] py-[7px]">
-            <IcUser className="h-[18px] w-[18px]" />
-            멤버 관리
+            <IcUser className="h-[18px] w-[18px] text-grey-700" />
+            <span className="whitespace-nowrap text-sub-title-4 text-grey-700">멤버 관리</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuPortal>
