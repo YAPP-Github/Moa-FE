@@ -68,7 +68,7 @@ function AssistantSection({
         className="inline-flex h-[36px] items-center rounded-[23px] border border-transparent bg-white px-[10px]"
         style={GRADIENT_BORDER_STYLE}
       >
-        <AssistantLabel>생성중</AssistantLabel>
+        <AssistantLabel>생성중...</AssistantLabel>
       </div>
     );
   }
@@ -189,7 +189,7 @@ export function WriteContent({
       </div>
 
       {/* AI Assistant */}
-      <div className="mt-6">
+      <div className="mt-[10px]">
         <AssistantSection
           guides={assistantGuides}
           isLoading={isAssistantLoading}
