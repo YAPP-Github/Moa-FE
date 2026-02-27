@@ -26,13 +26,13 @@ export function formatRelativeTime(dateString?: string): string {
   const mins = differenceInMinutes(now, target);
 
   if (mins < 1) return '방금 전';
-  if (mins < 60) return `${mins}분 전`;
+  if (mins < 60) return `${mins}분전`;
 
   const hours = differenceInHours(now, target);
-  if (hours < 24) return `${hours}시간 전`;
+  if (hours < 24) return `${hours}시간전`;
 
   const days = differenceInCalendarDays(now, target);
-  if (days < 30) return `${days}일 전`;
+  if (days < 30) return `${days}일 후`;
 
   return target.toLocaleDateString('ko-KR');
 }

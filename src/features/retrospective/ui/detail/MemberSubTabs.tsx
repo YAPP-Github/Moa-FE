@@ -15,7 +15,7 @@ export function MemberSubTabs({ members, selectedMemberId, onSelect }: MemberSub
           key={member.memberId}
           type="button"
           className={cn(
-            'w-full cursor-pointer overflow-hidden rounded-[8px] px-2 py-[8.5px] text-center text-sub-title-4 transition-colors',
+            'w-full cursor-pointer overflow-hidden rounded-[8px] px-2 py-[8.5px] text-center text-sub-title-3 transition-colors',
             selectedMemberId === member.memberId
               ? 'bg-blue-200 text-blue-500'
               : 'bg-grey-100 text-grey-900'

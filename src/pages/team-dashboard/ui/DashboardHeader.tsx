@@ -76,7 +76,6 @@ export function DashboardHeader({ teamId, teamName }: DashboardHeaderProps) {
         open={isCreateOpen}
         onOpenChange={setIsCreateOpen}
         retroRoomId={teamId}
-        teamName={teamName}
       />
 
       <LeaveTeamModal

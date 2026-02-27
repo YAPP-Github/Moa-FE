@@ -36,7 +36,7 @@ export function QuestionTabContent({ retrospectId, questions }: QuestionTabConte
             key={q.index}
             type="button"
             className={cn(
-              'cursor-pointer rounded-[8px] px-[25px] py-[8.5px] text-left text-sub-title-4 transition-colors',
+              'cursor-pointer whitespace-nowrap rounded-[8px] px-[25px] py-[8.5px] text-left text-sub-title-3 transition-colors',
               selectedIndex === idx ? 'bg-blue-200 text-blue-500' : 'bg-grey-100 text-grey-900'
             )}
             onClick={() => setSelectedIndex(idx)}

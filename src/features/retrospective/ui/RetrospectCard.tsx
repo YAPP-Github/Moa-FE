@@ -4,6 +4,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { DeleteRetrospectDialog } from './DeleteRetrospectDialog';
 import { useDeleteRetrospect } from '../api/retrospective.mutations';
+import {
+  usePrefetchRetrospectDetail,
+  useRetrospectDetailOnDemand,
+} from '../api/retrospective.queries';
 import { getDDayLabel } from '../lib/date';
 import { RETROSPECT_METHOD_LABELS, RetrospectListStatus } from '../model/constants';
 import type { RetrospectListItem } from '../model/schema';
@@ -15,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu/DropdownMenu';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
-import IcChevronDown from '@/shared/ui/icons/IcChevronDown';
+import IcChevronDownSmGrey from '@/shared/ui/icons/IcChevronDownSmGrey';
 import IcMoreGrey from '@/shared/ui/icons/IcMoreGrey';
 import { useToast } from '@/shared/ui/toast/Toast';
 
@@ -104,9 +108,17 @@ function CardMenu({ title, retrospectId, teamId, status }: CardMenuProps) {
   );
 }
 
-function CardInfo({ methodLabel, formattedDate }: { methodLabel: string; formattedDate: string }) {
+function CardInfo({
+  methodLabel,
+  formattedDate,
+  className = 'mt-auto',
+}: {
+  methodLabel: string;
+  formattedDate: string;
+  className?: string;
+}) {
   return (
-    <div className="mt-auto flex flex-col gap-[3px]">
+    <div className={`${className} flex flex-col gap-[3px]`}>
       <div className="flex items-center gap-3">
         <span className="text-sub-title-6 text-grey-700">회고 방식</span>
         <span className="text-sub-title-6 text-grey-800">{methodLabel}</span>
@@ -137,28 +149,109 @@ function ActiveCard({ item, teamId }: RetrospectCardProps) {
       className={`${CARD_CLASS} cursor-pointer text-left`}
       onClick={() => navigate(`/teams/${teamId}/retrospects/${item.retrospectId}/write`)}
     >
-      <div className="flex items-center justify-between">
-        {dDayLabel ? (
-          <span className="flex items-center rounded-[4px] bg-grey-100 px-[10.5px] py-[4px] text-sub-title-5 text-grey-800">
-            {dDayLabel}
-          </span>
-        ) : (
-          <span />
-        )}
-        {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
-        {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
-        <div onClick={(e) => e.stopPropagation()}>
-          <CardMenu
-            title={item.projectName}
-            retrospectId={item.retrospectId}
-            teamId={teamId}
-            status={item.status}
-          />
+      {dDayLabel ? (
+        <>
+          <div className="flex items-center justify-between">
+            <span className="flex items-center rounded-[4px] bg-grey-100 px-[10.5px] py-[4px] text-sub-title-5 text-grey-800">
+              {dDayLabel}
+            </span>
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
+            {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
+            <div onClick={(e) => e.stopPropagation()}>
+              <CardMenu
+                title={item.projectName}
+                retrospectId={item.retrospectId}
+                teamId={teamId}
+                status={item.status}
+              />
+            </div>
+          </div>
+          <span className="mt-3 truncate text-title-4 text-black">{item.projectName}</span>
+        </>
+      ) : (
+        <div className="flex items-center justify-between">
+          <span className="truncate text-title-4 text-black">{item.projectName}</span>
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for menu */}
+          {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
+          <div onClick={(e) => e.stopPropagation()}>
+            <CardMenu
+              title={item.projectName}
+              retrospectId={item.retrospectId}
+              teamId={teamId}
+              status={item.status}
+            />
+          </div>
         </div>
-      </div>
-      <span className="mt-3 truncate text-title-4 text-black">{item.projectName}</span>
-      <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} />
+      )}
+      {dDayLabel ? (
+        <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="mt-auto" />
+      ) : (
+        <>
+          <div className="flex-1 min-h-4" />
+          <div className="flex flex-col gap-[3px]">
+            <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="" />
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for dropdown */}
+            {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
+            <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
+              <span className="text-sub-title-6 text-grey-700">참여인원</span>
+              <ParticipantDropdown
+                retrospectId={item.retrospectId}
+                participantCount={item.participantCount}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </button>
+  );
+}
+
+function ParticipantDropdown({
+  retrospectId,
+  participantCount,
+}: {
+  retrospectId: number;
+  participantCount: number;
+}) {
+  const [open, setOpen] = useState(false);
+  const prefetch = usePrefetchRetrospectDetail();
+  const { data } = useRetrospectDetailOnDemand(retrospectId, open);
+  const members = data?.result.members;
+
+  return (
+    <DropdownMenuRoot open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger>
+        <button
+          type="button"
+          className="flex cursor-pointer items-center text-sub-title-6 text-grey-800"
+          onMouseEnter={() => prefetch(retrospectId)}
+        >
+          {participantCount}명
+          <IcChevronDownSmGrey
+            className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuPortal>
+        <DropdownMenuContent
+          align="end"
+          className="min-w-[100px] rounded-[8px] border border-grey-200 bg-white p-[12px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)]"
+        >
+          <div className="flex flex-col gap-[8px]">
+            <span className="text-caption-4 text-grey-700">참여 인원 {participantCount}명</span>
+            {members ? (
+              members.map((member) => (
+                <span key={member.memberId} className="text-sub-title-3 text-grey-900">
+                  {member.userName}
+                </span>
+              ))
+            ) : (
+              <span className="text-sub-title-3 text-grey-400">불러오는 중...</span>
+            )}
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenuPortal>
+    </DropdownMenuRoot>
   );
 }
 
@@ -185,42 +278,19 @@ function CompletedCard({ item, teamId }: RetrospectCardProps) {
           />
         </div>
       </div>
-      <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} />
-      {item.members && (
-        // biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for dropdown
-        // biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper
-        <div className="mt-[3px] flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
+      <div className="flex-1 min-h-4" />
+      <div className="flex flex-col gap-[3px]">
+        <CardInfo methodLabel={methodLabel} formattedDate={formattedDate} className="" />
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: stop propagation for dropdown */}
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: stop propagation wrapper */}
+        <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
           <span className="text-sub-title-6 text-grey-700">참여인원</span>
-          <DropdownMenuRoot>
-            <DropdownMenuTrigger>
-              <button
-                type="button"
-                className="flex items-center cursor-pointer text-sub-title-6 text-grey-800"
-              >
-                {item.members.length}명
-                <IcChevronDown width={18} height={18} />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuContent
-                align="end"
-                className="min-w-[100px] rounded-[8px] border border-grey-200 bg-white p-[12px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)]"
-              >
-                <div className="flex flex-col gap-[8px]">
-                  <span className="text-caption-4 text-grey-700">
-                    참여 인원 {item.members.length}명
-                  </span>
-                  {item.members.map((member) => (
-                    <span key={member.memberId} className="text-sub-title-3 text-grey-900">
-                      {member.userName}
-                    </span>
-                  ))}
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenuPortal>
-          </DropdownMenuRoot>
+          <ParticipantDropdown
+            retrospectId={item.retrospectId}
+            participantCount={item.participantCount}
+          />
         </div>
-      )}
+      </div>
     </button>
   );
 }

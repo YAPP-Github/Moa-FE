@@ -17,8 +17,8 @@ export function TeamDashboardPage() {
   }
 
   return (
-    <div className="flex h-full flex-col bg-grey-50">
-      <div className="mx-auto mt-[36px] flex min-h-0 w-full max-w-[960px] flex-1 flex-col">
+    <div className="flex h-full w-max min-w-full flex-col bg-grey-50">
+      <div className="mx-auto mt-[36px] flex min-h-0 w-full max-w-[960px] flex-1 flex-col px-5 pb-10">
         <DashboardHeader teamId={currentTeam.retroRoomId} teamName={currentTeam.retroRoomName} />
         <ApiErrorBoundary resetKeys={[currentTeam.retroRoomId]}>
           <Suspense fallback={null}>

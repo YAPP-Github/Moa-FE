@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu/DropdownMenu';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
-import IcMeatball from '@/shared/ui/icons/IcMeatball';
+import IcMoreGrey from '@/shared/ui/icons/IcMoreGrey';
 
 interface TeamMenuDropdownProps {
   teamName: string;
@@ -19,7 +19,7 @@ export function TeamMenuDropdown({ teamName, onEditTeamName, onLeaveTeam }: Team
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <IconButton variant="ghost" size="xs" shape="square" aria-label="팀 메뉴">
-          <IcMeatball width={24} height={24} />
+          <IcMoreGrey width={20} height={20} />
         </IconButton>
       </DropdownMenuTrigger>
       <DropdownMenuPortal>

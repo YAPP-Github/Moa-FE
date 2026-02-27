@@ -32,7 +32,7 @@ export function CommentInput({ responseId, initialContent, onContentChange }: Co
   };
 
   return (
-    <div className="flex items-center gap-2.5 rounded-xl border-2 border-grey-200 bg-grey-50 px-[13px] py-[7px] transition-colors focus-within:border-blue-300">
+    <div className="flex items-center gap-2.5 rounded-xl border-2 border-grey-200 bg-grey-50 px-[13px] py-[7px]">
       <textarea
         ref={textareaRef}
         value={content}
@@ -47,7 +47,7 @@ export function CommentInput({ responseId, initialContent, onContentChange }: Co
         size="sm"
         onClick={handleSubmit}
         disabled={!content.trim() || mutation.isPending}
-        className="shrink-0 px-[7px] py-[4px] rounded-[6px] text-sub-title-5"
+        className="shrink-0 px-[7px] py-[4px] rounded-[6px] text-sub-title-5 text-grey-0"
       >
         남기기
       </Button>
