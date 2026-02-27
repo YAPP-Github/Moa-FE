@@ -28,7 +28,7 @@ export function MemberTabContent({ retrospectId, members, questions }: MemberTab
   const selectedMember = members.find((m) => m.memberId === selectedMemberId);
 
   return (
-    <div className="flex h-full gap-6 pt-6 pb-2 pl-6 pr-2">
+    <div className="flex h-full gap-[42px] pt-6 pb-2 pl-6 pr-2">
       <MemberSubTabs
         members={members}
         selectedMemberId={selectedMemberId}

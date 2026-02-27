@@ -30,7 +30,9 @@ export function LikeButton({ responseId, likeCount, isLiked = false }: LikeButto
   return (
     <button
       type="button"
-      className="flex cursor-pointer items-center gap-0.5 leading-none text-caption-3-medium text-grey-600"
+      className={`flex cursor-pointer items-center gap-0.5 rounded-[4px] p-px leading-none text-caption-3-medium transition-colors ${
+        optimisticLiked ? 'text-red-300 hover:bg-red-200' : 'text-grey-600 hover:bg-grey-100'
+      }`}
       onClick={handleClick}
       disabled={mutation.isPending}
     >
