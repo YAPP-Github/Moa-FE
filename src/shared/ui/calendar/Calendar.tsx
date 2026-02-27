@@ -165,7 +165,7 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     return (
       <div ref={ref} className="w-full">
         {/* Header: 월/년 + 네비게이션 */}
-        <div className="grid grid-cols-7 items-center px-[20px]">
+        <div className="grid grid-cols-7 items-center px-2">
           <span className="col-span-5 text-sub-title-0 text-grey-1000 truncate">
             {format(currentMonth, 'yyyy년 M월', { locale: ko })}
           </span>
@@ -188,11 +188,10 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
         {/* 요일 헤더 */}
         <div className="grid grid-cols-7 mt-[18px]">
           {WEEKDAYS.map((day) => (
-            <div
-              key={day}
-              className="flex h-[28px] items-center justify-center text-caption-3-medium text-grey-400"
-            >
-              {day}
+            <div key={day} className="flex h-[28px] items-center justify-center">
+              <span className="inline-flex w-[28px] justify-center text-caption-3-medium text-grey-400">
+                {day}
+              </span>
             </div>
           ))}
         </div>
@@ -213,11 +212,12 @@ const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
             const isToday = isSameDay(date, new Date());
             const isFirstDay = index === 0;
 
-            // tabIndex 결정: focusedDate > selected > 첫 번째 날
             const shouldBeTabbable =
               isFocused ||
               (!focusedDate && isSelected) ||
               (!focusedDate && !selected && isFirstDay);
+
+            const dow = getDay(date);
 
             return (
               <div key={date.toISOString()} className="flex h-[28px] items-center justify-center">

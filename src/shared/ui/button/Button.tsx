@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { cn } from '@/shared/lib/cn';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center cursor-pointer font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3182F6]/30 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3182F6]/30 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -15,8 +15,8 @@ const buttonVariants = cva(
       size: {
         xs: 'h-6 px-2 rounded',
         sm: '',
-        md: 'h-[32px] px-[16.5px] text-sub-title-5 rounded-[8px]',
-        lg: 'h-[32px] px-[8px] text-sub-title-4 rounded-[8px]',
+        md: 'h-[32px] px-[16.5px] rounded-[8px]',
+        lg: 'h-[32px] px-[8px] rounded-[8px]',
         xl: 'h-[48px] rounded-[6px]',
       },
     },

@@ -5,9 +5,9 @@ export function SigninPage() {
   return (
     <div className="h-screen bg-grey-50 flex flex-col">
       <OnboardingHeader />
-      <main className="flex-1 overflow-y-auto">
-        <div className="flex min-h-full flex-col items-center py-4">
-          <div className="my-auto w-[720px] bg-white rounded-2xl flex items-center justify-center py-[130px]">
+      <main className="flex-1 flex flex-col overflow-y-auto">
+        <div className="flex-1 flex flex-col items-center py-4">
+          <div className="flex-1 w-full max-w-[720px] bg-white rounded-2xl flex items-center justify-center">
             <SigninForm />
           </div>
         </div>

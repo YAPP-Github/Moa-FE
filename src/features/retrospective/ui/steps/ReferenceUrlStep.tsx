@@ -149,7 +149,7 @@ export function ReferenceUrlStep({ onClose, onBack }: ReferenceUrlStepProps) {
           size="md"
           disabled={!hasValidUrl || isSubmitting}
           onClick={handleConfirmClick}
-          className="h-[32px] px-[18.5px] py-[7px]"
+          className="h-[32px] px-[18.5px] py-[7px] text-sub-title-5"
         >
           확인
         </Button>

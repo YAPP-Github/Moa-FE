@@ -8,7 +8,7 @@ import type {
 
 interface MemberResponseColumnsProps {
   questions: RetrospectQuestionItem[];
-  queryResults: { data: BaseApiResponse<ResponsesListResponse> }[];
+  queryResults: { data: BaseApiResponse<ResponsesListResponse> | undefined }[];
   memberName: string;
 }
 
@@ -29,10 +29,10 @@ export function MemberResponseColumns({
   };
 
   return (
-    <div className="flex gap-5">
+    <div className="flex gap-8">
       {questions.map((question, idx) => {
         const result = queryResults[idx];
-        const responses = result.data.result?.responses ?? [];
+        const responses = result.data?.result?.responses ?? [];
         const memberResponse = responses.find((r) => r.userName === memberName);
 
         return (

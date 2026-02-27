@@ -55,7 +55,12 @@ export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
       </Field>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={!inviteUrl?.trim()} size="md" className="px-3 py-2">
+        <Button
+          type="submit"
+          disabled={!inviteUrl?.trim()}
+          size="md"
+          className="px-3 py-2 text-sub-title-5"
+        >
           확인
         </Button>
       </div>

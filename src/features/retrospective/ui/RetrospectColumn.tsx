@@ -49,7 +49,7 @@ export function RetrospectColumn({ title, items, teamId }: RetrospectColumnProps
   };
 
   return (
-    <div className="flex flex-1 flex-col min-h-0">
+    <div className="flex w-[284px] shrink-0 flex-col min-h-0">
       <div className="mb-3 flex items-center gap-1.5">
         <span className="text-caption-2 text-grey-900">{title}</span>
         <span className="text-caption-2 text-grey-900">{items.length}</span>

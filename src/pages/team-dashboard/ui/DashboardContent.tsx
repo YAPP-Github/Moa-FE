@@ -48,7 +48,7 @@ export function DashboardContent({ teamId }: DashboardContentProps) {
   }
 
   return (
-    <div className="mt-[40px] flex flex-1 min-h-0 gap-[54px]">
+    <div className="mt-[40px] flex min-h-0 gap-[54px]">
       <RetrospectColumn title="진행중" items={sortByDateAsc(inProgress)} teamId={teamId} />
       <RetrospectColumn title="임시저장" items={sortByDateAsc(draft)} teamId={teamId} />
       <RetrospectColumn title="종료" items={sortByDateAsc(completed)} teamId={teamId} />
