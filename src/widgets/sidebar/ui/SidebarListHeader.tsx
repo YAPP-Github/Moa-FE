@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { CreateTeamDialog } from '@/features/team/ui/CreateTeamDialog';
 import { JoinTeamDialog } from '@/features/team/ui/JoinTeamDialog';
 import { IconButton } from '@/shared/ui/icon-button/IconButton';
@@ -13,17 +13,15 @@ export function SidebarListHeader({ title }: SidebarListHeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isJoinOpen, setIsJoinOpen] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   return (
     <div className="h-[38px] pl-[14px] py-[7px] flex items-center justify-between">
       <span className="text-sub-title-4 text-grey-600 truncate">{title}</span>
-      <div className="relative">
+      <div className="relative group">
         {!isDropdownOpen && (
-          <IcTooltip className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none" />
+          <IcTooltip className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover:opacity-100" />
         )}
         <IconButton
-          ref={buttonRef}
           shape="square"
           variant="tertiary"
           size="xs"
@@ -37,7 +35,7 @@ export function SidebarListHeader({ title }: SidebarListHeaderProps) {
             {/* biome-ignore lint/a11y/noStaticElementInteractions: backdrop overlay for closing dropdown */}
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: backdrop overlay for closing dropdown */}
             <div className="fixed inset-0 z-10" onClick={() => setIsDropdownOpen(false)} />
-            <div className="absolute top-[calc(100%+20px)] right-[-34px] z-20 min-w-[160px] rounded-[8px] border border-grey-200 bg-grey-0 p-3 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)] flex flex-col gap-3">
+            <div className="absolute top-[calc(100%+20px)] right-[-34px] z-20 w-max rounded-[8px] border border-grey-200 bg-grey-0 p-3 shadow-[0px_4px_16px_0px_rgba(0,0,0,0.07)] flex flex-col gap-3">
               <span className="text-[13px] font-normal text-grey-500">팀 추가하기</span>
               <button
                 type="button"
