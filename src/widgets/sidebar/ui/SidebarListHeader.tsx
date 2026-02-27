@@ -12,7 +12,7 @@ export function SidebarListHeader({ title }: SidebarListHeaderProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-    <div className="h-[38px] px-[14px] py-[7px] flex items-center justify-between">
+    <div className="h-[38px] pl-[14px] py-[7px] flex items-center justify-between">
       <span className="text-sub-title-4 text-grey-600 truncate">{title}</span>
       <div className="relative group">
         <IcTooltip className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />

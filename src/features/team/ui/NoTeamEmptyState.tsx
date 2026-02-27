@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { CreateTeamDialog } from '@/features/team/ui/CreateTeamDialog';
 import { JoinTeamDialog } from '@/features/team/ui/JoinTeamDialog';
 import { Button } from '@/shared/ui/button/Button';
+import IcNoteGrey from '@/shared/ui/icons/IcNoteGrey';
 import IcPlus from '@/shared/ui/icons/IcPlus';
-import IcNote from '@/shared/ui/logos/IcNote';
 
 export function NoTeamEmptyState() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -13,7 +13,7 @@ export function NoTeamEmptyState() {
     <>
       <div className="flex h-full items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <IcNote />
+          <IcNoteGrey />
 
           <p className="text-sub-title-2 text-grey-800">회고를 시작하려면 팀 생성이 필요해요</p>
 

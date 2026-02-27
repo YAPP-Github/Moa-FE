@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { WithdrawModal } from './WithdrawModal';
 import { useLogoutMutation, useWithdrawMutation } from '../api/auth.mutations';
 import { useProfile } from '../api/auth.queries';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
@@ -17,6 +19,7 @@ export function ProfileDropdown() {
   const { data: profileData } = useProfile();
   const { mutateAsync: logout } = useLogoutMutation();
   const { mutateAsync: withdraw } = useWithdrawMutation();
+  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
   const userName = profileData?.result.nickname ?? '';
 
   const handleLogout = async () => {
@@ -56,7 +59,7 @@ export function ProfileDropdown() {
               <span className="text-sub-title-3 text-grey-900">로그아웃</span>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onSelect={handleWithdraw}
+              onSelect={() => setWithdrawModalOpen(true)}
               className="flex items-center cursor-pointer"
             >
               <span className="text-sub-title-3 text-grey-900">서비스 탈퇴</span>
@@ -64,6 +67,11 @@ export function ProfileDropdown() {
           </div>
         </DropdownMenuContent>
       </DropdownMenuPortal>
+      <WithdrawModal
+        open={withdrawModalOpen}
+        onOpenChange={setWithdrawModalOpen}
+        onConfirm={handleWithdraw}
+      />
     </DropdownMenuRoot>
   );
 }

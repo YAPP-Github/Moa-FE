@@ -2,7 +2,7 @@ import { useRetrospects } from '@/features/retrospective/api/retrospective.queri
 import { RetrospectListStatus } from '@/features/retrospective/model/constants';
 import type { RetrospectListItem } from '@/features/retrospective/model/schema';
 import { RetrospectColumn } from '@/features/retrospective/ui/RetrospectColumn';
-import IcNote from '@/shared/ui/logos/IcNote';
+import IcNoteGrey from '@/shared/ui/icons/IcNoteGrey';
 
 interface DashboardContentProps {
   teamId: number;
@@ -41,7 +41,7 @@ export function DashboardContent({ teamId }: DashboardContentProps) {
   if (retrospects.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-4">
-        <IcNote width={48} height={56} />
+        <IcNoteGrey />
         <p className="text-caption-3-medium text-grey-700">회고 내역이 없어요</p>
       </div>
     );
