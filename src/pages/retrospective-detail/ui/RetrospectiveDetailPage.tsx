@@ -20,12 +20,17 @@ function DetailContent({ retrospectId, teamId }: { retrospectId: number; teamId:
     <>
       <RetrospectivePageHeader teamId={teamId} title={detail.title} />
       <div className="flex h-[calc(100vh-54px)] flex-col overflow-auto bg-grey-50">
-        <div className="mx-auto flex w-full max-w-[1096px] min-h-0 flex-1 flex-col">
+        <div
+          className={cn(
+            'mx-auto flex w-full max-w-[1096px] flex-col',
+            activeTab !== 'analysis' && 'min-h-0 flex-1'
+          )}
+        >
           <DetailHeader activeTab={activeTab} onTabChange={setActiveTab} title={detail.title} />
           <div
             className={cn(
               'flex min-h-0 flex-col rounded-t-[20px] bg-white',
-              activeTab === 'analysis' ? 'mb-12 flex-1 rounded-b-[20px]' : 'flex-1 overflow-hidden'
+              activeTab === 'analysis' ? 'mb-12 rounded-b-[20px]' : 'flex-1 overflow-hidden'
             )}
           >
             {activeTab === 'question' && (
