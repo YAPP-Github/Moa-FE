@@ -44,8 +44,15 @@ export function AnalysisResult({ analysis }: AnalysisResultProps) {
               {currentUser ? `${currentUser.userName}팀을 위한 AI 인사이트` : 'AI 인사이트'}
             </span>
           </div>
-          <p className="mt-2 whitespace-pre-wrap bg-linear-to-r from-[#191919] to-[#1B57AB] bg-clip-text text-title-2 text-transparent">
-            {analysis.insight}
+          <p className="mt-2 bg-linear-to-r from-[#1B57AB] to-[#191919] bg-clip-text text-title-2 text-transparent">
+            {analysis.insight.split(',').map((part, i, arr) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: 인사이트 텍스트를 쉼표 기준으로 분리한 정적 배열로, 순서 변경 없음
+              <span key={`insight-part-${i}`}>
+                {part.trim()}
+                {i < arr.length - 1 ? ',' : ''}
+                {i < arr.length - 1 && <br />}
+              </span>
+            ))}
           </p>
         </section>
       )}
