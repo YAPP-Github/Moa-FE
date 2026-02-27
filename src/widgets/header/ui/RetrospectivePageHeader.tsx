@@ -23,7 +23,9 @@ export function RetrospectivePageHeader({
   return (
     <header className="flex h-[54px] items-center justify-between border-b border-[#F3F4F5] bg-white px-[36px]">
       <div className="flex items-center gap-10">
-        <IcMoa />
+        <Link to={`/teams/${teamId}`} onClick={onHomeClick}>
+          <IcMoa />
+        </Link>
         <nav className="flex items-center gap-[2px] text-caption-3-medium leading-none text-grey-900">
           <span className="flex items-center">
             <Link to={`/teams/${teamId}`} onClick={onHomeClick}>

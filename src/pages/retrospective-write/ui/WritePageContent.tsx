@@ -83,6 +83,7 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
   const [saveDraftDialogOpen, setSaveDraftDialogOpen] = useState(false);
   const hasRegisteredParticipant = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const savedAnswersRef = useRef<string[]>([]);
 
   // ---- Derived Data ----
   const questions = useMemo(
@@ -119,8 +120,11 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
       const draft = loadDraftFromStorage(retrospectId);
       if (draft && draft.length === questions.length) {
         setAnswers(draft);
+        savedAnswersRef.current = draft;
       } else {
-        setAnswers(questions.map(() => ''));
+        const initial = questions.map(() => '');
+        setAnswers(initial);
+        savedAnswersRef.current = initial;
       }
     }
   }, [questions, answers.length, retrospectId]);
@@ -171,6 +175,8 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
         content: content || null,
       })),
     });
+    savedAnswersRef.current = [...answers];
+    queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.list(teamId) });
     showToast({ variant: 'success', message: '임시 저장 완료!' });
   };
 
@@ -254,7 +260,8 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
 
   // ---- 홈 이동 시 임시저장 팝업 ----
   const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (answers.some((a) => a.trim() !== '')) {
+    const hasUnsavedChanges = answers.some((a, i) => a !== (savedAnswersRef.current[i] ?? ''));
+    if (hasUnsavedChanges) {
       e.preventDefault();
       setSaveDraftDialogOpen(true);
     }
@@ -269,6 +276,8 @@ export function WritePageContent({ retrospectId, teamId, detail }: WritePageCont
           content: content || null,
         })),
       });
+      savedAnswersRef.current = [...answers];
+      queryClient.invalidateQueries({ queryKey: retrospectiveQueryKeys.list(teamId) });
       showToast({ variant: 'success', message: '임시 저장 완료!' });
     } catch {
       // 글로벌 에러 핸들러에서 처리
