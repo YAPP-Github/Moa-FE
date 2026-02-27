@@ -60,22 +60,8 @@ pnpm install
 # 개발 서버 실행
 pnpm dev
 
-# Mock API로 개발 서버 실행 (MSW)
-pnpm dev:mock
-
 # 빌드
 pnpm build
-
-# 빌드 결과 미리보기
-pnpm preview
-```
-
-### 환경 변수
-
-루트에 `.env` 파일을 생성하고 아래 변수를 설정하세요.
-
-```env
-VITE_API_BASE_URL=https://your-api-url.com
 ```
 
 <br />
@@ -107,9 +93,3 @@ pnpm storybook     # Storybook 실행
 pnpm generate:api  # OpenAPI 스펙으로 API 타입 생성
 pnpm generate:svg  # SVG → React 컴포넌트 생성
 ```
-
-<br />
-
-## 팀
-
-**YAPP 27기 Web Team 3** — [GitHub](https://github.com/YAPP-Github/27th-Web-Team-3-FE)
