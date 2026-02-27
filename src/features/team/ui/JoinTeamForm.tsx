@@ -38,7 +38,7 @@ export function JoinTeamForm({ onSuccess, onClose }: JoinTeamFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-[20px]">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <Field className="mt-[20px] flex flex-col gap-2">
         <FieldLabel htmlFor="inviteUrl" className="text-sub-title-4 text-grey-900">
           링크
