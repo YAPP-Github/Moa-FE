@@ -20,7 +20,7 @@ export function TeamActionStep() {
 
   if (teamOption === 'create') {
     return (
-      <div className="w-[388px] h-[528px] flex flex-col">
+      <div className="w-[388px] flex flex-col">
         <div className="flex flex-col items-center mb-[70px]">
           <h1 className="text-title-1 text-center text-[#191F28]">
             생성할 팀 이름을
@@ -51,7 +51,7 @@ export function TeamActionStep() {
           </div>
         </Field>
 
-        <div className="mt-auto flex justify-end">
+        <div className="mt-[clamp(24px,calc(100dvh-700px),260px)] flex justify-end">
           <Button type="submit" disabled={!teamName?.trim()} size="md">
             다음
           </Button>
@@ -62,7 +62,7 @@ export function TeamActionStep() {
 
   if (teamOption === 'join') {
     return (
-      <div className="w-[388px] h-[528px] flex flex-col">
+      <div className="w-[388px] flex flex-col">
         <div className="flex flex-col items-center mb-[70px]">
           <h1 className="text-title-1 text-center text-[#191F28]">
             공유받은 링크를
@@ -89,7 +89,7 @@ export function TeamActionStep() {
           />
         </Field>
 
-        <div className="mt-auto flex justify-end">
+        <div className="mt-[clamp(24px,calc(100dvh-700px),260px)] flex justify-end">
           <Button type="submit" disabled={!inviteLink?.trim() || !!errors.inviteLink} size="md">
             다음
           </Button>

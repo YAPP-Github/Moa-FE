@@ -1,4 +1,4 @@
-import IcMoa from '@/shared/ui/logos/IcMoa';
+import IcLogoMain from '@/shared/ui/icons/IcLogoMain';
 
 interface OnboardingHeaderProps {
   className?: string;
@@ -7,7 +7,7 @@ interface OnboardingHeaderProps {
 export function OnboardingHeader({ className }: OnboardingHeaderProps) {
   return (
     <header className={`h-[54px] bg-transparent flex items-center px-[36px] ${className ?? ''}`}>
-      <IcMoa />
+      <IcLogoMain />
     </header>
   );
 }

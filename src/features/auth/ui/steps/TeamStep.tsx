@@ -18,7 +18,7 @@ export function TeamStep() {
   const teamOption = watch('teamOption');
 
   return (
-    <div className="w-[388px] h-[528px] flex flex-col">
+    <div className="w-[388px] flex flex-col">
       <div className="flex flex-col items-center mb-[70px]">
         <h1 className="text-title-1 text-center text-[#191F28]">
           환영합니다!
@@ -73,7 +73,7 @@ export function TeamStep() {
         )}
       />
 
-      <div className="mt-auto flex justify-end">
+      <div className="mt-[clamp(24px,calc(100dvh-700px),260px)] flex justify-end">
         <Button onClick={goToNextStep} disabled={!teamOption} size="md">
           다음
         </Button>
