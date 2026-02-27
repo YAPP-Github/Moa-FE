@@ -10,6 +10,7 @@ import { DateTimeStep } from '@/features/retrospective/ui/steps/DateTimeStep';
 import { MethodStep } from '@/features/retrospective/ui/steps/MethodStep';
 import { ProjectNameStep } from '@/features/retrospective/ui/steps/ProjectNameStep';
 import { ReferenceStep } from '@/features/retrospective/ui/steps/ReferenceStep';
+import { ApiError } from '@/shared/api/error';
 import { MultiStepForm } from '@/shared/ui/multi-step-form/MultiStepForm';
 import { useToast } from '@/shared/ui/toast/Toast';
 
@@ -31,14 +32,21 @@ export function CreateRetrospectForm({
     const filteredUrls = data.referenceUrls?.filter((url) => url.trim() !== '');
     const questions = data.questions.filter((q) => q.trim() !== '');
 
-    await createRetrospect({
-      retroRoomId,
-      projectName: data.projectName,
-      retrospectDate: format(data.retrospectDate, 'yyyy-MM-dd'),
-      retrospectMethod: data.retrospectMethod,
-      questions,
-      referenceUrls: filteredUrls?.length ? filteredUrls : undefined,
-    });
+    try {
+      await createRetrospect({
+        retroRoomId,
+        projectName: data.projectName,
+        retrospectDate: format(data.retrospectDate, 'yyyy-MM-dd'),
+        retrospectMethod: data.retrospectMethod,
+        questions,
+        referenceUrls: filteredUrls?.length ? filteredUrls : undefined,
+      });
+    } catch (error) {
+      const message =
+        error instanceof ApiError ? error.message : '올바른 URL 형식을 확인해 주세요!';
+      showToast({ variant: 'warning', message });
+      return;
+    }
 
     showToast({ variant: 'success', message: '회고 생성 완료!' });
     onSuccess?.();
