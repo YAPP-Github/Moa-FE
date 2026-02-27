@@ -28,14 +28,14 @@ export function MemberTabContent({ retrospectId, members, questions }: MemberTab
   const selectedMember = members.find((m) => m.memberId === selectedMemberId);
 
   return (
-    <div className="flex h-full gap-[42px] pt-6 pb-2 pl-6 pr-2">
+    <div className="flex gap-[42px] pt-6 pb-2 pl-6 pr-2">
       <MemberSubTabs
         members={members}
         selectedMemberId={selectedMemberId}
         onSelect={setSelectedMemberId}
       />
 
-      <div className="min-w-0 mt-6 flex-1 overflow-x-auto [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-grey-300">
+      <div className="min-w-0 mt-6 flex-1 overflow-x-auto [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-grey-300 pb-12">
         {selectedMember && (
           <MemberResponseColumns
             questions={questions}

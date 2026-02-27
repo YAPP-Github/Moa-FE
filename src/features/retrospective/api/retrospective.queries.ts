@@ -1,7 +1,8 @@
 import {
+  keepPreviousData,
+  useQueries,
   useQuery,
   useQueryClient,
-  useSuspenseQueries,
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import {
@@ -71,10 +72,11 @@ export function useReferences(retrospectId: number) {
 }
 
 export function useResponses(retrospectId: number, category: ResponseCategory) {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: retrospectiveQueryKeys.responses(retrospectId, category),
     queryFn: () => listResponses(retrospectId, { category, size: 100 }),
     staleTime: 1000 * 60 * 2,
+    placeholderData: keepPreviousData,
   });
 }
 
@@ -100,11 +102,12 @@ export function useAnalysisResult(retrospectId: number) {
 }
 
 export function useQuestionResponses(retrospectId: number, questionCategories: ResponseCategory[]) {
-  return useSuspenseQueries({
+  return useQueries({
     queries: questionCategories.map((category) => ({
       queryKey: retrospectiveQueryKeys.responses(retrospectId, category),
       queryFn: () => listResponses(retrospectId, { category, size: 100 }),
       staleTime: 1000 * 60 * 2,
+      placeholderData: keepPreviousData,
     })),
   });
 }

@@ -6,7 +6,6 @@ import { AnalysisTabContent } from '@/features/retrospective/ui/detail/AnalysisT
 import { DetailHeader } from '@/features/retrospective/ui/detail/DetailHeader';
 import { MemberTabContent } from '@/features/retrospective/ui/detail/MemberTabContent';
 import { QuestionTabContent } from '@/features/retrospective/ui/detail/QuestionTabContent';
-import { cn } from '@/shared/lib/cn';
 import { ApiErrorBoundary } from '@/shared/ui/error-boundary/ApiErrorBoundary';
 import { RetrospectivePageHeader } from '@/widgets/header/ui/RetrospectivePageHeader';
 
@@ -17,22 +16,12 @@ function DetailContent({ retrospectId, teamId }: { retrospectId: number; teamId:
   const detail = data.result;
 
   return (
-    <>
+    <div className="flex flex-col">
       <RetrospectivePageHeader teamId={teamId} title={detail.title} />
-      <div className="flex h-[calc(100vh-54px)] flex-col overflow-auto bg-grey-50">
-        <div
-          className={cn(
-            'mx-auto flex w-full max-w-[1096px] flex-col',
-            activeTab !== 'analysis' && 'min-h-0 flex-1'
-          )}
-        >
+      <div className="flex flex-col bg-grey-50 min-h-[calc(100vh-54px)] pb-12">
+        <div className="mx-auto flex w-full max-w-[1096px] flex-1 flex-col">
           <DetailHeader activeTab={activeTab} onTabChange={setActiveTab} title={detail.title} />
-          <div
-            className={cn(
-              'flex min-h-0 flex-col rounded-t-[20px] bg-white',
-              activeTab === 'analysis' ? 'mb-12 rounded-b-[20px]' : 'flex-1 overflow-hidden'
-            )}
-          >
+          <div className="mt-4 flex flex-1 flex-col rounded-[20px] bg-white">
             {activeTab === 'question' && (
               <Suspense fallback={null}>
                 <QuestionTabContent retrospectId={retrospectId} questions={detail.questions} />
@@ -57,7 +46,7 @@ function DetailContent({ retrospectId, teamId }: { retrospectId: number; teamId:
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -68,7 +57,7 @@ export function RetrospectiveDetailPage() {
   const numRetrospectId = Number(retrospectId);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-white">
       <ApiErrorBoundary resetKeys={[numRetrospectId]}>
         <Suspense
           fallback={

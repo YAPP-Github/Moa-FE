@@ -29,7 +29,7 @@ export function QuestionTabContent({ retrospectId, questions }: QuestionTabConte
   const responses = data?.result?.responses ?? [];
 
   return (
-    <div className="flex h-full gap-[42px] py-6 pl-6 pr-2">
+    <div className="flex gap-[42px] py-6 pl-6 pr-2 pb-12">
       <nav className="flex w-[84px] shrink-0 flex-col gap-3">
         {questions.map((q, idx) => (
           <button
@@ -46,7 +46,7 @@ export function QuestionTabContent({ retrospectId, questions }: QuestionTabConte
         ))}
       </nav>
 
-      <div className="min-h-0 mt-6 flex-1 overflow-auto [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-grey-300">
+      <div className="mt-6 flex-1">
         <div className="max-w-[840px]">
           {selectedQuestion && (
             <h2 className="text-title-3 text-grey-1000">{selectedQuestion.content}</h2>
